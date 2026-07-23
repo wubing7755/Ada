@@ -1,0 +1,6 @@
+name: ada
+version: 0.1.0
+description: "A pragmatic software-engineering Hermes profile focused on correctness, clarity, and verifiable results"
+hermes_requires: ">=0.19.0"
+author: "wubing7755"
+license: "MIT"
