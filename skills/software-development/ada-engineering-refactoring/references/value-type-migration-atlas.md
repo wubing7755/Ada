@@ -1,5 +1,7 @@
 # Atlas Value-Type Migration: Full Cascade Record (2026-07-22)
 
+> **See also**: [value-type-migration.md](value-type-migration.md) — the generalized migration guide with pattern rules, error codes, pitfalls, and bulk strategy extracted from this case study.
+
 Session: refactor/base-class-optimization branch, Atlas Blazor Dock Layout project (net6.0).
 
 ## New Types Introduced

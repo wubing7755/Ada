@@ -1,6 +1,6 @@
 ---
 name: ada-engineering-refactoring
-description: Architectural-level code refactoring that meets Microsoft/NET library engineering standards — value-type-first, interface-based protocols, orchestration/implementation separation, and whole-project consistency. Use when the user rejects mechanical dedup and asks for engineering-level quality.
+description: Architectural-level code refactoring that meets Microsoft/.NET library engineering standards — value-type-first, interface-based protocols, orchestration/implementation separation, and whole-project consistency. Use when the user rejects mechanical dedup and asks for engineering-level quality.
 version: 1.0.0
 author: Hermes Agent
 license: MIT
@@ -19,7 +19,7 @@ Architectural-level code refactoring for entire projects. Not mechanical dedup �
 
 This skill defines a disciplined, architecture-first approach to whole-project refactoring. It replaces ad-hoc cleanup with six engineering quality gates: type-system constraints, intent-revealing API names, interface-based dependencies, orchestration/implementation separation, whole-project consistency, and Razor-first parity. The workflow emphasizes discovery, planning, user approval, phased execution, and a final consistency pass — ensuring the result is a maintainable codebase a new developer can pick up and extend naturally.
 
-Unlike mechanical dedup (extract-method, extract-helper), this skill targets the structural choices that separate "it works" from "it is engineered." It covers value-type migration cascades, Blazor component extraction, Razor-specific compiler pitfalls, and batch migration strategies for 50+ error codebases.
+Unlike mechanical dedup (extract-method, extract-helper), this skill targets the structural choices that separate "it works" from "it is engineered." Detailed procedures for value-type migrations and Blazor component extraction are in the [references/](references/) directory.
 
 ## When to Use
 
@@ -68,7 +68,6 @@ private void ExecutePanelAction(string id, Action<DockPanelModel> a) { ... }
 
 // ✓ Engineering: named for what it does, not how it works
 // (The panel lookup + notification + locking are all impl details)
-// Better: just keep the original method names and inline the action
 ```
 
 ### Gate 3 — Dependencies on Interfaces, Not Concrete Classes
@@ -91,7 +90,7 @@ Extract implementation into helper classes. Orchestration layer should have zero
 If you introduce a `Ratio` type for `DockPanelModel.MinSizeRatio`, every other property/param with the same range must use it too. If you rename `ExecuteLocked` to `Execute` in UndoStack, every call site must update. Partial application creates inconsistency — the exact state the user escapes.
 
 ### Gate 6 — Razor Files are Not Second-Class Citizens
-Template duplication (>2 identical blocks) → extract child component. Inline C# `@{}` declarations → computed properties in `@code`. `OnInitialized` doing 3+ things → named helper methods.
+Template duplication (>2 identical blocks) → extract child component. Inline C# `@{}` declarations → computed properties in `@code`. `OnInitialized` doing 3+ things → named helper methods. See [references/blazor-patterns.md](references/blazor-patterns.md) for detailed patterns.
 
 ## Workflow
 
@@ -131,301 +130,14 @@ After all phases complete:
 - Run `dotnet build && dotnet test && dotnet format --verify-no-changes`
 - Verify all quality checklist items from `references/quality-checklist.md`
 
-## Value-Type Migration (string→StrongId, double→Ratio)
-
-When migrating a codebase from primitive types (string for IDs, double for constrained values) to strongly-typed value types, the migration follows a predictable cascade. Add this section after Gate 1 when executing the actual migration work.
-
-### The Cascade Pattern
-
-| Original | New | Conversion Rule |
-|----------|-----|-----------------|
-| `FindDockPanel(stringId)` | `FindDockPanel(new PanelId(stringId))` | Constructor wrap at every call site |
-| `panel.Id` → `string` param/member | `panel.Id.Value` | `.Value` property (PanelId → string) |
-| `double` → `Ratio` property setter | `(Ratio)doubleValue` or `new Ratio(v)` | Explicit cast/constructor (implicit only Ratio→double) |
-| `Assert.Equal(expected, panel.SizeRatio)` | Works as-is | Ratio→double implicit, so Assert.Equal(double, Ratio) compiles |
-| `prop = 1.0` | `prop = (Ratio)1.0` | Literal doubles need explicit cast |
-
-### Cascade Spread Order
-
-Fix propagates through these layers:
-
-1. **Service layer** — `FindDockPanel(string)` → `FindDockPanel(new PanelId(string))`, property assignments
-2. **Command classes** — same FindDockPanel fix, plus `.Id` → `.Id.Value` when PanelId flows to string members or event payloads (`NotifyLayoutChanged(type, panel.Id.Value)`)
-3. **DTO serialization** — `FromModel`: `.Id = model.Id` → `.Id = model.Id.Value`; `SetSizeConstraints`/build: double literal → `(Ratio)` cast
-4. **Drag service** — one `FindDockPanel` call per handler
-5. **Razor components** — event handlers, inline ternaries, `_entryPanelIds[index]` storage
-6. **Test files** — all the same patterns as source, plus `panel.Id` in assertions → `.Value`
-7. **Demo files** — any standalone panels or services
-
-### Razor-Specific Pitfalls
-
-These only surface in `.razor` files (Blazor compiler, not C# compiler):
-
-- **Delegate calls** — `@onclick="@(() => OnHeaderClick(activePanel.Id))"` fails CS1503 because C# delegate creation requires explicit type. Fix: `activePanel.Id.Value`.
-- **HTML rendering** — `data-xd-panel="@activePanel.Id"` works fine without `.Value` because Blazor's `@` expression calls `.ToString()` which returns `Value`.
-- **Ternary type inference** — `var current = hasPanels ? somePanel.Id : null;` fails CS0173 (can't infer type between PanelId and null). Fix: `.Value` on the PanelId side gives `string?`, or cast `(PanelId?)null`.
-- **`?.` null-conditional** — `_hoveredPanel?.Id != stringVar` fails (PanelId? vs string). Fix: `_hoveredPanel?.Id.Value != stringVar`.
-
-### Ratio Arithmetic Gap
-
-`Ratio` has `implicit operator double` but NO arithmetic operators (+, -, *, /):
-
-```csharp
-// ✓ Compiles: both Ratios auto-convert to double
-var sum = panelA.SizeRatio + panelB.SizeRatio;  // double result
-
-// ✗ Fails: double can't implicitly convert back to Ratio
-panelA.SizeRatio = sum;  // CS0266
-
-// ✓ Fix
-panelA.SizeRatio = (Ratio)sum;
-```
-
-All arithmetic expressions that produce a `double` result and assign to a `Ratio` property need explicit `(Ratio)` cast. Common sites: `Clamp()` return values, `(sum / 2.0)` results, `sum - clamped` subtractions.
-
-### Clamp vs Throw: Choosing the Right Behavior
-
-When introducing a constrained value type (`Ratio`) to replace bare `double`, the initial instinct is to **throw** on out-of-range input. This preserves the "compile-time enforcement" contract. However, tests and intermediate calculations often use values outside [0, 1] — e.g. `Resize("a", "b", 0.5)` where panel B ends up with `sum - 0.5 = 1.5`, or tests that construct `SizeRatio = 3.0` as a setup value.
-
-**Decision rule**: Clamp silently when:
-- The type will be used as a struct-initialized property (`SizeRatio = (Ratio)1.5` in test setup)
-- Arithmetic operations can produce intermediate results outside range
-- Users of the type are unlikely to pre-validate every construction site
-
-Throw when:
-- The type is an API boundary input (user-facing method parameter)
-- Out-of-range indicates a genuine bug, not a rounding artifact
-
-**Default for `Ratio`**: silently clamp. The constraint still holds (`Ratio.Value` is always in [0, 1]) but callers aren't forced to pre-validate.
-
-```csharp
-// ✓ Engineering: clamp, don't throw
-public Ratio(double value)
-{
-    Value = value is < 0.0 ? 0.0 : value > 1.0 ? 1.0 : value;
-}
-```
-
-### Test Value Adjustment Pattern
-
-After introducing a constrained value type, tests that used values outside the new range will fail. **Don't remove or weaken the tests — adjust the values within the new range.** The test semantics stay the same:
-
-| Original | After Migration | Rationale |
-|----------|----------------|-----------|
-| `SizeRatio = 3.0; Equalize(); Assert.Equal(2.0, ...)` | `SizeRatio = 0.7; Equalize(); Assert.Equal(0.5, ...)` | Equalize still splits the pair evenly |
-| `SizeRatio = 2.0; Export(); Assert.Equal(2.0, ...)` | `SizeRatio = 0.8; Export(); Assert.Equal(0.8, ...)` | Round-trip test still validates serialization |
-| `SizeRatio = 1.5; Resize("a","b",0.5); Assert.Equal(1.5, ...)` | Pairs must sum to ~1.0: `SizeRatio = 0.6; SizeRatio2 = 0.4; Resize("a","b",0.3); Assert.Equal(0.7, ...)` | Resize redistributes within the pair |
-
-### One-Shot Bulk Migration Strategy
-
-For large migrations with 50+ errors across many files:
-
-1. **Read ALL error messages first** — `dotnet build 2>&1 | grep "error CS"` — to understand every affected file and pattern
-2. **Group by file** — files with all `FindDockPanel` errors are fastest (one pattern per call site), files with mixed `FindDockPanel` + `Ratio` need more attention
-3. **Fix .cs source files first** — C# compiler catches these clearly
-4. **Then .razor files** — Blazor-compiled files have different line numbering; re-read to match source line numbers. Use `replace_all=true` for identical patterns across 3+ blocks in the same file (e.g. ToolBar.razor 3 identical `_entryPanelIds[...] = panelId`)
-5. **Then test files** — same patterns but more files. `Assert.Equal(expected, panel.SizeRatio)` compiles fine (implicit Ratio→double). Only `.Id` in assertions needs `.Value`.
-6. **Rebuild after every file** — stop cascade early: if main .csproj is clean but tests still fail, you know you're in test-only territory
-7. **Don't stop at the main `.csproj`** — test projects and demo projects also need fixing
-
-## Blazor-Specific Patterns
-
-### Template Duplication → Child Component
-
-When a `.razor` template repeats a markup block ≥2× with different data:
-
-```razor
-@* Extract: ToolBarEntry.razor *@
-<div class="xd-toolbar-entry-wrapper @(IsAutoHidden ? "xd-autohidden" : null)"
-     @onmouseenter="() => OnMouseEnter.InvokeAsync(Panel.Id)">
-    <button class="xd-toolbar-entry @ActiveClass" @ref="_elRef"
-            @onclick="() => OnClick.InvokeAsync(Panel.Id)">
-        @if (Panel.Icon is not null) { <span>@Panel.Icon</span> }
-        else { <span>@GetInitial(Panel.Title)</span> }
-    </button>
-</div>
-@code {
-    [Parameter, EditorRequired] public DockPanelModel Panel { get; set; } = null!;
-    [Parameter] public EventCallback<string> OnClick { get; set; }
-    private ElementReference _elRef;
-    public ElementReference ElementRef => _elRef;
-}
-```
-
-**Known Blazor constraint**: `@ref` on RenderFragment cannot capture ElementReference from parent. Expose via a public property on child.
-
-### Inline Declarations → Computed Properties
-
-```razor
-@* ✗ Inline *@
-@{ var upperGroups = UpperSectionPanels.GroupBy(...).ToList(); }
-
-@* ✓ Property *@
-@code { private IReadOnlyList<...> UpperGroups => UpperSectionPanels.GroupBy(...).ToList(); }
-```
-
-### Lifecycle Sequence → Named Methods
-
-```csharp
-protected override void OnInitialized()
-{
-    _context = Context ?? new LayoutContext(State);
-    _style = new LayoutStyleAdapter(State);
-    SubscribeToEvents();
-}
-private void SubscribeToEvents() { ... }
-```
-
-## Value-Type Migration (string→StrongId, double→Ratio)
-
-When migrating a codebase from primitive types (string for IDs, double for constrained values) to strongly-typed value types, the migration follows a predictable cascade.
-
-### The Cascade Pattern
-
-| Original | New | Conversion Rule |
-|----------|-----|-----------------|
-| `FindDockPanel(stringId)` | `FindDockPanel(new PanelId(stringId))` | Constructor wrap at every call site |
-| `panel.Id` → `string` param/member | `panel.Id.Value` | `.Value` property (PanelId → string) |
-| `double` → `Ratio` property setter | `(Ratio)doubleValue` or `new Ratio(v)` | Explicit cast/constructor (implicit only Ratio→double) |
-| `Assert.Equal(expected, panel.SizeRatio)` | Works as-is | Ratio→double implicit, so Assert.Equal(double, Ratio) compiles |
-| `prop = 1.0` | `prop = (Ratio)1.0` | Literal doubles need explicit cast |
-
-### Cascade Spread Order
-
-Fix propagates through these layers:
-
-1. **Service layer** — `FindDockPanel(string)` → `FindDockPanel(new PanelId(string))`, property assignments
-2. **Command classes** — same FindDockPanel fix, plus `.Id` → `.Id.Value` when PanelId flows to string members or event payloads (`NotifyLayoutChanged(type, panel.Id.Value)`)
-3. **DTO serialization** — `FromModel`: `.Id = model.Id` → `.Id = model.Id.Value`; `SetSizeConstraints`/build: double literal → `(Ratio)` cast
-4. **Drag service** — one `FindDockPanel` call per handler
-5. **Razor components** — event handlers, inline ternaries, `_entryPanelIds[index]` storage
-6. **Test files** — all the same patterns as source, plus `panel.Id` in assertions → `.Value`
-7. **Demo files** — any standalone panels or services
-
-### Razor-Specific Pitfalls
-
-These only surface in `.razor` files (Blazor compiler, not C# compiler):
-
-- **Delegate calls** — `@onclick="@(() => OnHeaderClick(activePanel.Id))"` fails CS1503 because C# delegate creation requires explicit type. Fix: `activePanel.Id.Value`.
-- **HTML rendering** — `data-xd-panel="@activePanel.Id"` works fine without `.Value` because Blazor's `@` expression calls `.ToString()` which returns `Value`.
-- **Ternary type inference** — `var current = hasPanels ? somePanel.Id : null;` fails CS0173 (can't infer type between PanelId and null). Fix: `.Value` on the PanelId side gives `string?`, or cast `(PanelId?)null`.
-- **`?.` null-conditional** — `_hoveredPanel?.Id != stringVar` fails (PanelId? vs string). Fix: `_hoveredPanel?.Id.Value != stringVar`.
-- **Ref is a keyword** — `@ref="ref => list[index] = ref"` fails CS1041. Use a different parameter name: `@ref="elRef => list[index] = elRef"`.
-
-### Ratio Arithmetic Gap
-
-`Ratio` has `implicit operator double` but NO arithmetic operators (+, -, *, /):
-
-```csharp
-// ✓ Compiles: both Ratios auto-convert to double
-var sum = panelA.SizeRatio + panelB.SizeRatio;  // double result
-
-// ✗ Fails: double can't implicitly convert back to Ratio
-panelA.SizeRatio = sum;  // CS0266
-
-// ✓ Fix: explicit cast
-panelA.SizeRatio = (Ratio)sum;
-```
-
-**Critical bug to avoid**: Compute the sum BEFORE mutating any panel, then assign to both:
-```csharp
-// ✗ Wrong: panelA already mutated when panelB is computed
-panelA.SizeRatio = (Ratio)newRatio;
-panelB.SizeRatio = (Ratio)(panelA.SizeRatio + panelB.SizeRatio - newRatio); // uses MUTATED panelA!
-
-// ✓ Right: capture sum first
-var sum = panelA.SizeRatio + panelB.SizeRatio;
-panelA.SizeRatio = (Ratio)clamped;
-panelB.SizeRatio = (Ratio)(sum - clamped);
-```
-
-### Clamp vs Throw: Choosing the Right Behavior
-
-When introducing a constrained value type (`Ratio`) to replace bare `double`, the initial instinct is to **throw** on out-of-range input. However, tests and intermediate calculations often use values outside [0, 1]:
-
-**Decision rule**: Clamp silently when:
-- The type will be used as a struct-initialized property (`SizeRatio = (Ratio)1.5` in test setup)
-- Arithmetic operations can produce intermediate results outside range
-- Users of the type are unlikely to pre-validate every construction site
-
-Throw when:
-- The type is an API boundary input (user-facing method parameter)
-- Out-of-range indicates a genuine bug, not a rounding artifact
-
-**Default for `Ratio`**: silently clamp.
-```csharp
-public Ratio(double value)
-{
-    Value = value is < 0.0 ? 0.0 : value > 1.0 ? 1.0 : value;
-}
-```
-
-### Test Value Adjustment After Migration
-
-After introducing a constrained value type, tests that used values outside the new range will fail. **Don't remove or weaken the tests — adjust the values within the new range.** The test semantics stay the same:
-
-| Original | After Migration | Rationale |
-|----------|----------------|-----------|
-| `SizeRatio = 3.0; Equalize(); Assert.Equal(2.0, ...)` | `SizeRatio = 0.7; Equalize(); Assert.Equal(0.5, ...)` | Equalize still splits the pair evenly |
-| `SizeRatio = 2.0; Export(); Assert.Equal(2.0, ...)` | `SizeRatio = 0.8; Export(); Assert.Equal(0.8, ...)` | Round-trip test still validates serialization |
-| `SizeRatio = 1.5; Resize("a","b",0.5); Assert.Equal(1.5, ...)` | Pairs must sum to ~1.0: `SizeRatio = 0.6; SizeRatio2 = 0.4; Resize("a","b",0.3); Assert.Equal(0.7, ...)` | Resize redistributes within the pair |
-
-### Value-Type Implementation (struct not record struct)
-
-.NET 6 does not support `partial void OnValueChanged()` on `readonly record struct`. Use a plain `readonly struct` with explicit `IEquatable<T>`:
-
-```csharp
-public readonly struct Ratio : IEquatable<Ratio>
-{
-    public double Value { get; }
-    public Ratio(double value) { Value = Clamp(value); }
-    public bool Equals(Ratio other) => Value.Equals(other.Value);
-    public override bool Equals(object? obj) => obj is Ratio other && Equals(other);
-    public override int GetHashCode() => Value.GetHashCode();
-    public static bool operator ==(Ratio left, Ratio right) => left.Equals(right);
-    public static bool operator !=(Ratio left, Ratio right) => !left.Equals(right);
-}
-```
-
-### JSON Serialization Pattern
-
-Include a `JsonConverter` inside the same file for value types that need to serialize cleanly:
-
-```csharp
-[JsonConverter(typeof(PanelIdJsonConverter))]
-public readonly struct PanelId : IEquatable<PanelId> { ... }
-
-internal sealed class PanelIdJsonConverter : JsonConverter<PanelId>
-{
-    public override PanelId Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-    {
-        var str = reader.GetString();
-        return string.IsNullOrWhiteSpace(str) ? default : new PanelId(str!);
-    }
-    public override void Write(Utf8JsonWriter writer, PanelId value, JsonSerializerOptions options)
-        => writer.WriteStringValue(value.Value);
-}
-```
-
-### One-Shot Bulk Migration Strategy
-
-For migrations with 50+ errors across many files, **don't use delegate_task** — the subagent's slow `dotnet build` pipeline (90s per build on Windows/MSYS2) makes it impractical. Instead:
-
-1. **Read ALL error messages first** — `dotnet build 2>&1 | grep "error CS"` — group by file and error pattern
-2. **Fix .cs source files first** — use `patch` with `replace_all=true` for identical patterns across a file, Python scripts for cross-file patterns
-3. **Then .razor files** — Blazor-compiled files need different line-number matching. Use `replace_all=true` for identical patterns in 3+ template blocks
-4. **Then test files** — larger volume but same patterns. A Python script with regex replace (`re.sub`) handles batch fixes efficiently. **Warning**: Python `Path.write_text()` may introduce `\r\n` line endings; run `dotnet format --fix-whitespace` after.
-5. **Rebuild after each category** — stop cascade early
-6. **Don't stop at the main `.csproj`** — test projects and demo projects also need fixing
-
 ## Common Pitfalls
 
 - **Applying changes file-by-file instead of whole-project.** Engineering-grade refactoring requires whole-project consistency (Gate 5). Introducing a `Ratio` type in one file but leaving bare `double` in others creates inconsistency worse than the original state.
 - **Skipping the plan-and-approve step.** Jumping straight to implementation after the user rejects mechanical changes wastes effort. Always write the plan, present it, and get explicit approval before coding.
-- **Forgetting test/demo projects.** Value-type migrations ripple beyond `src/` — test projects, demo apps, and Razor components all need the same fixes. Stop only when `dotnet build` passes across the entire solution.
-- **Using `throw` instead of `clamp` for constrained value types.** Throwing on out-of-range construction breaks test setup and intermediate calculations. Default to silent clamping; reserve throws for API boundary inputs where out-of-range indicates a genuine bug.
-- **Computing arithmetic after mutating a source value.** When redistributing values (e.g., resize two panels), capture the original sum before mutating any variable. Otherwise the second computation uses the already-changed first value.
-- **Relying on `record struct` on .NET 6.** Use manual `readonly struct` with explicit `IEquatable<T>`, `Equals`, `GetHashCode`, and operator overloads.
+- **Forgetting test/demo projects.** Value-type migrations ripple beyond `src/` — test projects, demo apps, and Razor components all need the same fixes. Stop only when `dotnet build` passes across the entire solution. See [references/value-type-migration.md](references/value-type-migration.md) for the full cascade spread order.
+- **Using `throw` instead of `clamp` for constrained value types.** Throwing on out-of-range construction breaks test setup and intermediate calculations. Default to silent clamping; reserve throws for API boundary inputs. See [references/value-type-migration.md#clamp-vs-throw-choosing-the-right-behavior](references/value-type-migration.md#clamp-vs-throw-choosing-the-right-behavior).
+- **Computing arithmetic after mutating a source value.** When redistributing values (e.g., resize two panels), capture the original sum before mutating any variable. See [references/value-type-migration.md](references/value-type-migration.md) for the critical bug pattern.
+- **Relying on `record struct` on .NET 6.** Use manual `readonly struct` with explicit `IEquatable<T>`, `Equals`, `GetHashCode`, and operator overloads. See [references/value-type-migration.md#value-type-implementation-struct-not-record-struct](references/value-type-migration.md#value-type-implementation-struct-not-record-struct).
 - **Forgetting to add `@key` on Blazor components that re-register.** Without `@key`, Blazor reuses component instances across parameter changes, keeping stale `_registered` boolean flags that prevent re-registration.
 
 ## Verification Checklist
@@ -436,6 +148,18 @@ For migrations with 50+ errors across many files, **don't use delegate_task** �
 - [ ] `dotnet format --verify-no-changes` reports zero formatting violations
 - [ ] Whole-project consistency confirmed: any new pattern (value type, naming convention, extracted helper) is applied uniformly — no partial migrations left behind
 - [ ] `.razor` files match `.cs` quality standards (no inline `@{}` declarations, no repeated template blocks, no untestable lambdas)
+
+## Reference Documents
+
+Detailed procedures extracted from this skill for maintainability:
+
+| Reference | Contents |
+|-----------|----------|
+| [references/value-type-migration.md](references/value-type-migration.md) | Full value-type migration cascade: pattern rules, spread order, Razor pitfalls, arithmetic gaps, clamp-vs-throw, error codes, test adjustments, struct implementation, JSON serialization, bulk strategy |
+| [references/value-type-migration-atlas.md](references/value-type-migration-atlas.md) | Atlas project case study (2026-07-22): 108-error cascade record, actual execution order, file manifest, delegate_task lessons learned |
+| [references/blazor-patterns.md](references/blazor-patterns.md) | Blazor-specific refactoring: template dedup → child components, inline declarations → computed properties, lifecycle methods → named methods, common pitfalls |
+| [references/refactoring-plan-template.md](references/refactoring-plan-template.md) | Plan document template for Phase 0 (Chinese) |
+| [references/quality-checklist.md](references/quality-checklist.md) | Per-phase quality verification checklist (Chinese) |
 
 ## Related Skills
 
