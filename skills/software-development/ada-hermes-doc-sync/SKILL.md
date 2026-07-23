@@ -8,6 +8,7 @@ platforms: [linux, macos, windows]
 metadata:
   hermes:
     tags: [hermes, documentation, maintenance, skills, version-sync]
+    related_skills: [ada-hermes-agent-skill-authoring]
 ---
 
 # Hermes 文档同步

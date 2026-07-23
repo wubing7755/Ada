@@ -3,6 +3,8 @@ name: ada-dotnet-engineering-refactoring
 description: Engineering-grade .NET refactoring — domain primitives, orchestrator extraction, command base classes, API naming, Blazor component patterns. Use when upgrading codebase quality beyond superficial cleanup.
 version: 1.2.0
 author: Hermes Agent
+license: MIT
+platforms: [windows, linux, macos]
 metadata:
   hermes:
     tags: [dotnet, refactoring, engineering, csharp, blazor, patterns]

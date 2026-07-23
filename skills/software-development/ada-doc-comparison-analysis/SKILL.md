@@ -3,6 +3,12 @@ name: ada-doc-comparison-analysis
 description: Compare two technical documents (SRS, design docs, API specs) and synthesize an optimized version by extracting complementary strengths while respecting phase boundaries.
 version: 1.0.0
 author: Hermes Agent
+license: MIT
+platforms: [linux, macos, windows]
+metadata:
+  hermes:
+    tags: [documentation, comparison, srs, synthesis]
+    related_skills: [ada-srs-documentation, ada-docs-revision]
 ---
 
 # Document Comparison & Optimization

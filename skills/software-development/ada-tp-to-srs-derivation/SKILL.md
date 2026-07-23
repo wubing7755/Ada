@@ -4,6 +4,7 @@ description: Derive a Software Requirements Specification (SRS) from a Technical
 version: 1.4.0
 platforms: [windows]
 author: Hermes Agent
+license: MIT
 metadata:
   hermes:
     tags: [srs, tp, requirements, derivation, chinese, avionics]

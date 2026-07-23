@@ -4,8 +4,10 @@ description: Systematic SRS (Software Requirements Specification) review — fin
 version: 1.1.0
 platforms: [linux, macos, windows]
 author: Hermes Agent
+license: MIT
 metadata:
   hermes:
+    tags: [srs, review, requirements, quality]
     related_skills: [ada-srs-lifecycle]
 ---
 

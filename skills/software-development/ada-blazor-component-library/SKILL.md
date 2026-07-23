@@ -4,8 +4,11 @@ description: Patterns for building Blazor component libraries — state-driven a
 version: 1.0.0
 author: Hermes Agent
 license: MIT
+platforms: [windows, linux, macos]
 metadata:
   hermes:
+    tags: [blazor, component-library, razor, dotnet, nuget]
+    related_skills: [ada-dotnet-blazor-library]
     trigger_keywords: [Blazor, Razor, XDocker, dock layout, component library, .razor, DynamicComponent, WASM]
     usage_prompt: "Use when building or refactoring a Blazor component library — especially dock-panel / IDE-layout components, or any library with JS interop, xUnit tests, and eventual NuGet packaging."
 ---

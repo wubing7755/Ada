@@ -8,6 +8,7 @@ license: MIT
 metadata:
   hermes:
     tags: [dotnet, blazor, rcl, library, component, naming]
+    related_skills: [ada-blazor-component-library]
 ---
 
 # .NET Blazor Component Library

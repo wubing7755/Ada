@@ -3,6 +3,7 @@ name: ada-quality-report-qa
 description: Three-agent QA pipeline for code quality reports — catches statistical errors, test-coverage false negatives, and security omissions before delivery. Complements code-quality-analysis.
 version: 1.0.0
 author: Hermes Agent
+license: MIT
 platforms: [linux, macos, windows]
 metadata:
   hermes:

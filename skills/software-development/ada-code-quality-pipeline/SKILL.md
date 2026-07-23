@@ -4,9 +4,11 @@ description: 代码质量全流水线 — 从分析、验证到 QA 门禁的三�
 version: 1.0.0
 platforms: [linux, macos, windows]
 author: Hermes Agent
+license: MIT
 metadata:
   hermes:
     tags: [code-quality, pipeline, audit, qa, umbrella]
+    related_skills: [ada-code-quality-analysis, ada-code-quality-report-verification, ada-quality-report-qa]
     sub_skills: [code-quality-analysis, code-quality-report-verification, quality-report-qa]
 ---
 

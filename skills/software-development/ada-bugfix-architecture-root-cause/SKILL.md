@@ -6,6 +6,7 @@ description: >-
 version: 1.1.0
 author: Hermes Agent
 license: MIT
+platforms: [linux, macos, windows]
 metadata:
   hermes:
     tags: [debugging, refactoring, architecture, root-cause, blazor, interop]

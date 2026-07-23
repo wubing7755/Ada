@@ -4,9 +4,11 @@ description: SRS 全生命周期管理 — 从 TP 派生、编写、审查到大
 version: 1.0.0
 platforms: [linux, macos, windows]
 author: Hermes Agent
+license: MIT
 metadata:
   hermes:
     tags: [srs, lifecycle, requirements, umbrella]
+    related_skills: [ada-srs-writing, ada-srs-documentation, ada-srs-review, ada-srs-revision, ada-tp-to-srs-derivation, ada-requirements-authoring]
     sub_skills: [tp-to-srs-derivation, srs-writing, srs-review, srs-revision]
 ---
 

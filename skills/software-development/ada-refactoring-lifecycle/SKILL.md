@@ -4,9 +4,11 @@ description: 工程级重构全流程 — 通用架构重构与 .NET 专项重�
 version: 1.0.0
 platforms: [linux, macos, windows]
 author: Hermes Agent
+license: MIT
 metadata:
   hermes:
     tags: [refactoring, architecture, engineering, dotnet, umbrella]
+    related_skills: [ada-engineering-refactoring, ada-dotnet-engineering-refactoring]
     sub_skills: [engineering-refactoring, dotnet-engineering-refactoring]
 ---
 

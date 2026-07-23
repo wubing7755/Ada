@@ -8,6 +8,7 @@ license: MIT
 metadata:
   hermes:
     tags: [powershell, bash, msys, windows, git-bash, path]
+    related_skills: []
 ---
 
 # PowerShell from Bash (Windows)
