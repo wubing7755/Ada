@@ -17,6 +17,25 @@ metadata:
 
 Patterns for building maintainable Blazor (.NET 6+) component libraries with JS interop, tests, and a path to NuGet packaging.
 
+## Overview
+
+This skill captures battle-tested patterns from building a production Blazor dock-panel component library: state-driven architecture (domain model → context → commands → thin ViewModels), namespace collision resolution with `global::` prefixes, TypeScript build pipelines with esbuild and MSBuild integration, xUnit test conventions, Conventional Commits with per-module scopes, and post-phase structured review. It also documents deep pitfalls unique to Blazor's rendering model — `@ref` inside `RenderFragment` silently breaking ElementReference, `firstRender` boolean flags preventing JS re-registration, dictionary indexer failure in `@ref` bindings, drag-type inference fragility, and collection encapsulation migrations.
+
+The skill emphasizes .NET 6 compatibility throughout (no `record struct`, no `@ref` lambdas) and provides migration patterns for enums-to-interfaces (Open/Closed Principle), `List<T>` to `IReadOnlyList<T>` encapsulation, and batch refactoring via `execute_code` with regex for 10+ file changes.
+
+## When to Use
+
+Use when:
+- Building or refactoring a Blazor component library with dock-panel, IDE-layout, or similar complex UI components
+- Setting up JS interop with `IJSObjectReference` for a Blazor library
+- Resolving namespace collision errors (`CS0234`) when Razor component folders match the root namespace
+- Migrating from enum-based dispatch to interface strategy patterns in a Blazor domain model
+- Encapsulating mutable collections behind `IReadOnlyList<T>` / `IReadOnlyDictionary<K,V>` with named mutation methods
+- Applying batch refactoring across 10+ files for an API migration
+- Running a structured post-phase review before continuing to the next implementation phase
+
+Do **not** use for: simple single-component development, server-side Blazor configuration, or non-Blazor .NET library design.
+
 ## Core Principles
 
 1. **State-driven, not MVVM**: Use a pure domain model + per-instance state container + command/reducer-style operations. Components only render and forward events. ViewModels are thin adapters for render projection, not business logic owners.
@@ -498,6 +517,26 @@ document.addEventListener('visibilitychange', onVisibilityChange);
 ```
 
 Both handlers call `cleanupDrag()` + remove all listeners (pointer, key, resize, visibility). The same cleanup must be added to `onDragEnd()` and `onKeyDown()` (Escape).
+
+## Common Pitfalls
+
+- **`@ref` inside a `RenderFragment` returned from a C# method silently breaks.** The `@ref` directive only works in the main `.razor` template, not inside `__builder` lambdas. Extracting repeated `@ref`-containing markup into a helper method compiles but produces null `ElementReference` at runtime. Keep `@ref` inline; only extract display-only content.
+- **`firstRender` boolean flags preventing JS re-registration.** Blazor reuses component instances across parameter changes. A `_registered` bool set to `true` on first render stays `true` forever, blocking re-registration on new DOM elements. Use string-identity comparison (`_lastHeaderPanelId`) instead of boolean flags, or add `@key` in the parent template.
+- **`@ref` in `foreach` loop only captures the last element.** Use a pre-allocated `ElementReference[MaxEntries]` array with an index counter, not a `Dictionary` (which Razor cannot bind to).
+- **Dedup check ordering in `OpenTab`.** The dedup check must run before the duplicate-ID check per SRS requirements. When `DedupMode = ActivateExisting`, the dedup silently activates the existing tab — tests for `DuplicateTabId` rejection must set `DedupMode = AllowDuplicates`.
+- **Capture index before removing from list.** In `CloseTab`, capture `closedIndex = view.Tabs.IndexOf(tab)` before `view.Tabs.Remove(tab)`, otherwise `IndexOf` returns -1 and activation logic breaks.
+- **Drag type inference on the C# side.** Inferring drag type by checking if an ID belongs to a tab is brittle. Pass drag type explicitly from TypeScript via `invokeMethodAsync('OnDragStarted', dragData, dragType, ...)`.
+- **Object initializer order with cross-validated setters.** When setters validate against each other (e.g., `MinSizeRatio <= MaxSizeRatio`), object-initializer assignment order is undefined. Provide an atomic setter (`SetSizeConstraints(min, max)`) and call it after construction.
+
+## Verification Checklist
+
+- [ ] `dotnet build --no-restore && dotnet test --no-build` passes with zero failures
+- [ ] All `@ref` assignments are inline in `.razor` templates — no `@ref` inside extracted `RenderFragment` helper methods
+- [ ] Components that re-register JS handlers have either `@key` in the parent or string-identity tracking (no boolean `_registered` flags)
+- [ ] All `NotifyLayoutChanged` calls use `LayoutChangeType` constants, not raw strings
+- [ ] Post-phase structured review completed: all changed files re-read, analysis checklist passed, summary presented to user
+- [ ] Enums that have become extension bottlenecks are migrated to interface strategy patterns
+- [ ] Mutable collections exposed publicly are encapsulated behind `IReadOnlyList<T>` / `IReadOnlyDictionary<K,V>` with named mutation methods
 
 Pitfall: forgetting to remove these listeners in normal drag-end paths causes stale handlers that fire on the next session.
 

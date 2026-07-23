@@ -16,6 +16,20 @@ metadata:
 Audit and optimize user-side (agent-created + local) skills for quality,
 token efficiency, and maintainability.
 
+## Overview
+
+This skill covers the full maintenance lifecycle for user-side Hermes skills: inventory
+discovery (cross-referencing `hermes skills list` with `.usage.json`), diagnostic
+classification (premature creation, duplicate content, missing frontmatter, verbose
+descriptions >120 chars, content bloat >14K chars, stale/unused), frontmatter
+standardization (license, tags under `metadata.hermes.tags`, related_skills),
+description compression to ≤120 chars in "Use when <trigger>" format, cross-skill
+content deduplication (replacing duplicated prose with one-line pointers), memory-to-
+skill migration (removing procedural rules from memory that duplicate a skill), curator
+setup for automated lifecycle management, and cross-machine export via zip. The skill
+also detects and handles external tool skill injection (e.g., CC Switch writing
+directly to `~/.hermes/skills/` without `.usage.json` entries).
+
 ## When to Use
 
 - User asks to audit, review, or optimize skills
@@ -175,7 +189,7 @@ Import on target machine: `unzip hermes-local-skills.zip -d ~/.hermes/skills/`
    skills and the count didn't change, the list is cached from session start.
    Run `/reload-skills` or start a new session.
 
-## Verification
+## Verification Checklist
 
 After optimization:
 - [ ] `hermes skills list` shows correct count and all local skills enabled

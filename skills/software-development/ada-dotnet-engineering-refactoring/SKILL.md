@@ -16,6 +16,23 @@ metadata:
 Guide for elevating a .NET codebase from "works" to "human-maintainable engineering
 quality" — the level where a new developer can read, extend, and trust the code.
 
+## Overview
+
+This skill provides the concrete .NET/C#/Blazor patterns that implement the engineering-grade refactoring philosophy: domain primitive value types (Ratio, PanelId, TabId), orchestrator-to-helper decomposition, command base class extraction, intent-revealing API naming, overload consolidation, Blazor component extraction with ElementReference callbacks, and named handler methods replacing inline lambdas. It also defines the optimal phase ordering for multi-phase refactoring — starting with value types (widest ripple effect), progressing through API naming, orchestrator extraction, base classes, dead code removal, and finally template extraction.
+
+Every pattern includes a "Key decisions" section documenting trade-offs: clamp vs. throw for constrained types, manual `IEquatable<T>` for .NET 6 compatibility, implicit/explicit conversion operators, JSON serialization via custom `JsonConverter<T>`, and `InternalsVisibleTo` for test access. The workflow section specifies the build-verify-format loop per phase and cross-platform CI considerations.
+
+## When to Use
+
+Use when:
+- The user asks for "工程级" (engineering-grade) refactoring of a .NET/C#/Blazor project
+- The user rejects superficial changes and demands architectural depth («不要嫌麻烦，要改就重构地改»)
+- The project needs to be handed off to human successors for long-term maintenance
+- A code quality audit has identified systemic issues across type safety, naming, and structure
+- Multi-phase refactoring needs a proven phase-ordering strategy to minimize rework
+
+Do **not** use for: simple bug fixes, single-file cleanup, pre-commit formatting, or one-off mechanical dedup.
+
 ## Trigger
 
 - User asks for "工程级" (engineering-grade) refactoring
@@ -288,7 +305,7 @@ When a .NET library refactoring reaches package/API-boundary cleanup, follow `re
 
 At the end of a multi-phase refactoring plan, follow `references/refactoring-closeout.md`: audit stale status markers in traceability/design docs, record independent-review results, mark historical analysis docs as baseline snapshots instead of current-state truth, and answer with a two-layer distinction between “the document-required repair set is complete” and “the whole SRS backlog is complete.”
 
-## Pitfalls
+## Common Pitfalls
 
 - **Ratio clamping vs throwing:** Clamp by default. Throwing on `(Ratio)3.0` breaks
   tests that use intermediate values. The type guarantee is "value is always in [0,1]",
@@ -337,6 +354,26 @@ At the end of a multi-phase refactoring plan, follow `references/refactoring-clo
   `public` prematurely.
 
 - **Independent-review hardening checklist:** See `references/atlas-phase17-19-review-lessons.md` for reviewer-discovered pitfalls around client-visible `ErrorBoundary` details, behavioral lifecycle tests, render-identity hashes, DI boundaries that avoid concrete casts, and Windows ad-hoc verification evidence.
+
+## Common Pitfalls
+
+- **Starting with the wrong phase.** Phase order matters — value types have the widest ripple effect and must come first. Starting with API naming or template extraction forces rework when value types change signatures.
+- **Using `patch(replace_all=true)` on method definitions.** When a file both defines and calls a method, `replace_all` corrupts the definitions. Use sed on call sites only, or rewrite the entire file.
+- **Forgetting `@key` on extracted Blazor subcomponents.** Without `@key`, Blazor reuses component instances and stale `_registered` flags prevent JS interop re-registration. Use string-identity tracking instead of boolean flags.
+- **Fixing only the main `.csproj`.** Value-type migrations cascade through test projects, demo apps, and Razor files. Run `dotnet build` on the entire solution and grep remaining errors before declaring done.
+- **Skipping `dotnet format` after batch edits.** Python `write_text` on Windows introduces `
+`. Always follow batch file edits with `dotnet format` to restore project line endings.
+- **Using `record struct` on .NET 6.** Not available. Use manual `readonly struct` with `IEquatable<T>`.
+- **Losing callback fields during model construction.** When `OpenTabRequest` carries optional callbacks, every non-null field must be explicitly assigned to the `TabModel` during construction. Grep for `request\.` in the construction method to verify completeness.
+
+## Verification Checklist
+
+- [ ] `dotnet build` succeeds across the entire solution (all `.csproj` files — src, tests, demo)
+- [ ] `dotnet test` passes with no regressions — compare pass/fail counts before and after
+- [ ] `dotnet format --verify-no-changes` reports zero formatting changes
+- [ ] All domain primitives are applied uniformly: no bare `string` IDs or bare `double` values remain where strong types were introduced
+- [ ] Extracted subcomponents have `@key` in parent templates and use callback patterns (not `@ref` lambdas) for ElementReference passthrough
+- [ ] `git diff --check` shows no whitespace violations
 
 ## Related Skills
 

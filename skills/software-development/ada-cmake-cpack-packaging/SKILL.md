@@ -15,7 +15,29 @@ metadata:
 
 Use this skill when working on CMake install rules, CPack- or WiX-generated artifacts, Windows installers (NSIS `.exe` or MSI), release packaging workflows, package smoke tests, desktop/start-menu shortcuts, installer UX, or installed-layout runtime behavior.
 
-If the project is Windows-only or treats the Windows installer as a first-class deliverable, **default to WiX/MSI** — see "Choosing between NSIS and WiX/MSI" below for the decision criteria.
+If the project is Windows-only or treats the Windows installer as a first-class deliverable, **default to WiX/MSI** — see "Choosing between NSIS and WiX/MSI" below for the decision criteria. The NSIS sections below remain valid for projects that already chose NSIS, but they document a path with known escape and behavior traps.
+
+## Overview
+
+This skill is the definitive reference for CMake/CPack packaging and Windows installer generation, born from a real migration that survived 20+ PR cycles of escape-character debugging. It covers the full pipeline: CMake install rules, CPack generator choice (NSIS vs WiX 6 MSI vs productbuild), CPack include-order and component-system pitfalls, Windows NSIS escape-character recipe (the single verified configuration that actually ships), installer UX (desktop shortcuts, Start Menu links, PATH modification, finish-page auto-run), installed-layout launcher behavior, and regression tests for packaging config. The skill also documents a complete WiX 6 MSI migration path with every schema change from v3, `file(GLOB_RECURSE)` pitfalls on Windows, graceful CI fallback, and per-user desktop shortcut patterns via PowerShell deferred custom actions.
+
+The core lesson: CPack NSIS has a four-stage escape pipeline (CMake source → CPackConfig.cmake → CMake re-parse → NSIS substitution) where every naive quoting approach fails in a different way. The verified recipe uses quadruple-backslash escaping and explicitly avoids `!include` of `.nsh` files. When NSIS becomes unmaintainable, the decision framework guides the switch to WiX/MSI.
+
+## When to Use
+
+Use when:
+- Setting up CMake install rules for a C/C++ project with `install(TARGETS ...)`, `install(DIRECTORY ...)`, or `install(FILES ...)`
+- Generating Windows installers via CPack (NSIS `.exe`) or WiX 6 (MSI)
+- Debugging missing desktop shortcuts, Start Menu entries, or silent empty installs in CPack-generated installers
+- Implementing per-user desktop shortcuts from a per-machine MSI installer
+- Adding or modifying CPack NSIS variables (`CPACK_NSIS_MENU_LINKS`, `CPACK_NSIS_CREATE_ICONS_EXTRA`, `CPACK_NSIS_MODIFY_PATH`, etc.)
+- Validating CPack packaging config with CTest regression tests
+- Migrating from CPack NSIS to WiX 6 MSI
+- Testing installed-layout behavior (launcher working directory, template/data discovery)
+- Handling CPack component-system pitfalls (silent empty installs from Unspecified component)
+- Cross-platform packaging (NSIS on Windows, DEB/RPM/TGZ on Linux, productbuild on macOS)
+
+Do **not** use for: configuring CI runners (use GitHub Actions docs), writing application code, or general CMake build system design (use CMake documentation).
 
 ## Choosing between NSIS and WiX/MSI
 
@@ -125,7 +147,7 @@ cd build/installer-layout-test/share/<project-data-dir>
 ../../bin/<tool> MyProject --dry-run --yes
 ```
 
-## Verification checklist
+## Verification Checklist
 
 After packaging changes, run:
 
@@ -144,6 +166,19 @@ After packaging changes, run:
 4. **Desktop shortcut (Windows):** check `C:\Users\Public\Desktop\` for admin installs; check user desktop for per-user installs. Verify shortcut Properties → Target path is correct.
 
 5. **Uninstall cleanup:** uninstall and confirm all shortcuts are removed; no orphaned files in `$INSTDIR`.
+
+## Common Pitfalls
+
+- **Setting CPACK_* variables after `include(CPack)`.** CPack captures variables at the point of `include(CPack)`. Any variable set afterward will not appear in `CPackConfig.cmake` and will not affect generated installers. Always set all `CPACK_NSIS_*`, `CPACK_PACKAGE_*`, and `CPACK_RESOURCE_FILE_*` variables before `include(CPack)`.
+- **Using `CPACK_COMPONENTS_ALL` without `COMPONENT` labels on `install()` commands.** Files from unlabeled `install()` calls go to the hidden Unspecified component and are silently skipped. Either remove `CPACK_COMPONENTS_ALL` or add `COMPONENT <name>` to every `install()` command.
+- **Relying on `CPACK_CREATE_DESKTOP_LINKS` alone for desktop shortcuts.** CMake 4.3 reads the variable but never emits `CreateShortCut` into the NSIS script. Use `CPACK_NSIS_CREATE_ICONS_EXTRA` with the verified quadruple-backslash escape recipe instead.
+- **Embedding `!include` of `.nsh` files in CPACK_NSIS_* variables.** CPack's serialization breaks the quoting — NSIS sees broken escape sequences in the include path and fails. Use inline `CreateShortCut` / `Delete` commands instead.
+- **Using forward slashes in NSIS shortcut paths.** NSIS `CreateShortCut` accepts `/` in target paths but rejects it in the `.lnk` shortcut path. The shortcut path must use Windows backslashes.
+- **Forgetting to check Public Desktop for admin installs.** Admin installs via `RequestExecutionLevel admin` land shortcuts on `C:\\Users\\Public\\Desktop`, not the user's personal desktop. Always check both locations when debugging missing shortcuts.
+- **Using the deprecated `dotnet-format` global tool instead of SDK built-in `dotnet format`.** The global tool conflicts with the built-in command in .NET 6+ SDK. CI pipelines using the global tool produce false-positive format failures.
+- **Referencing compiler-specific static libraries in WiX File elements.** MSVC produces `.lib`, GCC/Clang produce `.a`. A fixed reference to one format breaks cross-compiler CI. Use `find_package` and CMake config files instead.
+- **Using `file(GLOB_RECURSE dir)` without `/*`.** The directory path alone is treated as a literal filename — returns empty. Always use `file(GLOB_RECURSE dir/*)`.
+- **Forgetting to guard `CPACK_RESOURCE_FILE_LICENSE` / `CPACK_RESOURCE_FILE_README` for non-Windows.** macOS `productbuild` only accepts `.rtfd`, `.rtf`, `.html`, `.txt` extensions. Files with no extension or `.md` cause `CPack Error: Bad file extension specified`. Guard with `if(CMAKE_SYSTEM_NAME STREQUAL "Windows")`.
 
 ## References
 

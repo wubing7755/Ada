@@ -27,6 +27,19 @@ Every claim must survive a read of the actual file:line it references.
 When a tool result is cited (e.g. `dotnet format` output), re-run the tool
 to confirm. When the report claims N files and M lines, count them yourself.
 
+## Overview
+
+This skill independently validates claims made in a pre-existing code quality report
+by reading actual source code, re-running reproducibility tools, and classifying each
+issue as confirmed (✅), partially correct (⚠️), or false positive (❌). It supports
+three verification modes: Mode A (issue sampling — quick sanity check on 5 issues),
+Mode B (full statistical self-consistency audit — exhaustive 7-point verification),
+and Mode C (implementation phase pass/fail review — fail-closed verification against
+SRS/design acceptance criteria). The skill accumulates known verification heuristics
+from real-world sessions, covering common failure modes like coverage miscounts,
+instance count inaccuracies, duplicate code understatements, and header-vs-appendix
+contradictions.
+
 ## When to Use
 
 - User provides a quality report and asks you to verify it ("独立复核", "抽样验证")
@@ -218,7 +231,7 @@ End with a summary table:
 | 1 | P0-1: ... | 🔴 | ⚠️ | Report claimed 22 zero-coverage; actual 20 |
 ```
 
-## Pitfalls
+## Common Pitfalls
 
 - **Don't trust the report's table without reading source**: The report may list
   "8/30 covered" when the actual count is 10/30 because it missed aggregated tests.
@@ -262,6 +275,14 @@ End with a summary table:
   as `passed`, `security_concerns`, `logic_errors`, `test_gaps`, `evidence`, and
   `recommended_fixes`, return that shape directly with evidence-dense bullets rather
   than a long narrative.
+
+## Verification Checklist
+
+- [ ] Every sampled issue was verified against actual source code at the claimed file:line (never from memory or the report's description alone)
+- [ ] All quantitative claims (file count, line count, test count, coverage percentage) were independently counted with `find`/`wc -l`/`grep` (not taken from the report)
+- [ ] Each sampled issue was assigned one of three outcomes (✅ confirmed / ⚠️ partially correct / ❌ false positive) with concrete evidence
+- [ ] The report's own sub-totals were summed and checked for internal consistency before comparing to independently collected source data
+- [ ] For Mode C (pass/fail) reviews: SRS/design acceptance criteria were read first, and tests were verified to assert required semantics (not just exercise the path)
 
 ## Reference Files
 

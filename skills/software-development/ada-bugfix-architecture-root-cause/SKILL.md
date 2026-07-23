@@ -15,6 +15,12 @@ metadata:
 
 # Architecture Root Cause Analysis for Bug Fixes
 
+## Overview
+
+When multiple UI/behavior bugs present simultaneously — especially in cross-cutting infrastructure like drag-and-drop, interop registration, event wiring, or layout computation — they rarely stem from independent causes. This skill defines a five-phase methodology to trace symptom clusters to a single architecture-level root cause before writing any fix: (1) map symptoms to code paths, (2) find the shared design pattern, (3) perform a mandatory full SRS coverage audit, (4) present the root cause with evidence before fixing, and (5) implement all fixes as one coherent change. The approach prevents the common failure mode where fixing symptom A exposes symptom B, triggering an iterative cycle that never addresses the underlying design flaw.
+
+The skill also captures recurring architectural anti-patterns specific to Blazor drag/interop systems: infrastructure coupled to content, lifecycle tied to `firstRender`, front-end/back-end semantic gaps, and wrong abstraction boundaries. Each includes a signature, real-world example, and the fix principle.
+
 ## When to Use
 
 - User reports **multiple UI/behavior bugs** (2–5 symptoms) that could share a root cause
@@ -122,7 +128,7 @@ Format:
 
 Do NOT fix one symptom at a time. Implement all changes for the shared root cause in a single pass, then verify ALL symptoms are resolved.
 
-## Pitfalls
+## Common Pitfalls
 
 - **Don't fix symptoms individually.** If three bugs share one root cause, three separate fixes = three wrong places + one remaining root cause.
 - **Don't stop at the C# layer.** Blazor drag bugs often live in the TypeScript front-end (visual feedback) while the C# logic is correct. Read both layers.
@@ -140,6 +146,27 @@ Do NOT fix one symptom at a time. Implement all changes for the shared root caus
 - **@ref in foreach only captures the last element.** Blazor @ref inside a loop overwrites each iteration. For ToolBars with multiple entry buttons, use a pre-allocated ElementReference[MaxEntries] + a parallel string?[MaxEntries] array for panel IDs + an int renderIndex counter. In OnAfterRenderAsync, iterate up to renderIndex to register JS handlers per entry. The Dictionary pattern fails because Razor @ref cannot bind to dictionary indexers.
 - **@ref inside RenderFragment returned from a C# method silently breaks ElementReference capture.** Extracting repeated `@ref`-containing markup into a helper that returns `RenderFragment` compiles fine but at runtime `ElementReference` points to a stale/non-existent DOM element, causing `JSException: Cannot read properties of null (reading 'removeAttribute')` in JS interop calls. The `@ref` directive ONLY works when placed directly in the component's main .razor template — not inside a `__builder` lambda. **Fix**: keep `@ref` assignments inline (accept duplication), only extract display-only content (no `@ref`, no event handlers). Additionally, wrap `DetachDragHandlers` in `try-catch (JSException)` to tolerate stale references from Blazor diffing. See `references/blazor-ref-in-renderfragment-pitfall.md`.
 - **Do not couple Dock Region visibility to droppability.** In Dock layouts, a logical Dock Region can be hidden in normal mode (no expanded panels) and still must be a valid target while a panel is being dragged. If you simply stop rendering empty regions, users cannot drag panels back into them. Fix by separating **normal space occupancy** from **drop scaffold** rendering: normal mode shows regions only when they contain expanded panels; panel-drag mode temporarily exposes hidden logical regions as lightweight drop scaffolds that register `dock-region` targets. See `references/atlas-dock-visibility-scaffold-pattern.md`.
+
+## Common Pitfalls
+
+- **Fixing symptoms individually when they share a root cause.** Three separate fixes for three symptoms that trace to one design flaw = three wrong places + one remaining root cause. Map all symptoms first, find the shared pattern, then fix once.
+- **Stopping at the C# layer when bugs span C# and TypeScript.** Blazor drag/interop bugs often live in the TypeScript front-end (visual feedback, DOM registration) while the C# logic is correct. Read both layers before concluding.
+- **Skipping the SRS coverage audit before proposing a fix.** A fix that passes tests but violates SRS acceptance criteria is incomplete. Every AC of every affected requirement must be individually checked — not just the happy-path AC.
+- **Using boolean `_registered` flags for Blazor JS re-registration.** Blazor reuses component instances across parameter changes. A `_registered` bool stays `true` forever. Use `@key` on the parent template or string-comparison identity tracking.
+- **Treating the user's second-order constraint as optional.** When the user says "fix this bug, but don't reduce code quality," the quality constraint IS the main requirement. A "quick fix" that creates technical debt is a failed fix.
+- **Splitting a shared-root-cause fix into multiple PRs.** One root cause → one coherent change → one PR. Splitting forces iterative testing and makes each change look incomplete.
+- **`@ref` inside `foreach` only captures the last element.** Use pre-allocated `ElementReference[N]` arrays with index counters, not dictionaries (Razor can't bind `@ref` to dictionary indexers).
+
+## Verification Checklist
+
+- [ ] Full SRS coverage audit completed with requirement table (Group A: directly broken, Group B: indirectly affected, Group C: regression guard)
+- [ ] Root cause analysis presented to user with: symptom cluster mapping, shared pattern identification, SRS evidence, fix principle, and risk assessment
+- [ ] User explicitly approved the root cause analysis before any code was written
+- [ ] All original symptoms verified as resolved after the fix (not just the one most visible)
+- [ ] No new symptoms introduced — regression tests pass for unaffected features
+- [ ] Each SRS acceptance criterion for affected requirements individually verified (not just happy-path ACs)
+- [ ] `@key` attributes added to Blazor components that need fresh instances on identity change
+- [ ] Boolean `_registered` flags replaced with string-identity comparison or eliminated entirely
 
 ## References
 

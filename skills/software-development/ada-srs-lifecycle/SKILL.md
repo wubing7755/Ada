@@ -66,3 +66,36 @@ Then  ...
 ## 使用方式
 
 加载本 skill 后，根据用户意图选择对应阶段，再加载对应子技能获取详细工作流。
+
+## Overview
+
+`ada-srs-lifecycle` is the umbrella entry point for the complete SRS document lifecycle — from deriving requirements from a Technical Protocol (TP), through structured writing, systematic review, to large-scale revision. Rather than re-implementing any single phase, it routes to the appropriate sub-skill based on where you are in the process, enforces shared conventions (REQ-F format, document structure, core principles), and ensures consistency across all four phases. Load this skill first whenever starting SRS work to get oriented, then follow its routing to the phase-specific sub-skill.
+
+## When to Use
+
+Use when:
+- Starting SRS work and unsure which phase to begin with — this skill diagnoses the current state and routes accordingly
+- You have a TP document and need to produce an SRS from it (routes to `ada-tp-to-srs-derivation`)
+- You need to write or refine an SRS from scratch (routes to `ada-srs-writing`)
+- You need to audit an existing SRS for quality issues (routes to `ada-srs-review`)
+- You need to perform large-scale terminology or concept changes (routes to `ada-srs-revision`)
+
+Don't use for:
+- Single, isolated edits that don't span multiple phases — load the specific sub-skill directly
+- Design documents, API specs, or test plans — this lifecycle is SRS-specific
+- One-off typo fixes or formatting corrections — use a simple `patch` call
+
+## Common Pitfalls
+
+1. **Skipping phase ordering.** The lifecycle is sequential for a reason: derivation produces raw material for writing, review findings feed revision, and revision output may need re-review. Jumping directly to revision without reviewing first misses issues that review would catch.
+2. **Loading this skill and stopping.** This skill is a router — after it identifies the correct phase, you must load the corresponding sub-skill to get detailed workflows, checklists, and pitfalls specific to that phase.
+3. **Mixing conventions across phases.** The shared conventions (REQ-F format, document structure, core principles) apply uniformly. Deviating in one phase (e.g., using a different requirement format during writing) creates inconsistency that downstream phases must clean up.
+4. **Not updating traceability during revision.** When revising, cross-references, statistics tables, and appendix entries silently rot. Always run the post-edit consistency sync from `ada-srs-review` Pass J after any revision.
+
+## Verification Checklist
+
+- [ ] Correct sub-skill loaded for the current phase (check: does the sub-skill's triggers match the user's stated intent?)
+- [ ] Shared conventions reviewed: REQ-F format uses `###` heading + emoji priority (🔴🟡🟢) + `[Actor: Role]`
+- [ ] Document structure follows: §1 Introduction → §2 Terminology → §3 Functional Requirements → §4 Non-Functional Requirements → §5 Appendices
+- [ ] Core principles upheld: no implementation details in requirements, no editor-specific references, terminology consistency via §2 glossary, TP traceability on every requirement
+- [ ] Cross-phase data flows correctly: derivation output feeds writing input; review findings feed revision scope

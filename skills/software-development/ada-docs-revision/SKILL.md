@@ -67,7 +67,7 @@ grep -c 'NewTerm' doc.md
 grep -n '^\|\|' doc.md  # double-pipe in markdown tables
 ```
 
-## Pitfalls
+## Common Pitfalls
 
 ### replace_all corrupts mermaid ER diagrams
 
@@ -115,6 +115,32 @@ When the user asks to align terminology with real-world products:
    of the Chinese prefix
 4. **Container ≠ slot** — parent grouping containers (Left Region) and
    individual dockable slots (左侧上部停靠区) are different concepts
+
+## Overview
+
+`ada-docs-revision` is the general-purpose structured revision methodology for technical documentation — SRS documents, design docs, API specs, and standards. It provides a five-phase workflow (Audit → Reference → Propose → Execute → Verify) that grounds every change in real-world product references (VS Code, JetBrains Rider), requires explicit user approval before any file is touched, executes replacements in dependency order (specific compound phrases → standalone terms → area/entity names → cleanup), and validates with grep-based zero-count checks. The skill also captures the most common breakage patterns from large-scale document revisions: `replace_all` corrupting mermaid ER diagrams, patch tool failures on SVG text with escaped quotes, Chinese-English mixed-term normalization, and double-space artifacts after replacement.
+
+## When to Use
+
+Use when:
+- User asks to revise, review, or restructure a technical document (SRS, design doc, API spec)
+- Aligning terminology across a document, especially when real-world product references are available
+- Disambiguating overloaded concepts (e.g., a word used for three different things in the same document)
+- Performing large-scale renaming with `replace_all` — this skill's pitfalls section warns about the specific breakage patterns
+- User wants changes proposed and approved before execution (the mandatory review-then-execute gate)
+
+Don't use for:
+- SRS-specific revision with the full lifecycle context — load `ada-srs-revision` which extends this skill with SRS-specific patterns (terminology → data model → concepts → requirements → diagrams → statistics dependency order)
+- Document comparison and synthesis — load `ada-doc-comparison-analysis`
+- Writing new documentation from scratch — load `ada-srs-writing` or `ada-requirements-authoring`
+
+## Verification Checklist
+
+- [ ] Audit complete: all occurrences of the problematic term mapped with `grep -n` across the entire document before any changes
+- [ ] Reference grounded: proposed terminology checked against at least one real-world product (VS Code, Rider, or applicable domain reference)
+- [ ] Proposal approved: explicit user confirmation obtained before any file modification
+- [ ] Replacements executed in dependency order: specific compound phrases first, standalone terms next, area/entity names after, cleanup last
+- [ ] Post-revision validation: old terms at zero count (`grep -c 'OldTerm'` returns 0), new terms present, no double-pipe table corruption, mermaid ER diagrams intact
 
 ## Related Skills
 

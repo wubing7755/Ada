@@ -16,6 +16,22 @@ metadata:
 Structuring and developing a Blazor component library as a Razor Class Library
 (RCL) with a companion demo app.
 
+## Overview
+
+This skill covers the full lifecycle of a .NET Blazor component library: RCL project structure (Domain, Services, Interop, Components, ClientScripts, wwwroot), companion WebAssembly demo app separation, public API naming conventions with prefix+suffix disambiguation, TypeScript/JS interop build pipelines with esbuild MSBuild integration, .editorconfig and .gitattributes for cross-platform consistency, and NuGet packaging considerations. It also documents hard-won pitfalls from real migrations — domain model/component name clashes, `_content/{AssemblyName}/` static asset prefix rules, scoped CSS project locality, ContentRegistry ownership, and deprecated `dotnet-format` global tool conflicts.
+
+## When to Use
+
+Use when:
+- Creating a new Blazor component library as a Razor Class Library (RCL)
+- Splitting an existing Blazor app into a library + demo app structure
+- Applying a common type prefix (e.g., "Atlas") to all public types in a Blazor library
+- Setting up TypeScript/JS interop with `IJSObjectReference` in an RCL
+- Preparing a Blazor library for NuGet packaging
+- Debugging 404 errors on RCL static assets (JS, CSS, images)
+
+Do **not** use for: writing individual Blazor components, general .NET library design (non-Blazor), or ASP.NET Core server-side configuration.
+
 ## Trigger
 
 - "Create a Blazor component library"
@@ -111,7 +127,7 @@ as prefix on all types. Distinguish categories by suffix:
 The `Model` suffix on domain types prevents clash. The component name stays
 clean because that's what developers type in markup.
 
-## Pitfalls
+## Common Pitfalls
 
 ### Domain Model / Component Name Clash
 
@@ -263,6 +279,24 @@ var registry = Context?.ContentRegistry ?? new ContentRegistry();
 
 Pre-register demo/fallback components in `LayoutContext`'s constructor.
 See `references/content-registry-wiring.md` for the full pattern.
+
+## Common Pitfalls
+
+- **Domain model / component name clash after prefix application.** When adding a common prefix (e.g., "Atlas") to all types, both `DockPanelModel` and the `DockPanel` component become `AtlasDockPanel`. Fix: add `Model` suffix to domain types (`AtlasDockPanelModel`) so component tags stay clean (`<AtlasDockPanel>`).
+- **RCL static assets not using `_content/{AssemblyName}/` prefix.** Every reference to RCL `wwwroot/` from outside the RCL must use this prefix — JS imports, CSS links, image paths. Missing it produces silent 404s.
+- **Referencing another project's scoped CSS.** Scoped CSS bundles (`{ProjectName}.styles.css`) are per-project. An RCL's scoped CSS is not available to the demo app unless the RCL owns the `.razor.css` files.
+- **Using the deprecated `dotnet-format` global tool.** It conflicts with the SDK built-in `dotnet format`. CI pipelines using the global tool produce false-positive format failures. Always use `dotnet format style --verify-no-changes`.
+- **Regex that matches generic type parameters when renaming component tags.** When reverting component tag names after a model-suffix pass, the regex must distinguish `<TagName ...>` (HTML/XML tag) from `List<TagName>` (generic parameter). Match only when preceded by whitespace, `=`, `"`, or start-of-line.
+- **Creating `new ContentRegistry()` per component per render.** The registry must be owned by a long-lived container (`LayoutContext`), not instantiated in component render methods. An empty-per-render registry means no keys are ever registered.
+
+## Verification Checklist
+
+- [ ] `dotnet build` succeeds for both the RCL project and the demo app
+- [ ] `dotnet test` passes all test projects
+- [ ] `dotnet format style --verify-no-changes --verbosity diagnostic` reports zero changes
+- [ ] All static asset references from the demo app use `_content/{AssemblyName}/` prefix — grep for `"./` in the demo app and verify RCL assets are prefixed
+- [ ] No domain model shares a name with a Razor component — grep for type names and confirm `Model` suffix on domain types
+- [ ] `.editorconfig` and `.gitattributes` are present at the repo root with correct settings for `.cs`, `.razor`, `.ts`, `.js`, `.css`, and config files
 
 ## Reference
 

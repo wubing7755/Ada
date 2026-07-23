@@ -21,6 +21,19 @@ sub-agent reviews, and risk-tiered verification into an end-to-end process.
 session do analysis → design → implementation → review. Fresh contexts (via
 `/new` or `delegate_task`) find what stale contexts miss.
 
+## Overview
+
+This skill provides structured end-to-end development workflows for Hermes Agent
+covering seven scenarios: bug fixes, feature implementation, code review, code quality
+optimization, architecture upgrades, SRS coverage analysis, and quality reporting.
+Every workflow follows a common meta-pattern — Understand → Plan → Execute → Review →
+Report — with baked-in context management rules: fresh contexts between phases,
+sub-agent isolation for reviews (reviewer never equals implementer), and hard limits
+on auto-fix retries (max 2 cycles, then escalate). The skill also enforces context
+hygiene rules (when to `/new`, `/compress`, or split sessions) and a "trust nothing"
+verification discipline where every sub-agent output is a claim to be independently
+confirmed by re-running commands.
+
 ## When to Use
 
 - User asks to fix a bug, implement a feature, review code, optimize quality,
@@ -328,6 +341,17 @@ fix → break" spiral.
 
 ---
 
+## Common Pitfalls
+
+- **Self-review blindness**: The implementer reviewing its own work misses what a fresh context catches. Always `delegate_task` for the review phase — reviewer never equals implementer.
+- **Skipping reproduction in bug fixes**: Jumping to a fix without first reproducing the bug with a failing test is gambling. The `systematic-debugging` Iron Law: create the tight feedback loop before touching code.
+- **Bundled fixes**: "While I'm here" improvements during a bug fix or feature implementation introduce unrelated risk. One change, one verify.
+- **Implementing without SRS alignment**: Feature work without checking the spec leads to rework. Always read SRS + traceability matrix first.
+- **Mixing feature work with architecture upgrades**: Architecture upgrades should be pure refactors — behavior must stay identical. If new features are needed, do them in a separate workflow.
+- **Ignoring the Rule of Three**: If 3 consecutive fix attempts fail for the same bug, stop and question the architecture, not the fix. This is the escape hatch from the fix→break→fix→break spiral.
+- **Single-point quality reports**: One report is a snapshot. Trends over 3+ months tell the real story. Use Hermes cronjob for monthly auto-analysis.
+- **Partial status misjudgment in SRS coverage**: Marking a requirement as "Implemented" because a function signature exists, without verifying all acceptance criteria, produces misleading coverage reports. Sub-agent review must spot-check Partial entries.
+
 ## Verification: Trust Nothing
 
 Every sub-agent output is a **claim**, not a **fact**. Always verify:
@@ -362,3 +386,11 @@ Every workflow ends with a structured report. Minimum sections:
 
 Full scenario guides with detailed prompts and expected outputs are in
 `references/scenario-guides.md`.
+
+## Verification Checklist
+
+- [ ] Workflow phases executed in order: Understand → Plan → Execute → Review → Report (no phase skipped)
+- [ ] Review phase used a fresh sub-agent via `delegate_task` — not self-review by the implementing session
+- [ ] Fix phase used a separate sub-agent from the reviewer (reviewer ≠ fixer)
+- [ ] All sub-agent claims (tests pass, file written, review passed) were independently verified by re-running commands
+- [ ] Context was reset between analysis → implementation and before any review phase

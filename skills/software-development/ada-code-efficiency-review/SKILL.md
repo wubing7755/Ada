@@ -22,6 +22,17 @@ recommendation and is graded by confidence and risk.
 dependencies (interop layers, domain models, service registrations), and validate
 against actual execution paths — not just surface-level diff reading.
 
+## Overview
+
+This skill audits a diff or codebase for efficiency and resource-management issues:
+wasted computation, unnecessary allocations, missed parallelism, hot-path bloat,
+concurrency bugs, TOCTOU races, and memory leaks. Unlike general code review, it
+focuses exclusively on waste — code that works correctly but does too much work,
+allocates too often, or leaks over time. The audit walks an 8-category checklist
+(redundant computation, N+1 patterns, missed concurrency, hot-path bloat, TOCTOU
+races, memory issues, excessive reads, silent failures) and produces findings graded
+by both confidence (HIGH/MEDIUM/LOW) and risk (🔴/🟡/🟢) with concrete fix recommendations.
+
 ## When to Use
 
 - User asks to "review for efficiency", "audit performance", "check for waste"
@@ -152,7 +163,7 @@ End with a prioritized table:
 |---|:---:|------|-----|
 | 1 | 🔴 | Short summary | One-line fix description |
 
-## Pitfalls
+## Common Pitfalls
 
 - **Reviewing only the diff, not the whole file.** A changed line might look
   fine in isolation but be called from a hot loop 50 lines above. Always read
@@ -188,6 +199,14 @@ End with a prioritized table:
   zeroes out primary state, check whether secondary collections (recent-item
   lists, caches, MRU buffers) are also cleared — stale entries can cause
   incorrect behavior in downstream strategy methods.
+
+## Verification Checklist
+
+- [ ] Every changed file was read in full (not just the diff) to understand call-site context and surrounding logic
+- [ ] All 8 efficiency categories were checked against each new or changed code block
+- [ ] Cross-file dependencies (interop layers, domain models, service registrations) were traced and inspected for hidden waste
+- [ ] Each finding includes: file:line, specific problem description, concrete fix, confidence level, and risk level
+- [ ] Summary table present with all findings prioritized by severity (🔴 before 🟡 before 🟢)
 
 ## References
 

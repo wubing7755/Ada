@@ -13,6 +13,24 @@ metadata:
 
 # Hermes 配置与人格设计
 
+## Overview
+
+This skill covers Hermes Agent configuration patterns including SOUL.md personality
+design (what belongs vs. what doesn't — identity only, not operational instructions),
+memory and profile optimization (batch atomic operations, identifying stale references,
+target <70% capacity), and the configuration layering model (SOUL.md for identity,
+AGENTS.md for project rules, skills for workflows, memory for persistent preferences).
+It also provides concrete guidance for curator setup (auto-consolidation and archival)
+and cross-machine skill export.
+
+## When to Use
+
+- User wants to configure or tune Hermes Agent's personality, communication style, or behavior
+- User asks about SOUL.md design, memory optimization, or profile management
+- User needs to decide where configuration rules belong (SOUL vs AGENTS vs skills)
+- User encounters memory capacity issues (>80% full) or wants to batch-update memory entries
+- User asks "how do I configure Hermes", "优化 memory", "配置 Hermes personality", or "curator setup"
+
 ## SOUL.md 编写
 
 **SOUL.md = 身份标识，不是操作手册。** 占据系统提示词第 1 个槽位。
@@ -108,3 +126,18 @@ memory(target="user", operations=[
 | 操作流程 | skill | 按需加载 | 工作流步骤、陷阱、验证 |
 | 持久偏好 | memory(user) | 跨会话 | 语言、工具偏好、约定 |
 | 环境笔记 | memory(memory) | 跨会话 | 项目结构、部署方式、经验教训 |
+
+## Common Pitfalls
+
+- **Putting operational instructions in SOUL.md**: SOUL.md is identity only (tone, style, personality). Operational rules like "confirm before deleting files" or "run tests after every change" belong in skills or AGENTS.md. The litmus test: "Does this rule apply everywhere I use this profile?" → SOUL.md. "Does this rule only matter for this project?" → AGENTS.md.
+- **Memory capacity overload**: Memory should stay under 70% capacity; above 80% is critical. Batch-optimize by removing stale entries first (outdated file names, old version numbers, completed progress markers), then replace inaccurate entries, and finally add new merged entries — all in one `operations` array call.
+- **Single operations on memory instead of batch**: Using separate `memory(action='add')` calls when an `operations` array could do it all at once risks hitting character limits between calls. The batch approach is atomic — the entire operation succeeds or fails as one.
+- **Forgetting that config changes need session reset**: SOUL.md and skill description changes only take effect after `/reset` or starting a new session. If a change doesn't seem to work, verify with `/reset` before debugging further.
+
+## Verification Checklist
+
+- [ ] SOUL.md contains only identity/communication style content (no operational instructions, no formatting rules, no workflow steps)
+- [ ] Memory usage is under 70% capacity with ≤5 entries; no stale references (old filenames, version numbers, progress markers)
+- [ ] Configuration layering is correct: identity in SOUL.md, project rules in AGENTS.md/.hermes.md, procedures in skills, preferences in memory
+- [ ] Curator settings are active (`curator.consolidate: true` with `stale_after_days` and `archive_after_days` configured)
+- [ ] `hermes config list` confirms all settings match intended configuration

@@ -15,6 +15,12 @@ metadata:
 
 Architectural-level code refactoring for entire projects. Not mechanical dedup — this is the skill for when the user says "Microsoft engineering level" or "this doesn't meet my standard."
 
+## Overview
+
+This skill defines a disciplined, architecture-first approach to whole-project refactoring. It replaces ad-hoc cleanup with six engineering quality gates: type-system constraints, intent-revealing API names, interface-based dependencies, orchestration/implementation separation, whole-project consistency, and Razor-first parity. The workflow emphasizes discovery, planning, user approval, phased execution, and a final consistency pass — ensuring the result is a maintainable codebase a new developer can pick up and extend naturally.
+
+Unlike mechanical dedup (extract-method, extract-helper), this skill targets the structural choices that separate "it works" from "it is engineered." It covers value-type migration cascades, Blazor component extraction, Razor-specific compiler pitfalls, and batch migration strategies for 50+ error codebases.
+
 ## When to Use
 
 - User explicitly rejects mechanical refactoring (extract-method, extract-helper) as insufficient
@@ -411,6 +417,25 @@ For migrations with 50+ errors across many files, **don't use delegate_task** �
 4. **Then test files** — larger volume but same patterns. A Python script with regex replace (`re.sub`) handles batch fixes efficiently. **Warning**: Python `Path.write_text()` may introduce `\r\n` line endings; run `dotnet format --fix-whitespace` after.
 5. **Rebuild after each category** — stop cascade early
 6. **Don't stop at the main `.csproj`** — test projects and demo projects also need fixing
+
+## Common Pitfalls
+
+- **Applying changes file-by-file instead of whole-project.** Engineering-grade refactoring requires whole-project consistency (Gate 5). Introducing a `Ratio` type in one file but leaving bare `double` in others creates inconsistency worse than the original state.
+- **Skipping the plan-and-approve step.** Jumping straight to implementation after the user rejects mechanical changes wastes effort. Always write the plan, present it, and get explicit approval before coding.
+- **Forgetting test/demo projects.** Value-type migrations ripple beyond `src/` — test projects, demo apps, and Razor components all need the same fixes. Stop only when `dotnet build` passes across the entire solution.
+- **Using `throw` instead of `clamp` for constrained value types.** Throwing on out-of-range construction breaks test setup and intermediate calculations. Default to silent clamping; reserve throws for API boundary inputs where out-of-range indicates a genuine bug.
+- **Computing arithmetic after mutating a source value.** When redistributing values (e.g., resize two panels), capture the original sum before mutating any variable. Otherwise the second computation uses the already-changed first value.
+- **Relying on `record struct` on .NET 6.** Use manual `readonly struct` with explicit `IEquatable<T>`, `Equals`, `GetHashCode`, and operator overloads.
+- **Forgetting to add `@key` on Blazor components that re-register.** Without `@key`, Blazor reuses component instances across parameter changes, keeping stale `_registered` boolean flags that prevent re-registration.
+
+## Verification Checklist
+
+- [ ] All six quality gates pass on every modified file (re-read each file explicitly — do not assume)
+- [ ] `dotnet build` succeeds across the entire solution (src + tests + demo)
+- [ ] `dotnet test` passes with no regressions (compare test count before/after)
+- [ ] `dotnet format --verify-no-changes` reports zero formatting violations
+- [ ] Whole-project consistency confirmed: any new pattern (value type, naming convention, extracted helper) is applied uniformly — no partial migrations left behind
+- [ ] `.razor` files match `.cs` quality standards (no inline `@{}` declarations, no repeated template blocks, no untestable lambdas)
 
 ## Related Skills
 

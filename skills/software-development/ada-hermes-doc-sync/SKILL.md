@@ -15,6 +15,7 @@ metadata:
 
 当 `hermes-agent` skill 版本升级或定期维护 Hermes 项目文档时，系统性同步技能清单、命令引用和功能描述。
 
+## When to Use
 ## 适用时机
 
 - `hermes-agent` skill 版本号变化
@@ -178,6 +179,7 @@ for i, line in enumerate(text.split('\n')):
 
 每轮进化后更新（详见 `references/evolution-checklist.md`）。
 
+## Common Pitfalls
 ## 常见陷阱
 
 | 陷阱 | 症状 | 对策 |
@@ -188,3 +190,15 @@ for i, line in enumerate(text.split('\n')):
 | **ASCII 轨迹图断裂** | patch 时截断了代码围栏中的图 | 用包含前后文的大段 old_string 确保唯一匹配 |
 | **级联引用遗漏** | 改完主流程但边缘引用（引擎 6/7/cronjob）未同步 | 用 search_files 全局扫描过时数字，逐处修正 |
 | **章节插入导致编号漂移** | 新增场景后 TOC、决策树、抽象模型、引擎审视范围全部偏移 | 插入新节后必须执行一次全局编号同步：TOC条目+1、所有引用该节号的 grep 结果逐条修正、EVOLUTION 数据面板更新、引擎审视范围扩展 |
+
+## Overview
+
+`ada-hermes-doc-sync` keeps Hermes project documentation (best-practices, built-in-capabilities, acquired-skills, self-evolution, EVOLUTION.md) in lockstep with the live Hermes installation. It provides a systematic workflow for detecting and resolving drift: skill inventory diffing (set-difference analysis of `hermes skills list` vs documented skill lists), full-document count synchronization across seven touchpoints, skill list additions/removals/renames, stale reference cleanup, external documentation cross-auditing (comparing project docs against the official Hermes docs at hermes-agent.nousresearch.com), and version-upgrade cascade checks (new slash commands, toolsets, CLI commands, providers, and feature areas). Load this during periodic project maintenance or whenever the `hermes-agent` skill version changes.
+
+## Verification Checklist
+
+- [ ] Skill inventory diffed: `hermes skills list` output parsed and compared against documented skill lists; new/removed/renamed skills identified
+- [ ] All seven counting touchpoints synchronized: header stats, panorama counts, auto-load notes, dedup notes, source manifests (§6.1), deployment verification (§6.3), and setup-skills.sh comments
+- [ ] Stale references cleaned: global `grep -rn` for removed skill names; each occurrence either replaced with an installed alternative, marked "(未安装)", or deleted
+- [ ] External documentation audited: official Hermes docs fetched, structure extracted, cross-compared against project docs; gaps triaged as 🔴 P0 / 🟡 P1 / 🟢 P2
+- [ ] EVOLUTION.md updated: data panel counters match current state, header rounds match panel rounds, ASCII trajectory diagrams intact

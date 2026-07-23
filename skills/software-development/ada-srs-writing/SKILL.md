@@ -95,6 +95,7 @@ SRS 定义**行为**，不是**数值常量**。以下属于实现细节，不�
 - 更新各节的需求索引
 - 更新 §5 需求统计
 
+## Common Pitfalls
 ## 常见陷阱
 
 - **AC 描述不可能发生的场景**：检查"运行时检测"类 AC 是否真的有触发路径
@@ -145,6 +146,33 @@ VS Code 内置 markdown 预览对 SVG 有严格要求。不遵守以下规则会
 |------|------|:----:|
 | YYYY-MM-DD | **简短标题**: 具体变更描述 | — |
 ```
+
+## Overview
+
+`ada-srs-writing` provides a structured, four-phase methodology for writing and iteratively refining Software Requirements Specification documents. Grounded in real-world SRS authoring experience (notably the Atlas/xDocker dock-layout system), it covers core principles — document purity (no editor references, no historical annotations), the requirements-vs-implementation boundary (describe WHAT, not HOW), concept separation (Editor Tab vs Dock Panel vs ToolBar Entry), terminology consistency, and in-document coherence. The optimization workflow (Understand → Propose → Execute → Wrap-up) gates large changes behind user confirmation, and the extensive pitfall catalog captures hard-won lessons from multi-thousand-line document revisions. This is the primary writing skill in the SRS lifecycle.
+
+## When to Use
+
+Use when:
+- Writing a new SRS section or requirement from scratch
+- Refining or "optimizing" an existing SRS — restructuring, improving clarity, fixing concept confusion
+- User asks to "优化 SRS", "修改需求文档", or "讨论这条需求是否合理"
+- Aligning SRS terminology and concepts with a reference design (e.g., VS Code Workbench)
+- Adding, removing, or restructuring functional requirements and their acceptance criteria
+- Incorporating review findings from `ada-srs-review` into the document
+
+Don't use for:
+- One-off typo fixes — use a simple `patch` call instead
+- Full-document audit — load `ada-srs-review` for the systematic 12-pass review methodology
+- Large-scale terminology revision across hundreds of occurrences — load `ada-srs-revision` for the review-then-execute workflow with blast-radius analysis
+
+## Verification Checklist
+
+- [ ] Document purity: no references to specific editor implementations (VS Code, Rider) or historical edit annotations ("已合并: REQ-F-xxx", "已删除: REQ-F-xxx")
+- [ ] Requirements describe WHAT, not HOW: pixel values, colors, and exact timings are in design docs (behavioral parameters like 4px drag threshold and 200ms performance targets are acceptable)
+- [ ] Concept separation enforced: Editor Tab (标签页), Dock Panel (面板), and ToolBar Entry (条目) are defined in §1 and used consistently — no Tab-requirements on Dock Panels or vice versa
+- [ ] Terminology consistency: same concept uses same term everywhere; §2 glossary is the single source of truth; bilingual annotations follow `English（中文）` format on first use per segment
+- [ ] After any structural change: §5 statistics recalculated, section indexes updated, appendix change log appended, and cross-references verified with `search_files`
 
 ## 参考文件
 

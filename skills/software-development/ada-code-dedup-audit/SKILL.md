@@ -17,6 +17,20 @@ Audit uncommitted changes against the whole codebase to find where new code
 reimplements existing utilities, helpers, constants, or behavioural patterns
 instead of calling them. Answers the question "am I reinventing the wheel?"
 
+## Overview
+
+This skill systematically audits uncommitted changes against the entire codebase to
+identify DRY violations before they become technical debt. It follows a five-phase
+methodology: scope the change (identify every new pattern introduced), extract
+searchable signatures from each pattern, run parallel searches across the codebase,
+read and compare existing implementations against new code, and produce a structured
+report with concrete reuse suggestions. Findings are prioritized by risk tier: event/
+lock bypassing (highest), identical patterns in different contexts, identical calls
+with different wrappers, and component-local LINQ vs. existing state queries (lowest).
+Common duplication patterns like debounce/delay, logging/tracing, component-to-service
+bypass, CSS magic numbers, repeated string literals, and Blazor markup duplication
+are explicitly documented with detection patterns.
+
 ## When to Use
 
 - User says "审查本次改动中是否存在重复造轮子" or "检查是否可以复用已有代码"
@@ -163,11 +177,19 @@ return DockResult.Failure(DockErrorCode.InvalidLayoutData, "Preset name is requi
 <!-- Appears in both DockPanel.razor and ToolBar.razor → AutoHidePinButton.razor -->
 ```
 
-## Pitfalls
+## Common Pitfalls
 
 - **Don't flag legitimate specialisation.** Two methods that look similar but serve different domains (e.g. debouncing UI vs debouncing persistence) may legitimately stay separate if they have different lifecycle requirements.
 - **Component-local LINQ is often OK.** Blazor components receive a filtered `IReadOnlyList` and searching it with `FirstOrDefault` is cheap. Only flag when there's a semantic benefit to using the state query (consistency, future-proofing against filter changes).
 - **Model-level guard + service-level guard is defensive, not duplication.** If `Collapse()` throws on AutoHidden and `CollapsePanel()` guards before calling it, both serve different consumers. Note it but don't demand a fix.
+
+## Verification Checklist
+
+- [ ] All new code patterns (methods, types, framework calls, control flow, CSS classes, string literals) were extracted as searchable signatures
+- [ ] Parallel searches across the codebase were executed for every identified pattern (not just a few sampled ones)
+- [ ] Each match was verified by reading the full existing implementation — not accepting the search hit at face value
+- [ ] Every finding includes file:line for both new code and existing code, with a concrete reuse or extraction suggestion
+- [ ] Priority tiers applied correctly: event/lock bypassing flagged as HIGH risk, component-local LINQ not over-flagged
 
 ## Reference
 

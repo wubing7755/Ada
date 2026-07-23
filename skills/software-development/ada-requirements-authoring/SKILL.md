@@ -13,6 +13,7 @@ metadata:
 
 # Requirements Authoring: SRS vs Design Boundary
 
+## When to Use
 ## When to Load
 
 - User asks you to review an SRS for completeness or quality
@@ -111,6 +112,7 @@ These are often mistaken for design but are actually behavioral specifications:
 
 4. **"Timing values are design"** — No. "300ms delay before auto-hide" defines user-perceivable behavior. The user experiences the delay. It's a behavioral specification.
 
+## Verification Checklist
 ## Review Checklist
 
 When reviewing an SRS for design-level leakage, scan for:
@@ -122,3 +124,7 @@ When reviewing an SRS for design-level leakage, scan for:
 - [ ] Data structure type annotations (`Map<...>`, `Record<...>`)
 - [ ] Design pattern names
 - [ ] File format specifics (when describing internal processing, not external interfaces)
+
+## Overview
+
+`ada-requirements-authoring` defines and enforces the boundary between Software Requirements Specification (WHAT the system must do) and Design (HOW the system achieves it). It provides three self-check questions that catch design-level leakage in every requirement, a dangerous-vocabulary table mapping framework/API/data-structure terms to their SRS-safe equivalents, safe sentence patterns with before/after examples for common leak categories, and an "up-one-level" technique for methodically abstracting implementation details into behavioral specifications. It also clarifies the nuanced cases: quantitative thresholds (4px drag threshold, 200ms initialization), algorithm-as-behavior rules, external interface contracts (ARIA, JSON export format), and international standards (BCP 47) — all of which are legitimate SRS content despite looking like design. Load this whenever writing or reviewing requirements to stay at the correct abstraction level.

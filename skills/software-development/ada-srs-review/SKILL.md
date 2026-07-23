@@ -275,7 +275,7 @@ Record every deletion, merge, and concept shift in an appendix change log. Forma
 | YYYY-MM-DD | **变更类型**: 具体描述 | — |
 ```
 
-## Pitfalls
+## Common Pitfalls
 
 - **Don't review in isolation**: Cross-reference every requirement against the architecture section (§1.x) and concept definitions. A requirement that looks fine in isolation may be nonsense when checked against the data model.
 - **Don't be shy about deleting**: Dead requirements (physically impossible scenarios) should be removed, not marked "future" or "low priority". They confuse implementers.
@@ -312,3 +312,31 @@ Record every deletion, merge, and concept shift in an appendix change log. Forma
 - **Contradiction resolution needs user decision before edits**: When architecture (§1.3) and a requirement AC disagree on the same scenario, DON'T pick a side silently. Present both as 方案 A/B with an industry reference table (how VS Code/Rider do it) and a recommendation. *Atlas case*: §1.3 said toggle, F-022 said no-op; user chose toggle after seeing that both VS Code and Rider use toggle. Then the chosen model exposed a companion gap (header close button + API needed a separate REQ) — trace the cascade.
 
 - **Batch-insert-then-sync for multi-REQ additions**: When adding 6+ new requirements across multiple sections, insert ALL REQ bodies first (insertion is cheap), then update all indices/stats/changelog/appendix in a single sync pass. This avoids N×7 cascading edits per REQ. *Atlas case*: B3-B11 produced 6 REQs + 3 doc fixes (scope table, appendix B, appendix D) — 9 insertions followed by 1 sync pass of ~20 patch calls, verified once with `verify_srs_consistency.py`.
+
+## Overview
+
+`ada-srs-review` is a systematic audit methodology for Software Requirements Specification documents. It runs 12 structured passes (Pass A–K plus Pass J for post-edit consistency sync) that collectively catch: dead requirements describing physically impossible scenarios (Pass A), stale cross-references to merged or deleted requirements (Pass B), concept confusion and terminology drift (Pass C), implementation-detail leaks (Pass D), scope boundary violations (Pass E), missing behaviors exposed by corrections (Pass F), framework coverage gaps against reference implementations (Pass G), SRS-to-code coverage mismatches (Pass K), and silent post-edit rot in indexes, statistics, and cross-references (Pass J). Developed and hardened on the Atlas/xDocker SRS — a 4700+ line dock-layout specification — each pass includes detection signals, fix procedures, and real-world examples of the defect class it targets.
+
+## When to Use
+
+Use when:
+- User asks to "review", "audit", or "check" an SRS document for quality
+- User questions a single requirement's validity ("这个需求合理吗？") and you need to scale the check across the whole document
+- After any large-scale revision — run Pass J (post-edit consistency sync) to catch silently rotted indexes, statistics, numbering rules, deferred-requirements appendix entries, change log, and hardcoded ID ranges
+- Comparing an SRS against a reference implementation's full capability set (Pass G — framework coverage / gap analysis)
+- Comparing SRS requirements against actual source code implementation (Pass K — SRS-to-code coverage analysis)
+- Before handing off an SRS to design or implementation — a pre-handoff quality gate
+- Auditing an existing coverage report for accuracy (Pass K — "复核 SRS 覆盖率报告的准确性")
+
+Don't use for:
+- Writing new requirements — load `ada-srs-writing` or `ada-requirements-authoring`
+- Deriving SRS from a TP — load `ada-tp-to-srs-derivation`
+- Executing fixes found during review — use `ada-srs-revision` for large-scale changes or `ada-srs-writing` for surgical edits
+
+## Verification Checklist
+
+- [ ] Full document read and section hierarchy mapped before starting any audit pass
+- [ ] Pass A complete: all dead requirements (physically impossible scenarios) identified, flagged, and rationale documented
+- [ ] Pass B complete: all stale cross-references to merged/deleted requirements found via `search_files` and updated to current IDs
+- [ ] Pass C complete: concept confusion and terminology drift audited against explicit entity definitions (e.g., the four-concept model: Region / DockPanel / EditorView / EditorTab)
+- [ ] Pass J complete: section indexes recount matches actual headers, §5 statistics recomputed from genuine requirement headers, numbering rules reflect current gaps, deferred-requirements appendix entries match by title not stale ID, change log appended, hardcoded ID ranges in NFR bodies replaced with unbound phrasing

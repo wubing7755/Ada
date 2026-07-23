@@ -336,6 +336,7 @@ Then 应切换至对应工具的操作界面
 | 术语表 | 三列 | 中文 | 英文 | 定义 |
 | Actor 角色名 | 英文 | 如 Application Developer |
 
+## Common Pitfalls
 ## 常见陷阱
 
 ### 1. 过度偏离 TP
@@ -555,6 +556,18 @@ REQ-F-00XX 线型 .c/.h 文件生成（旧版 — 太粗）
    - Description 末尾补充引用
 6. **更新附录**：追迹矩阵追加新行、统计表更新章节区间和总数、变更记录追加行
 7. **验证**：围栏数 = 新总需求数 × 2，统计表与头部一致
+
+## Overview
+
+`ada-tp-to-srs-derivation` is the complete methodology for deriving a Software Requirements Specification from a Technical Protocol (TP) document — the contractual or technical agreement that defines what a system must do. Originally developed for avionics/embedded display systems, the skill covers every stage: reading and understanding the TP, confirming architecture decisions with the user (deployment, framework, multi-system relationships), six derivation paths (direct mapping, decomposition, cross-tool extraction, architecture-derived, precision correction, AC atomization), structured requirement authoring with REQ-F format and Chinese-English bilingual conventions, multi-system SRS chapter structures, traceability matrix maintenance, statistical verification, self-evolution iterations, and TP sentence-by-sentence regression. All requirements must be traceable to a TP clause — this skill enforces that fidelity.
+
+## Verification Checklist
+
+- [ ] All TP clauses covered: every paragraph in the TP document has at least one corresponding REQ-F requirement or a documented reason for exclusion
+- [ ] Architecture decisions confirmed with user before drafting: deployment type, framework choices, multi-system relationships, shared vs independent backends, authentication requirements
+- [ ] Requirement format validated: `### REQ-F-XXX` heading + priority emoji (🔴🟡🟢) + `[Actor: Role]`, Title/Description/Acceptance Criteria with Given/When/Then, source annotation (`> **来源**: TP §x.x`)
+- [ ] Traceability matrix (Appendix C) complete: every TP clause mapped to REQ-F IDs; architecture-derived items marked "衍生：xxx"; no orphan REQ-F entries without a TP source
+- [ ] Statistical verification passed: REQ-F count from headers matches Appendix B totals; priority distribution (🔴🟡🟢) matches; no ID gaps or duplicates; fence count = REQ-F count × 2
 
 ## 参考文件
 

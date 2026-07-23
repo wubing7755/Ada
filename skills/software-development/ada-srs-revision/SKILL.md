@@ -123,7 +123,7 @@ After terminology changes, update:
 - Cross-references in other sections that use the old terms
 - `docs/requirements-traceability.md` if implementations reference old terms
 
-## Pitfalls
+## Common Pitfalls
 
 ### `replace_all` on short terms is dangerous
 
@@ -185,6 +185,26 @@ grep -c '新术语' docs/SRS.md
 # 6. Line count sanity check
 wc -l docs/SRS.md
 ```
+
+## Overview
+
+`ada-srs-revision` is the disciplined methodology for executing large-scale revisions on structured technical documents — primarily SRS documents but applicable to design docs and standards. Developed on a 4700-line SRS where a core concept ("面板堆叠 / Panel Stacking") was replaced with "Tab 组 / Tab Group" across every section, table, diagram caption, term definition, and requirement, it enforces a review-then-execute workflow: understand the semantic change (old surface forms + behavioral implications), map the blast radius with `grep`, propose options with comparison tables for user approval, patch in dependency order (terminology → data model → concepts → requirements → diagrams → statistics), fix common breakage patterns (double-pipe corruption, mermaid damage, spacing artifacts, SVG text), and validate with grep-based zero-count checks. The cost of getting a term wrong across 100+ occurrences is far higher than the cost of an extra confirmation round-trip — this skill bakes that discipline into every step.
+
+## When to Use
+
+Use when:
+- Changing a core concept or term across an entire SRS or technical specification
+- User says "review the terminology" or "this term isn't right" for a term that appears dozens of times
+- Aligning specification terminology with industry references (VS Code, Rider, IntelliJ)
+- Adding, removing, or restructuring numbered sections in a large specification
+- Any change exceeding ~5 individual edits in a large document — the workflow overhead pays for itself at scale
+- Mass terminology standardization (e.g., "Dock 区域" → "停靠区", "堆叠" → "Tab 组") across all sections, tables, diagrams, and code blocks
+
+Don't use for:
+- Single-line typo fixes — use a simple `patch` call
+- Writing new content from scratch — load `ada-srs-writing`
+- Auditing or reviewing a document — load `ada-srs-review` first to identify what needs changing, then use this skill to execute the changes
+- Changes that don't affect terminology or structure (e.g., adding a single new requirement) — load `ada-srs-writing`
 
 ## References
 

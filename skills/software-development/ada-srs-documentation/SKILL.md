@@ -147,3 +147,15 @@ When writing for Chinese-speaking teams:
 - Technical terms include English equivalents: `Dock 面板（Dock Panel）`
 - English-only for maintainer/architecture docs
 - Terminology table: Chinese | English | Definition (three columns)
+
+## Overview
+
+`ada-srs-documentation` defines the canonical structure, format, and quality rules for Software Requirements Specification documents. It serves as the reference standard for what a well-formed SRS looks like: chapter organization (§1 Introduction through §5 Statistics plus Appendices), requirement formatting conventions (REQ-F-XXX with priority emoji, actor notation, Given/When/Then acceptance criteria), priority usage rules (🔴 P0 / 🟡 P1 / 🟢 P2), quality rules for separating behavior from implementation, concept separation patterns for systems with multiple container types, scope boundary documentation, and bilingual conventions for Chinese-English mixed teams. Use this as the structural template when creating a new SRS or when an existing SRS needs to be evaluated against quality expectations.
+
+## Verification Checklist
+
+- [ ] All required sections present: §1 Introduction (purpose, scope, architecture, data model, terminology, conventions, spatial concepts), §2 Overall Description (quick-finder, user characteristics, constraints), §3 Functional Requirements (grouped by concern, per-section indexes), §4 Non-Functional Requirements (testable criteria), §5 Statistics (by section/priority/role), Appendices (lifecycle diagrams, deferred reqs, traceability matrix, change log)
+- [ ] Each requirement uses the canonical format: `### REQ-F-XXX` + priority emoji (🔴🟡🟢) + `[Actor: Role]`, followed by Title / Description / Acceptance Criteria with Given/When/Then in separate paragraphs
+- [ ] Priority emojis appear in every requirement header — not just defined in §1 conventions and then forgotten
+- [ ] Spatial concepts (if the system has multiple container types) are defined upfront in §1 with a comparison table showing where each appears, how it's switched, its lifecycle, and applicable requirements
+- [ ] No implementation details leaked: pixel values, API field names, framework/pattern names, data structure type annotations removed or justified as behavioral parameters

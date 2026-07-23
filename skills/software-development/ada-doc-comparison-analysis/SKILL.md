@@ -148,7 +148,7 @@ After the user approves the proposal, implement changes in this order:
 7. **Use a TODO list** — for multi-phase edits (>10 tool calls), track
    progress with `todo()` to avoid losing your place across turns.
 
-## Pitfalls
+## Common Pitfalls
 
 - **Don't propose changes the target already does well.** Acknowledge existing
   strengths (e.g. XDocker already had AC numbering and cross-references — keep
@@ -181,3 +181,29 @@ After the user approves the proposal, implement changes in this order:
   content between existing sections, use the section header text as the
   match anchor — never rely on line numbers from old `read_file` output
   after the file has been modified above.
+
+## Overview
+
+`ada-doc-comparison-analysis` provides a structured methodology for comparing two technical documents (typically SRS documents, but applicable to design docs, API specs, and other structured references), extracting complementary strengths from each, and synthesizing an improved version that respects the target document's phase boundaries. The five-step workflow — read both documents completely, extract strengths into dimensioned tables, build a complementarity map, propose an optimized structure (with strict phase-boundary discipline: no implementation details in requirements-phase documents), and deliver a concrete proposal with before/after comparisons — ensures that improvements are evidence-based, not subjective. Developed on the PromptEditor vs XDocker SRS comparison, the skill's reference patterns catalog what transfers between documents and what stays behind.
+
+## When to Use
+
+Use when:
+- User asks to compare two technical documents and identify what each does well
+- User has an SRS and wants to improve it against a reference or example SRS
+- User says "阅读 A 和 B，分析各自优点，然后优化 B" or similar comparison-then-optimize requests
+- Merging the best structural patterns from two versions of the same specification
+- Cross-pollinating navigation aids (quick-finders, section indexes, role-based summaries) from a well-structured document into a less-structured one
+
+Don't use for:
+- Comparing a document against a live product (not another document) — use `ada-srs-review` Pass G (framework coverage) or Pass K (SRS-to-code coverage)
+- Simple diff/merge of two versions of the same document — use git diff/merge tooling
+- Single-document review or quality audit — load `ada-srs-review`
+
+## Verification Checklist
+
+- [ ] Both documents read completely (100% coverage) before any analysis or proposals — no skimming
+- [ ] Strengths tables produced for each document across all six dimensions: structural, navigational, format, completeness, readability, maintainability
+- [ ] Complementarity map built: each document's strengths explicitly mapped to the other's gaps
+- [ ] Optimized structure proposal respects the target document's phase boundaries: no implementation details (API signatures, algorithms, technology choices) injected into a requirements-phase SRS
+- [ ] Proposal ends with a concrete before/after comparison and an explicit question: produce the full optimized document, or refine the proposal?

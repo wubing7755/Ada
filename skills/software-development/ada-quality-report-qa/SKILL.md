@@ -15,6 +15,18 @@ metadata:
 
 在 `code-quality-analysis` 的 Step 5 三 Agent 复核基础上，增加四道额外的质量门禁。**本 skill 专门捕获主 skill 未覆盖的常见陷阱：统计偏差、聚集测试文件遗漏、不安全的统计公式。**
 
+## Overview
+
+This skill adds four extra quality gates on top of the 3-agent verification built into
+`code-quality-analysis`. It specifically targets failure modes that the main skill's
+verification routinely misses: statistical formula inconsistency (sub-totals not
+matching the unified total), aggregated test file detection (coverage miscounts from
+files containing multiple test classes like `DomainModelTests.cs`), header-vs-appendix
+file count mismatches, and subdirectory boundary blurring where parent directories are
+double-counted. Based on empirical data, first-draft hand-written reports have ~10%
+error rates — these four gates catch those errors before delivery.
+
+## When to Use
 ## 何时使用
 
 - 完成代码质量报告撰写后、交付用户前
@@ -79,6 +91,7 @@ find Services -type f -name "*.cs" ...  # 包含 Commands/
 
 根据实践统计，手工编制的报告在第一版中约有 10% 的错误率（统计偏差 + 覆盖分类错误）。这属于可接受范围——但必须经过本 QA pipeline 修正后再交付。
 
+## Verification Checklist
 ## 检查清单
 
 - [ ] 附录 A 子目录行数和 == 统一 find 公式的计算总数
@@ -86,3 +99,10 @@ find Services -type f -name "*.cs" ...  # 包含 Commands/
 - [ ] 测试覆盖表已检查聚集文件（`grep -rhoP 'class.*Tests\b'`）
 - [ ] 子目录行数未混入（如 Services/ 不含 Commands/ 的子目录行数）
 - [ ] `obj/`、`bin/`、生成文件已排除
+
+## Common Pitfalls
+
+- **Trusting manual addition over unified find**: Adding per-directory `wc -l` results by hand introduces arithmetic errors. Always run a single unified `find -exec cat {} + | wc -l` command to get the true total and cross-check the sum of subdirectory counts against it.
+- **Filename-matched test coverage only**: The common mapping pattern (`FooTests.cs ↔ Foo.cs`) misses aggregated test files that contain multiple test classes. Always grep for `class.*Tests\b` patterns across all test files.
+- **Header vs. appendix mismatch**: The report header may claim "48 source files" while the appendix table lists 47. Always count independently with `find` and flag discrepancies between the scope statement and the detailed breakdown.
+- **Subdirectory double-counting**: When `Services/` contains `Services/Commands/`, the subdirectory breakdown must explicitly clarify whether the parent count includes child subdirectories. Use `-maxdepth 1` for parent-only counts and subtract child subtotals to verify.

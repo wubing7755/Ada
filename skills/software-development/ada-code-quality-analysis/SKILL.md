@@ -20,6 +20,17 @@ structured markdown report with severity ratings and prioritized recommendations
 matching), then manually read the hot spots. Never fabricate findings — every issue
 in the report must be traceable to a specific file:line.
 
+## Overview
+
+This skill provides a comprehensive multi-dimension code quality audit spanning seven
+dimensions: complexity, duplication, dead code, security, dependencies, test coverage,
+and code standards. It combines automated static analysis scripts with deep manual
+reading of hot spots, producing a structured markdown report with severity ratings
+(A-F) and prioritized recommendations (P0-P3). A unique 3-agent parallel verification
+step independently cross-checks the report for fabricated findings, missed security
+issues, and statistical inconsistencies before the report reaches the user. The skill
+also supports post-fix report updates and implementation planning for top-priority items.
+
 ## When to Use
 
 - User asks for "code quality analysis", "quality audit", or "static analysis report"
@@ -259,7 +270,7 @@ Patch the original quality report (NOT a new file) to reflect post-fix reality:
 If the review agent produces detailed findings, write them to
 `docs/reports/code-quality-fix-review-YYYY-MM-DD.md` for traceability.
 
-## Pitfalls
+## Common Pitfalls
 
 - **Fabricating findings**: Never list an issue you didn't actually find in the code.
   If a scan comes up empty for a dimension, say so rather than inventing plausible issues.
@@ -294,3 +305,11 @@ If the review agent produces detailed findings, write them to
   specific types, order `catch (TaskCanceledException)` BEFORE
   `catch (OperationCanceledException)`, or omit the subclass entirely since the
   base class already catches it. The C# compiler enforces this (CS0160).
+
+## Verification Checklist
+
+- [ ] All automated analysis scripts executed without errors and produced output for all 7 dimensions
+- [ ] Every Critical (🔴) and High (🟠) issue in the report is traceable to a specific file:line verified by reading source
+- [ ] 3-agent parallel verification completed: truth sampling (Agent 1), completeness scan (Agent 2), consistency audit (Agent 3)
+- [ ] Appendix A per-directory statistics are computed from actual `os.walk` traversal (not manual estimation); sub-totals sum to total
+- [ ] Security second-pass scan covered ALL source file types (.cs, .ts, .razor, .json, .csproj, .css, .html), not just .cs

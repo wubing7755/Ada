@@ -21,6 +21,20 @@ deeply searches the codebase for a single class of problem — reuse, quality,
 efficiency — without diluting its attention across all three. They run
 concurrently, so you pay the latency of one review, not three.
 
+## Overview
+
+This skill launches three parallel, focused code reviewers via `delegate_task` to
+analyze recent code changes (from `git diff`). Reviewer 1 targets code reuse — finding
+new code that duplicates existing utilities, helpers, or patterns. Reviewer 2 targets
+code quality — redundant state, parameter sprawl, copy-paste-with-variation, leaky
+abstractions, stringly-typed code, and AI-generated slop patterns. Reviewer 3 targets
+efficiency — wasted computation, N+1 access patterns, missed concurrency, TOCTOU
+anti-patterns, and memory leaks. All three receive the complete diff (not fragments)
+so cross-file issues are visible. Results are aggregated, deduped, and applied by
+risk tier: SAFE (auto-apply), CAREFUL (apply with per-file test verification), and
+RISKY (flag for human review only). Chesterton's Fence is respected — no code is
+removed without `git blame` confirming its original purpose.
+
 ## When to Use
 
 Trigger this skill when the user says any of:
@@ -173,7 +187,7 @@ Wait for all three to return (batch mode returns them together).
    reviewer category and risk tier, plus any findings you deliberately skipped
    and why.
 
-## Pitfalls
+## Common Pitfalls
 
 - **Don't fan out wider than ~3.** More reviewers means more cost and more
   conflicting suggestions to reconcile, not better coverage. Three categories
@@ -203,6 +217,15 @@ Wait for all three to return (batch mode returns them together).
 - **Removing "unnecessary" error handling.** An empty catch block or ignored
   error might be intentional — the error is expected and benign in that
   context. Flag it, don't remove it; let the human decide.
+
+## Verification Checklist
+
+- [ ] `git diff` was captured and all three reviewers received the complete diff (not per-reviewer fragments)
+- [ ] All three reviewers returned structured findings with file:line evidence, confidence level, and risk tier
+- [ ] SAFE findings were auto-applied and the project's tests passed after application
+- [ ] CAREFUL findings were applied one file at a time with test verification between each file
+- [ ] RISKY findings were flagged for human review only — not auto-applied
+- [ ] `git blame` was checked before removing or refactoring any existing code (Chesterton's Fence respected)
 
 ## Related
 
