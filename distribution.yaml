@@ -1,0 +1,77 @@
+name: ada
+version: 0.2.0
+description: A pragmatic software-engineering Hermes profile focused on correctness,
+  clarity, and verifiable results. Includes 57 curated skills spanning SRS lifecycle,
+  code quality, .NET/Blazor engineering, CMake/CPack packaging, systematic debugging,
+  and autonomous agent workflows.
+hermes_requires: '>=0.19.0'
+author: wubing7755
+license: MIT
+source: github.com/wubing7755/Ada
+skills:
+  # ── Autonomous AI Agents ──
+  - autonomous-ai-agents/claude-code
+  - autonomous-ai-agents/codex
+  - autonomous-ai-agents/coding-agent-readiness
+  - autonomous-ai-agents/hermes-agent
+  - autonomous-ai-agents/opencode
+  # ── GitHub ──
+  - github/codebase-inspection
+  - github/git-cross-platform-pitfalls
+  - github/github-auth
+  - github/github-ci-debug
+  - github/github-code-review
+  - github/github-issues
+  - github/github-pr-workflow
+  - github/github-repo-management
+  # ── Software Development: Agent & Workflow ──
+  - software-development/ada-agent-assisted-development
+  - software-development/ada-hermes-agent-skill-authoring
+  - software-development/ada-hermes-configuration
+  - software-development/ada-hermes-doc-sync
+  - software-development/ada-skill-optimization
+  - software-development/plan
+  - software-development/requesting-code-review
+  - software-development/spike
+  - software-development/systematic-debugging
+  - software-development/test-driven-development
+  # ── Software Development: SRS Lifecycle ──
+  - software-development/ada-requirements-authoring
+  - software-development/ada-srs-documentation
+  - software-development/ada-srs-lifecycle
+  - software-development/ada-srs-review
+  - software-development/ada-srs-revision
+  - software-development/ada-srs-writing
+  - software-development/ada-tp-to-srs-derivation
+  - software-development/ada-doc-comparison-analysis
+  - software-development/ada-docs-revision
+  # ── Software Development: Audit & Traceability ──
+  - software-development/ada-code-dedup-audit
+  - software-development/ada-code-efficiency-review
+  - software-development/ada-doc-implementation-audit
+  - software-development/ada-doc-traceability-audit
+  - software-development/ada-pre-implementation-audit
+  - software-development/ada-project-audit
+  - software-development/ada-traceability-audit
+  # ── Software Development: Code Quality ──
+  - software-development/ada-code-quality-analysis
+  - software-development/ada-code-quality-pipeline
+  - software-development/ada-code-quality-report-verification
+  - software-development/ada-quality-report-qa
+  - software-development/ada-simplify-code
+  # ── Software Development: .NET & Blazor ──
+  - software-development/ada-blazor-component-library
+  - software-development/ada-blazor-interaction-pitfalls
+  - software-development/ada-blazor-interop-pitfalls
+  - software-development/ada-dotnet-blazor-library
+  - software-development/ada-dotnet-engineering-refactoring
+  - software-development/ada-dotnet-verification
+  # ── Software Development: Refactoring ──
+  - software-development/ada-bugfix-architecture-root-cause
+  - software-development/ada-engineering-refactoring
+  - software-development/ada-refactoring-lifecycle
+  # ── Software Development: Cross-platform & Tools ──
+  - software-development/ada-cmake-cpack-packaging
+  - software-development/ada-node-inspect-debugger
+  - software-development/ada-powershell-from-bash
+  - software-development/ada-python-debugpy
