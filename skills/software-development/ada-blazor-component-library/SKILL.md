@@ -1,6 +1,6 @@
 ---
 name: ada-blazor-component-library
-description: Patterns for building Blazor component libraries — state-driven architecture, namespace collision fixes, TS interop with IJSObjectReference, xUnit integration, convention-based commits, post-phase code review, and Razor Class Library extraction path.
+description: "Use when building or maintaining Blazor component libraries — state-driven architecture patterns, namespace collision fixes, TypeScript interop with IJSObjectReference, xUnit integration testing, convention-based commits, and Razor Class Library extraction."
 version: 1.0.0
 author: Hermes Agent
 license: MIT

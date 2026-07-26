@@ -1,6 +1,6 @@
 ---
 name: ada-requirements-authoring
-description: Write and review software requirements specifications (SRS). Use when authoring, reviewing, or supplementing requirements documents — especially for keeping SRS at the right abstraction level and avoiding design-level details.
+description: "Use for lightweight, single-requirement authoring — writing one REQ, adding acceptance criteria, or reviewing individual requirements for quality. For full multi-section SRS documents, use document-level authoring workflows instead. Covers format conventions, quality rules, and bilingual terminology patterns."
 version: 1.0.0
 platforms: [linux, macos, windows]
 author: Hermes Agent
@@ -8,12 +8,16 @@ license: MIT
 metadata:
   hermes:
     tags: [srs, requirements, authoring, quality, specification]
-    related_skills: [ada-srs-writing, ada-srs-documentation]
+    related_skills: [ada-srs-writing]
 ---
 
 # Requirements Authoring: SRS vs Design Boundary
 
 ## When to Use
+
+
+Don't use for: full SRS document authoring — use document-level authoring workflows. Systematic SRS review — use structured review methodology. Large-scale terminology revision — use revision workflows for large-scale changes.
+
 ## When to Load
 
 - User asks you to review an SRS for completeness or quality
@@ -113,6 +117,14 @@ These are often mistaken for design but are actually behavioral specifications:
 4. **"Timing values are design"** — No. "300ms delay before auto-hide" defines user-perceivable behavior. The user experiences the delay. It's a behavioral specification.
 
 ## Verification Checklist
+
+- [ ] Each requirement uses the canonical format: `REQ-F-XXX` + priority emoji (🔴🟡🟢) + `[Actor: Role]`
+- [ ] Requirements describe WHAT (behavior), not HOW (implementation details)
+- [ ] All acceptance criteria use Given/When/Then structure with concrete, testable conditions
+- [ ] Cross-references to other requirements are explicit and use correct REQ IDs
+- [ ] No implementation details leaked: pixel values, API field names, framework patterns removed or justified
+- [ ] Terminology consistent with project glossary; bilingual annotations follow `English（中文）` on first use
+
 ## Review Checklist
 
 When reviewing an SRS for design-level leakage, scan for:

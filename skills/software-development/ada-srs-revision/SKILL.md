@@ -1,6 +1,6 @@
 ---
 name: ada-srs-revision
-description: Systematically revise SRS and large technical requirements documents — semantic-concept replacement, mass terminology standardization, iterative review-then-execute workflow, and safe replace_all techniques. Use when the user asks to change core concepts, rename terms, or restructure sections across a large spec document.
+description: "Use when revising an SRS or requirements document at scale: terminology/concept replacement, requirement renumbering, cross-reference repair, acceptance-criteria updates, or traceability consistency checks. For non-SRS technical docs, use ada-docs-revision."
 version: 1.1.0
 platforms: [linux, macos, windows]
 author: Hermes Agent
@@ -166,25 +166,22 @@ When aligning terminology with real-world products:
 
 After all patches are applied:
 
-```sh
-# 1. Remaining old-term references (should be 0 or only intentional ones)
-grep -n '旧术语' docs/SRS.md
+- [ ] Remaining old-term references: `grep -n '旧术语' docs/SRS.md` — should be 0 or only intentional
+- [ ] No double-pipe table corruption: `grep -n '^||' docs/SRS.md` — should return nothing
+- [ ] Mermaid diagram integrity: `grep -c '||--o{' docs/SRS.md` — count matches expected
+- [ ] New term appears in all expected sections: `grep -c '新术语' docs/SRS.md`
+- [ ] Line count sanity: `wc -l docs/SRS.md`
+- [ ] Requirement count matches stats table (manually verify REQ-F-xxx lines vs §5 total)
 
-# 2. No double-pipe table corruption
-grep -n '^||' docs/SRS.md
+Post-revision consistency checks:
 
-# 3. Mermaid diagram integrity (||--o{ patterns intact)
-grep -c '||--o{' docs/SRS.md
-
-# 4. New term appears in all expected sections
-grep -c '新术语' docs/SRS.md
-
-# 5. Requirement count matches stats table
-# (manually verify: count of REQ-F-xxx lines vs §5 total)
-
-# 6. Line count sanity check
-wc -l docs/SRS.md
-```
+- [ ] Section indexes recount matches actual headers (no stale §3.4 after section deletion)
+- [ ] §5 Statistics regenerated from current `REQ-F-XXX` headers (not from memory)
+- [ ] Numbering rules reflect current gap
+- [ ] Deferred-requirements appendix entries match by title, not stale ID
+- [ ] Change log appended with date, change type, and author
+- [ ] Hardcoded ID ranges in NFR bodies replaced with unbound phrasing
+- [ ] Appendices do not list requirements marked as deleted in the body
 
 ## Overview
 
@@ -202,9 +199,9 @@ Use when:
 
 Don't use for:
 - Single-line typo fixes — use a simple `patch` call
-- Writing new content from scratch — load `ada-srs-writing`
-- Auditing or reviewing a document — load `ada-srs-review` first to identify what needs changing, then use this skill to execute the changes
-- Changes that don't affect terminology or structure (e.g., adding a single new requirement) — load `ada-srs-writing`
+- Writing new content from scratch — use direct SRS authoring
+- Auditing or reviewing a document — run a systematic document audit first to identify what needs changing, then use this skill to execute the changes
+- Changes that don't affect terminology or structure (e.g., adding a single new requirement) — use direct SRS authoring
 
 ## References
 

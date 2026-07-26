@@ -1,6 +1,6 @@
 ---
 name: ada-hermes-doc-sync
-description: "Keep Hermes project documentation in sync with the live Hermes installation — skill inventory diffing, command reference updates, version upgrade checklists. Use when hermes-agent skill updates or during periodic project maintenance."
+description: "Use when keeping Hermes project documentation in sync with a live Hermes installation — skill inventory diffing, command reference updates, version upgrade checklists, and periodic maintenance audits."
 version: 1.1.0
 author: Hermes Agent
 license: MIT
@@ -16,12 +16,14 @@ metadata:
 当 `hermes-agent` skill 版本升级或定期维护 Hermes 项目文档时，系统性同步技能清单、命令引用和功能描述。
 
 ## When to Use
-## 适用时机
 
 - `hermes-agent` skill 版本号变化
 - 定期（月度）项目文档巡检
 - `hermes skills list` 输出与文档声称数量不一致
 - 发现文档中有过时或失效的技能引用
+
+
+Don't use for: regular skill content updates — use `patch` directly. New skill creation — follow standard skill authoring conventions. General project documentation — this skill is specific to hermes-agent internal docs.
 
 ## 流程
 
@@ -180,7 +182,6 @@ for i, line in enumerate(text.split('\n')):
 每轮进化后更新（详见 `references/evolution-checklist.md`）。
 
 ## Common Pitfalls
-## 常见陷阱
 
 | 陷阱 | 症状 | 对策 |
 |------|------|------|

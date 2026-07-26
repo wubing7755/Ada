@@ -1,6 +1,6 @@
 ---
 name: ada-docs-revision
-description: Structured revision of technical documentation — terminology alignment, large-scale renaming, and SRS refinement with real-world product references.
+description: 'Use when revising general technical documents at scale: terminology replacement, mass rename, section restructuring, README/design-doc cleanup, or blast-radius analysis. For SRS-specific requirement terminology, numbering, or traceability changes, use ada-srs-revision.'
 version: 1.0.0
 platforms: [linux, macos, windows]
 author: Hermes Agent
@@ -8,7 +8,7 @@ license: MIT
 metadata:
   hermes:
     tags: [documentation, revision, terminology, srs, markdown]
-    related_skills: [ada-srs-revision, ada-srs-documentation]
+    related_skills: [ada-srs-revision, ada-srs-writing]
 ---
 
 # Documentation Revision
@@ -130,9 +130,9 @@ Use when:
 - User wants changes proposed and approved before execution (the mandatory review-then-execute gate)
 
 Don't use for:
-- SRS-specific revision with the full lifecycle context — load `ada-srs-revision` which extends this skill with SRS-specific patterns (terminology → data model → concepts → requirements → diagrams → statistics dependency order)
-- Document comparison and synthesis — load `ada-doc-comparison-analysis`
-- Writing new documentation from scratch — load `ada-srs-writing` or `ada-requirements-authoring`
+- SRS-specific revision with the full lifecycle context — use SRS-specific revision which extends this skill with SRS-specific patterns (terminology → data model → concepts → requirements → diagrams → statistics dependency order)
+- Document comparison and synthesis — use document comparison and synthesis
+- Writing new documentation from scratch — use full SRS authoring or lightweight requirement writing
 
 ## Verification Checklist
 

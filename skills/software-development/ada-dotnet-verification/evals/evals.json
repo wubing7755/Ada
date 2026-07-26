@@ -1,0 +1,34 @@
+{
+  "skill_name": "ada-dotnet-verification",
+  "evals": [
+    {
+      "id": "after-razor-edit",
+      "prompt": "我改了一个 .razor 组件和对应测试，帮我验证这次 .NET 改动能不能过。",
+      "expected_output": "The agent loads .NET verification and runs focused tests plus build/format/diff gates when feasible.",
+      "should_trigger": true,
+      "assertions": [
+        "Identifies .NET project/test files.",
+        "Separates focused and full-suite evidence."
+      ]
+    },
+    {
+      "id": "windows-dll-lock",
+      "prompt": "dotnet test 报 MSB3027，testhost.exe 好像锁了 bin/Debug 的 DLL，怎么继续验证？",
+      "expected_output": "The agent loads .NET verification and uses the Windows isolated artifacts lock workaround without killing ambiguous user processes.",
+      "should_trigger": true,
+      "assertions": [
+        "Recognizes output-tree lock.",
+        "Suggests isolated artifacts verification."
+      ]
+    },
+    {
+      "id": "python-test-run",
+      "prompt": "跑一下这个 Python 项目的 pytest，看看刚才的 fixture 改动有没有问题。",
+      "expected_output": "The agent should not load .NET verification for a Python test task.",
+      "should_trigger": false,
+      "assertions": [
+        "Does not invoke dotnet gates."
+      ]
+    }
+  ]
+}

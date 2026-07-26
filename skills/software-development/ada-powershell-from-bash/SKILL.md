@@ -1,6 +1,6 @@
 ---
 name: ada-powershell-from-bash
-description: Run PowerShell commands and scripts from git-bash/MSYS on Windows without path/variable mangling.
+description: "Use on Windows when an agent runs PowerShell from git-bash/MSYS and sees $ variable expansion, backslash/path mangling, encoding issues, or powershell.exe -Command failures. Prefer native PowerShell when already in a PowerShell shell."
 version: 1.0.0
 platforms: [windows]
 author: Hermes Agent
@@ -34,6 +34,9 @@ covers CMake/Ninja path conversion from MSYS/Unix-style to Windows-native using
 - User encounters MSYS path conversion mangling Windows backslash paths (e.g., `C:\` paths broken)
 - User needs to invoke Windows-native tools (PowerShell, CMake/Ninja) from git-bash with proper path handling
 - User says "PowerShell from bash", "run ps1 from git-bash", or "MSYS_NO_PATHCONV"
+
+
+Don't use for: native PowerShell sessions (not via git-bash/MSYS), Linux/macOS shell scripting, or non-Windows environments.
 
 ## Problem 1: `$` variable expansion eaten by bash
 

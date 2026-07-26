@@ -1,6 +1,6 @@
 ---
 name: ada-code-quality-pipeline
-description: 代码质量全流水线 — 从分析、验证到 QA 门禁的三阶段统一入口。产生、验证、交付结构化的代码质量报告。
+description: "Use when an agent must deliver an end-to-end code quality report, not just a quick review: analyze the codebase, verify report claims against source, and run a QA gate before delivery. Load this router for full-pipeline quality audits, compliance-style reviews, or high-stakes remediation planning."
 version: 1.0.0
 platforms: [linux, macos, windows]
 author: Hermes Agent
@@ -9,7 +9,7 @@ metadata:
   hermes:
     tags: [code-quality, pipeline, audit, qa, umbrella]
     related_skills: [ada-code-quality-analysis, ada-code-quality-report-verification, ada-quality-report-qa]
-    sub_skills: [code-quality-analysis, code-quality-report-verification, quality-report-qa]
+    sub_skills: [ada-code-quality-analysis, ada-code-quality-report-verification, ada-quality-report-qa]
 ---
 
 # 代码质量流水线
@@ -18,28 +18,20 @@ metadata:
 
 ## Overview
 
-This skill provides a unified three-stage gated pipeline for end-to-end code quality
-assurance. It chains three specialized skills — `code-quality-analysis` (Stage 1:
-multi-dimension audit), `code-quality-report-verification` (Stage 2: independent
-verification), and `quality-report-qa` (Stage 3: QA gate with four extra checks) —
-into a sequential workflow where each stage blocks the next if issues are found.
-The pipeline enforces a strict no-skip rule: analysis → verification → QA, in order.
-If verification finds ≥3 false positives or QA finds statistical drift, the pipeline
-sends the report back for correction before delivery.
+This skill provides a unified three-stage gated pipeline for end-to-end code quality assurance. It chains three specialized stages — Stage 1: multi-dimension audit, Stage 2: independent verification, Stage 3: QA gate with four extra checks — into a sequential workflow where each stage blocks the next if issues are found. The pipeline enforces a strict no-skip rule: analysis → verification → QA, in order. If verification finds ≥3 false positives or QA finds statistical drift, the pipeline sends the report back for correction before delivery.
 
 ## 三阶段流水线
 
 ```
 源代码 ──→ [Stage 1: Analyze] ──→ [Stage 2: Verify] ──→ [Stage 3: QA Gate] ──→ 交付用户
-            code-quality-           code-quality-           quality-report-qa
-            analysis                report-verification
+            多维度代码审计           独立验证报告结论         四道额外门禁
 ```
 
-| 阶段 | 技能 | 做什么 | 输入 | 输出 |
-|------|------|--------|------|------|
-| **Analyze** | `code-quality-analysis` | 多维度扫描代码库 | 源代码树 | 质量报告 (Markdown) |
-| **Verify** | `code-quality-report-verification` | 抽查/全量验证报告结论 | 质量报告 + 源代码 | 验证结果 (confirmed/partial/false-positive) |
-| **QA Gate** | `quality-report-qa` | 三道额外门禁 | 已验证的报告 | 放行/打回 |
+| 阶段 | 功能 | 输入 | 输出 |
+|------|------|------|------|
+| **Analyze** | 多维度扫描代码库（7 个维度） | 源代码树 | 质量报告 (Markdown) |
+| **Verify** | 独立验证报告结论（抽查/全量） | 质量报告 + 源代码 | 验证结果 (confirmed/partial/false-positive) |
+| **QA Gate** | 四道额外门禁检查 | 已验证的报告 | 放行/打回 |
 
 ## 流水线执行规则
 
@@ -63,6 +55,16 @@ Stage 1 覆盖七大维度：
 
 加载本 skill 后，从 Stage 1 开始，依次加载对应子技能。每个阶段完成后确认输出质量再进入下一阶段。
 
+## Agent Activation
+
+Use this as a gated router. Do not deliver a final quality report after only Stage 1 when the user asked for a full pipeline, high-confidence audit, or actionable remediation plan.
+
+| Stage | Route to | Gate |
+|-------|----------|------|
+| 1. Analyze | `ada-code-quality-analysis` | Report covers the required dimensions with concrete file evidence |
+| 2. Verify | `ada-code-quality-report-verification` | Claims are confirmed/partial/false-positive against source |
+| 3. QA Gate | `ada-quality-report-qa` | Statistics, coverage claims, and security omissions are checked |
+
 ## When to Use
 
 - User wants a complete code quality workflow spanning analysis through delivery
@@ -70,6 +72,8 @@ Stage 1 覆盖七大维度：
 - User wants a code quality report that has been independently verified and QA-gated before acting on it
 - When the cost of delivering an inaccurate quality report is high (e.g., mandatory compliance, team-wide action items)
 - User needs to chain the three quality skills together with enforced stage gating
+
+Don't use for: single-dimension analysis — run a focused static scan directly. Quick spot-checks — this pipeline is for end-to-end gated delivery. Reports where false positives are acceptable — the verification stage blocks on ≥3 false positives.
 
 ## Common Pitfalls
 

@@ -1,0 +1,34 @@
+{
+  "skill_name": "ada-code-quality-analysis",
+  "evals": [
+    {
+      "id": "multi-dimension-source-audit",
+      "prompt": "帮我对 src 目录做代码质量分析，重点看复杂度、重复代码、死代码、安全风险和测试覆盖缺口，输出一份带证据的报告。",
+      "expected_output": "The agent loads code quality analysis, discovers source/test scope, runs lightweight scans, reads hot spots, and reports findings with file evidence.",
+      "should_trigger": true,
+      "assertions": [
+        "Covers multiple source-code quality dimensions.",
+        "Requires concrete file evidence for findings."
+      ]
+    },
+    {
+      "id": "baseline-before-refactor",
+      "prompt": "重构前先给我一个质量基线，看看哪些类太大、哪些方法复杂度高、哪些地方重复最多。",
+      "expected_output": "The agent loads code quality analysis and produces baseline metrics suitable for refactoring planning.",
+      "should_trigger": true,
+      "assertions": [
+        "Produces metrics before recommendations.",
+        "Identifies hot spots for manual reading."
+      ]
+    },
+    {
+      "id": "srs-quality-review",
+      "prompt": "帮我审查 SRS 文档有没有死需求、AC 缺失和术语冲突。",
+      "expected_output": "The agent should route to SRS review, not source code quality analysis.",
+      "should_trigger": false,
+      "assertions": [
+        "Does not treat document quality as source code quality."
+      ]
+    }
+  ]
+}

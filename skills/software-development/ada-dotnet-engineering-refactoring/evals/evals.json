@@ -1,0 +1,34 @@
+{
+  "skill_name": "ada-dotnet-engineering-refactoring",
+  "evals": [
+    {
+      "id": "domain-primitive-refactor",
+      "prompt": "这个 C# 项目到处用 string panelId，我想迁移成强类型领域原语，并把公开 API 稳定下来。",
+      "expected_output": "The agent loads .NET engineering refactoring, plans value-type/domain primitive migration, and defines verification gates.",
+      "should_trigger": true,
+      "assertions": [
+        "Uses .NET-specific refactoring patterns.",
+        "Requires phased plan and verification gates."
+      ]
+    },
+    {
+      "id": "orchestrator-extraction",
+      "prompt": "这个服务类既调度命令又直接改状态，想抽 Orchestrator，把执行和编排拆开。",
+      "expected_output": "The agent loads .NET engineering refactoring and applies orchestration/implementation separation patterns.",
+      "should_trigger": true,
+      "assertions": [
+        "Identifies orchestration vs execution boundaries.",
+        "Plans tests around behavior preservation."
+      ]
+    },
+    {
+      "id": "python-architecture-refactor",
+      "prompt": "Python 项目里业务协议和执行细节混在一起了，要做架构级重构。",
+      "expected_output": "The agent should use generic engineering refactoring rather than .NET-specific refactoring.",
+      "should_trigger": false,
+      "assertions": [
+        "Does not apply C#/.NET-specific patterns to Python."
+      ]
+    }
+  ]
+}

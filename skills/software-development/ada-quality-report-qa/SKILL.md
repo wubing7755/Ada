@@ -1,6 +1,6 @@
 ---
 name: ada-quality-report-qa
-description: Three-agent QA pipeline for code quality reports — catches statistical errors, test-coverage false negatives, and security omissions before delivery. Complements code-quality-analysis.
+description: "Use when running the three-agent QA pipeline on a code quality report — catches statistical errors, test-coverage false negatives, and security scan omissions before delivery. Complements ada-code-quality-analysis."
 version: 1.0.0
 author: Hermes Agent
 license: MIT
@@ -8,7 +8,7 @@ platforms: [linux, macos, windows]
 metadata:
   hermes:
     tags: [code-quality, qa, verification, report]
-    related_skills: [ada-code-quality-analysis, hermes-operations, requesting-code-review, ada-code-quality-pipeline]
+    related_skills: [ada-code-quality-analysis, ada-requesting-code-review, ada-code-quality-pipeline]
 ---
 
 # Quality Report QA — 报告质量门禁
@@ -27,12 +27,14 @@ double-counted. Based on empirical data, first-draft hand-written reports have ~
 error rates — these four gates catch those errors before delivery.
 
 ## When to Use
-## 何时使用
 
 - 完成代码质量报告撰写后、交付用户前
 - 报告中包含附录 A 文件统计表
 - 报告中有测试覆盖率数据
 - 交互式 Agent 手工编制报告（非全自动 pipeline）
+
+
+Don't use for: running the initial code quality analysis — run initial static analysis (Stage 1). Verifying individual report claims — run independent verification (Stage 2). This is the final QA gate before delivery, not the first step.
 
 ## 四道门禁
 
@@ -92,7 +94,6 @@ find Services -type f -name "*.cs" ...  # 包含 Commands/
 根据实践统计，手工编制的报告在第一版中约有 10% 的错误率（统计偏差 + 覆盖分类错误）。这属于可接受范围——但必须经过本 QA pipeline 修正后再交付。
 
 ## Verification Checklist
-## 检查清单
 
 - [ ] 附录 A 子目录行数和 == 统一 find 公式的计算总数
 - [ ] 报告头部文件数 == 附录 A 文件数

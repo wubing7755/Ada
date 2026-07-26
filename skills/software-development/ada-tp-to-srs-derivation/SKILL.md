@@ -1,6 +1,6 @@
 ---
 name: ada-tp-to-srs-derivation
-description: Derive a Software Requirements Specification (SRS) from a Technical Protocol (TP) document — four derivation paths, multi-system SRS structure, REQ-F format with Chinese-English bilingual conventions, traceability matrix maintenance, and strict fidelity to source.
+description: "Use when deriving a Software Requirements Specification (SRS) from a Technical Protocol (TP) document — four derivation paths, multi-system SRS structure, REQ-F format with Chinese-English bilingual conventions, traceability matrix maintenance, and strict fidelity to the source protocol."
 version: 1.5.0
 platforms: [windows]
 author: Hermes Agent
@@ -8,7 +8,7 @@ license: MIT
 metadata:
   hermes:
     tags: [srs, tp, requirements, derivation, chinese, avionics]
-    related_skills: [ada-srs-writing, ada-srs-documentation, ada-requirements-authoring, ada-srs-lifecycle]
+    related_skills: [ada-srs-writing, ada-requirements-authoring, ada-srs-lifecycle]
 ---
 
 # TP-to-SRS Derivation（从技术协议派生 SRS）
@@ -20,6 +20,9 @@ metadata:
 - 用户提供一份技术协议（.md/.docx）并要求编写 SRS
 - 用户说「基于这份协议写一份SRS」
 - 从合同/协议条款中系统化派生出软件需求
+
+
+Don't use for: writing SRS from scratch without a TP source — use direct SRS authoring workflows. Reviewing an existing SRS — use structured SRS review methodology. The TP must exist and be complete before derivation begins.
 
 ## TP-to-SRS 工作流
 

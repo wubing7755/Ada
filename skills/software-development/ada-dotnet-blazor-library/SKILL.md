@@ -1,6 +1,6 @@
 ---
 name: ada-dotnet-blazor-library
-description: Use when structuring, developing, or publishing .NET Blazor component libraries — RCL setup, public API naming conventions, demo app separation, and NuGet packaging considerations.
+description: "Use when building, restructuring, or publishing .NET Blazor component libraries: Razor Class Library setup, demo app separation, public API naming, content registry wiring, static assets, NuGet packaging, CS0234 namespace collisions, or component tag registration failures."
 version: 1.0.0
 platforms: [windows, linux, macos]
 author: Hermes Agent
@@ -279,8 +279,6 @@ var registry = Context?.ContentRegistry ?? new ContentRegistry();
 
 Pre-register demo/fallback components in `LayoutContext`'s constructor.
 See `references/content-registry-wiring.md` for the full pattern.
-
-## Common Pitfalls
 
 - **Domain model / component name clash after prefix application.** When adding a common prefix (e.g., "Atlas") to all types, both `DockPanelModel` and the `DockPanel` component become `AtlasDockPanel`. Fix: add `Model` suffix to domain types (`AtlasDockPanelModel`) so component tags stay clean (`<AtlasDockPanel>`).
 - **RCL static assets not using `_content/{AssemblyName}/` prefix.** Every reference to RCL `wwwroot/` from outside the RCL must use this prefix — JS imports, CSS links, image paths. Missing it produces silent 404s.

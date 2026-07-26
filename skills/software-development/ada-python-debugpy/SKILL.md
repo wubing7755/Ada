@@ -1,6 +1,6 @@
 ---
 name: ada-python-debugpy
-description: "Debug Python: pdb REPL + debugpy remote (DAP)."
+description: "Use when debugging Python needs interactive inspection: pdb, breakpoint(), post-mortem frames, debugpy/DAP attach, breakpoints, locals, or hard-to-reproduce pytest failures. For Node.js inspector/CDP work, use ada-node-inspect-debugger."
 version: 1.0.0
 author: Hermes Agent
 license: MIT
@@ -8,7 +8,7 @@ platforms: [linux, macos]
 metadata:
   hermes:
     tags: [debugging, python, pdb, debugpy, breakpoints, dap, post-mortem]
-    related_skills: [systematic-debugging, ada-node-inspect-debugger, debugging-hermes-tui-commands]
+    related_skills: [ada-systematic-debugging, ada-node-inspect-debugger]
 ---
 
 # Python Debugger (pdb + debugpy)
@@ -24,6 +24,32 @@ Three tools, picked by situation:
 | **`debugpy`** | Remote / headless / "attach to already-running process." Talks DAP, scriptable from terminal, works for long-lived processes (gateway, daemon, PTY children). |
 
 **Start with `breakpoint()`.** It's the cheapest thing that works.
+
+## Agent Execution Contract
+
+Inputs to identify first:
+- The failing command, traceback, test, process, or long-running service.
+- Whether source edits are acceptable or debugger attachment must be non-invasive.
+- Whether the process is local, remote/headless, subprocess-driven, or already running.
+
+Default workflow:
+1. Prefer `pytest --tb=long --showlocals`, logging, or a targeted assertion if that answers the question quickly.
+2. Use `breakpoint()` / pdb for local interactive inspection.
+3. Use `python -m pdb` when source edits are undesirable.
+4. Use `debugpy` or DAP attach for long-running, remote, or already-running processes.
+5. Remove temporary breakpoints and re-run the normal test command before finalizing.
+
+Stop conditions:
+- Debugging requires credentials, production data, or attaching to a process the user has not approved.
+- The failure cannot be reproduced locally enough to justify interactive debugging.
+- A breakpoint would block an automated/non-interactive environment.
+
+Output contract:
+- Debugging method chosen and why.
+- Breakpoints or attach points used.
+- Key observed locals/stack frames.
+- Root-cause evidence.
+- Cleanup and verification commands.
 
 ## When to Use
 
@@ -151,7 +177,7 @@ For long-lived processes: Hermes gateway, tui_gateway, a daemon, a process that'
 ### Setup
 
 ```bash
-source /home/bb/hermes-agent/.venv/bin/activate
+source <project-root>/.venv/bin/activate
 pip install debugpy
 ```
 
@@ -248,7 +274,7 @@ This is fine for one-off automation but painful as an interactive UX.
   "connect": { "host": "127.0.0.1", "port": 5678 },
   "justMyCode": false,
   "pathMappings": [
-    { "localRoot": "${workspaceFolder}", "remoteRoot": "/home/bb/hermes-agent" }
+    { "localRoot": "${workspaceFolder}", "remoteRoot": "<project-root>" }
   ]
 }
 ```

@@ -1,6 +1,6 @@
 ---
 name: ada-engineering-refactoring
-description: Architectural-level code refactoring that meets Microsoft/.NET library engineering standards — value-type-first, interface-based protocols, orchestration/implementation separation, and whole-project consistency. Use when the user rejects mechanical dedup and asks for engineering-level quality.
+description: 'Use when an agent is doing architecture-level refactoring outside .NET-specific workflows: type-system constraints, interface protocols, orchestration/implementation separation, and whole-project consistency. For C#/.NET/Blazor refactors, route through ada-refactoring-lifecycle to ada-dotnet-engineering-refactoring.'
 version: 1.0.0
 author: Hermes Agent
 license: MIT
@@ -8,7 +8,7 @@ platforms: [linux, macos, windows]
 metadata:
   hermes:
     tags: [refactoring, architecture, engineering-quality, dotnet, blazor]
-    related_skills: [hermes-operations, deviation-analysis-refactoring, blazor-razor-authoring, ada-refactoring-lifecycle]
+    related_skills: [ada-refactoring-lifecycle]
 ---
 
 # Engineering-Grade Refactoring
@@ -30,6 +30,9 @@ Unlike mechanical dedup (extract-method, extract-helper), this skill targets the
 - After a code quality report identified 5+ items, and the first mechanical fix was rejected
 
 **Skip for**: single-file cleanup, pre-commit verification, bug fixes, small scoped changes.
+
+
+Don't use for: .NET/C#/Blazor projects — use stack-specific refactoring patterns with domain primitives and orchestrator extraction. Single-file cleanup — use `patch` or parallel code cleanup workflows.
 
 ## Signal: When Mechanical Dedup is Not Enough
 

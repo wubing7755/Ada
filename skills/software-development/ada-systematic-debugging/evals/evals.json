@@ -1,0 +1,34 @@
+{
+  "skill_name": "ada-systematic-debugging",
+  "evals": [
+    {
+      "id": "flaky-test-root-cause",
+      "prompt": "有个 pytest 用例偶发失败，之前修了两次都没彻底解决。帮我找根因，别先乱改。",
+      "expected_output": "The agent loads systematic debugging, builds a tight reproduction loop or raises reproduction rate, then investigates root cause before proposing fixes.",
+      "should_trigger": true,
+      "assertions": [
+        "Requires a reproduction or tight feedback loop.",
+        "Does not propose a fix before root-cause evidence."
+      ]
+    },
+    {
+      "id": "multiple-ui-symptoms",
+      "prompt": "三个 UI bug 好像有关：拖拽目标有时消失、hover 不触发、切换 tab 后状态错乱。先帮我查是不是同一个根因。",
+      "expected_output": "The agent loads systematic debugging and likely routes to stack-specific skills after mapping symptoms and evidence.",
+      "should_trigger": true,
+      "assertions": [
+        "Maps symptoms before fixing.",
+        "Looks for shared root cause."
+      ]
+    },
+    {
+      "id": "obvious-typo",
+      "prompt": "这个变量名拼错了，把 teh 改成 the。",
+      "expected_output": "The agent should not load systematic debugging for a trivial typo fix.",
+      "should_trigger": false,
+      "assertions": [
+        "Does not require a debugging workflow."
+      ]
+    }
+  ]
+}

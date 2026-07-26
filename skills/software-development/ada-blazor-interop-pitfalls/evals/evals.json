@@ -1,0 +1,34 @@
+{
+  "skill_name": "ada-blazor-interop-pitfalls",
+  "evals": [
+    {
+      "id": "mouseenter-not-firing",
+      "prompt": "Blazor 组件里 @onmouseenter 编译没报错，但运行时 hover 处理器完全不触发。",
+      "expected_output": "The agent loads Blazor interop pitfalls, identifies non-bubbling event behavior, and recommends JS interop registration.",
+      "should_trigger": true,
+      "assertions": [
+        "Explains why the directive silently fails.",
+        "Routes to JS interop fix pattern."
+      ]
+    },
+    {
+      "id": "dotnetobjectreference-disposed",
+      "prompt": "拖拽过程中浏览器 console 报 DotNetObjectReference disposed，而且内存一直涨。",
+      "expected_output": "The agent loads Blazor interop pitfalls and checks callback lifetime/disposal and JS map ownership.",
+      "should_trigger": true,
+      "assertions": [
+        "Inspects both Razor/C# and JS/TS sides.",
+        "Mentions callback lifetime or map cleanup."
+      ]
+    },
+    {
+      "id": "statehaschanged-index-error",
+      "prompt": "StateHasChanged 后 BuildRenderTree 里 IndexOutOfRange，但没有任何 JS 代码参与。",
+      "expected_output": "The agent should prefer Blazor lifecycle/rendering pitfalls instead of JS interop.",
+      "should_trigger": false,
+      "assertions": [
+        "Routes to ada-blazor-interaction-pitfalls."
+      ]
+    }
+  ]
+}

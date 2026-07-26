@@ -1,8 +1,6 @@
 ---
 name: ada-bugfix-architecture-root-cause
-description: >-
-  When fixing multiple UI/behavior bugs, trace them to a shared architecture-level
-  root cause before proposing fixes. Never fix symptoms in isolation.
+description: "Use when fixing multiple UI or behavior bugs that may share a common root cause — trace symptoms to architecture-level issues before patching. Covers Blazor interop patterns, dock panel lifecycles, toolbar grouping, and RenderFragment pitfalls."
 version: 1.1.0
 author: Hermes Agent
 license: MIT
@@ -10,7 +8,7 @@ platforms: [linux, macos, windows]
 metadata:
   hermes:
     tags: [debugging, refactoring, architecture, root-cause, blazor, interop]
-    related_skills: [systematic-debugging, deviation-analysis-refactoring, blazor-component-development]
+    related_skills: [ada-systematic-debugging]
 ---
 
 # Architecture Root Cause Analysis for Bug Fixes
@@ -100,62 +98,28 @@ Format:
 ```
 ## Root Cause Analysis
 
-### Cluster: <shared pattern name>
-
-**Symptoms:**
-- Symptom A → <file:line> → <mechanism>
-- Symptom B → <file:line> → <mechanism>
-- Symptom C → <file:line> → <mechanism>
-
-**Root cause:** One-sentence description of the design flaw.
-
-**SRS evidence:** <SRS §X.Y> explicitly distinguishes these concepts.
+Use the template in `skill_view(name="ada-bugfix-architecture-root-cause", file_path="references/bugfix-analysis-patterns.md")` — cluster symptoms by shared pattern, identify the design flaw, cite SRS evidence, and produce a principled fix plan (not a symptom-level patch).
 
 **Fix principle:** <architectural principle, not code — e.g., "Region droppability is a Region attribute, not a Panel attribute">
 
-### Fix plan
+### Fix plan template
 
 | File | Change | Principle |
 |---|---|---|
 | path/to/file.razor | <what to change> | <why> |
 | path/to/index.ts | <what to change> | <why> |
 
-**Risks:**
-- <Risk 1> — <mitigation>
-```
-
-### Phase 5: Implement as One Coherent Change
-
-Do NOT fix one symptom at a time. Implement all changes for the shared root cause in a single pass, then verify ALL symptoms are resolved.
+Implement all changes for the shared root cause in a single pass — do NOT fix symptoms one at a time.
 
 ## Common Pitfalls
 
-- **Don't fix symptoms individually.** If three bugs share one root cause, three separate fixes = three wrong places + one remaining root cause.
-- **Don't stop at the C# layer.** Blazor drag bugs often live in the TypeScript front-end (visual feedback) while the C# logic is correct. Read both layers.
-- **Don't propose fixes before presenting the root cause.** The user may have domain knowledge that changes your understanding.
-- **Don't conflate "works on my machine" with "bug is fixed."** After implementing, verify ALL original symptoms are gone, not just the one you were looking at.
-- **Don't sacrifice architecture to fix UI bugs.** When a user says "fix this bug" and then adds "but don't reduce code quality", that is a second-order constraint: the fix must be principled even if the symptom seems small. Opening a direct coupling in one place (e.g., adding a special-case parameter) to quickly fix a symptom is _worse_ than leaving the symptom unfixed. If the fix would violate an existing abstraction boundary, extend the abstraction — never work around it. If the fix would make a class/component do two things, split the responsibility — never add a flag. A "quick fix" that creates technical debt is a failed fix.
-- **Don't assume `OnAfterRenderAsync` logic alone is sufficient for drag source re-registration.** Even with correct per-render comparison logic, Blazor can reuse component instances across parameter changes while preserving instance fields (like `_isFirstRender`, `_headerRegistered`). The `_registered` bool flag may persist in its `true` state from a previous render cycle, preventing re-registration on a new DOM element. **Always add `@key` to the component in the parent template** (`@key="@RegionName"`) to ensure Blazor creates fresh instances when the logical identity changes. Use string-comparison identity tracking (e.g., `_lastHeaderPanelId`) instead of boolean `_registered` flags — strings automatically detect changes and don't require manual reset logic.
-- **Don't skip the user's second-order constraints.** When the user adds a constraint like "covered SRS first" or "don't reduce code quality", that IS the main requirement — the bug fix is secondary. Present the SRS coverage table before the fix plan. If the user says "先出方案确认", produce the full root cause analysis + SRS table + fix plan for approval before writing any code.
-- **Don't split a shared-root-cause fix into multiple PRs.** If three bugs share one root cause, one fix resolves all three. Splitting them into separate changes forces iterative testing and makes each individual change look incomplete.
-- **ToolBar drag sources have the same lifecycle problem as panel drag sources.** `OnAfterRenderAsync(firstRender: true)` registration in ToolBar components suffers the same `firstRender` + boolean flag fragility as `DockPanel.razor`. After panels move between regions, the ToolBar re-renders but `firstRender` is already false. Fix: use a panel-ID hash (`string.Join(",", panels.Select(p => p.Id))`) detected in `OnAfterRenderAsync` to re-register drag handlers when the panel set changes, regardless of `firstRender`.
-- **`ElementReference[]` array pattern for ToolBar loops.** Blazor `@ref` in `foreach` only captures the last element. For ToolBars with multiple entry buttons, use a pre-allocated `ElementReference[MaxEntries]` + index counter + parallel `string?[]` for panel IDs. Loop through the array in `OnAfterRenderAsync` to register JS handlers per entry.
-- **Group ordering in ToolBars: Upper to Lower to Bottom (REQ-F-021 AC5).** Use GroupBy(RegionName) + OrderBy(RegionGroupOrder) where RegionGroupOrder maps region names containing Upper to 0, Lower to 1, Bottom to 2. Within each group, preserve the order from the DockPanels list (add order) - do NOT sort alphabetically by Title. Groups are separated by hr with class xd-toolbar-divider.
-- **.OrderBy(p => p.Title) silently violates SRS ordering.** REQ-F-021 AC5 requires group-internal ordering by add order (insertion order in the DockPanels list). Alphabetical sort is a silent SRS violation. Always remove explicit OrderBy on groups unless the SRS specifies a different rule.
-- **CSS hr divider is invisible without explicit style.** hr elements have no default visible style in most browsers. When using hr as a visual separator, you MUST define border: none, width, height, background, and flex-shrink: 0. Without border: none the default border-top renders inconsistently. Without flex-shrink: 0 flexbox may collapse the divider to zero. This is undetectable by HTML-only code review.
-- **@ref in foreach only captures the last element.** Blazor @ref inside a loop overwrites each iteration. For ToolBars with multiple entry buttons, use a pre-allocated ElementReference[MaxEntries] + a parallel string?[MaxEntries] array for panel IDs + an int renderIndex counter. In OnAfterRenderAsync, iterate up to renderIndex to register JS handlers per entry. The Dictionary pattern fails because Razor @ref cannot bind to dictionary indexers.
-- **@ref inside RenderFragment returned from a C# method silently breaks ElementReference capture.** Extracting repeated `@ref`-containing markup into a helper that returns `RenderFragment` compiles fine but at runtime `ElementReference` points to a stale/non-existent DOM element, causing `JSException: Cannot read properties of null (reading 'removeAttribute')` in JS interop calls. The `@ref` directive ONLY works when placed directly in the component's main .razor template — not inside a `__builder` lambda. **Fix**: keep `@ref` assignments inline (accept duplication), only extract display-only content (no `@ref`, no event handlers). Additionally, wrap `DetachDragHandlers` in `try-catch (JSException)` to tolerate stale references from Blazor diffing. See `references/blazor-ref-in-renderfragment-pitfall.md`.
-- **Do not couple Dock Region visibility to droppability.** In Dock layouts, a logical Dock Region can be hidden in normal mode (no expanded panels) and still must be a valid target while a panel is being dragged. If you simply stop rendering empty regions, users cannot drag panels back into them. Fix by separating **normal space occupancy** from **drop scaffold** rendering: normal mode shows regions only when they contain expanded panels; panel-drag mode temporarily exposes hidden logical regions as lightweight drop scaffolds that register `dock-region` targets. See `references/atlas-dock-visibility-scaffold-pattern.md`.
+- **Don't fix symptoms individually.** If three bugs share one root cause, one fix resolves all three.
+- **Don't stop at the C# layer.** Blazor drag bugs often live in TypeScript. Read both layers.
+- **Use `@key` for Blazor component identity, not boolean `_registered` flags.** String-comparison tracking auto-detects changes.
+- **The user's second-order constraint IS the main requirement.** A "quick fix" that creates technical debt is a failed fix.
+- **`@ref` inside `foreach` or C#-returned `RenderFragment` breaks.** Keep `@ref` inline; use pre-allocated arrays with index counters.
 
-## Common Pitfalls
-
-- **Fixing symptoms individually when they share a root cause.** Three separate fixes for three symptoms that trace to one design flaw = three wrong places + one remaining root cause. Map all symptoms first, find the shared pattern, then fix once.
-- **Stopping at the C# layer when bugs span C# and TypeScript.** Blazor drag/interop bugs often live in the TypeScript front-end (visual feedback, DOM registration) while the C# logic is correct. Read both layers before concluding.
-- **Skipping the SRS coverage audit before proposing a fix.** A fix that passes tests but violates SRS acceptance criteria is incomplete. Every AC of every affected requirement must be individually checked — not just the happy-path AC.
-- **Using boolean `_registered` flags for Blazor JS re-registration.** Blazor reuses component instances across parameter changes. A `_registered` bool stays `true` forever. Use `@key` on the parent template or string-comparison identity tracking.
-- **Treating the user's second-order constraint as optional.** When the user says "fix this bug, but don't reduce code quality," the quality constraint IS the main requirement. A "quick fix" that creates technical debt is a failed fix.
-- **Splitting a shared-root-cause fix into multiple PRs.** One root cause → one coherent change → one PR. Splitting forces iterative testing and makes each change look incomplete.
-- **`@ref` inside `foreach` only captures the last element.** Use pre-allocated `ElementReference[N]` arrays with index counters, not dictionaries (Razor can't bind `@ref` to dictionary indexers).
+Full pitfall catalog and root cause template: `skill_view(name="ada-bugfix-architecture-root-cause", file_path="references/bugfix-analysis-patterns.md")`
 
 ## Verification Checklist
 

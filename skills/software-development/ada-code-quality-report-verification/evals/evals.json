@@ -1,0 +1,34 @@
+{
+  "skill_name": "ada-code-quality-report-verification",
+  "evals": [
+    {
+      "id": "verify-report-claims",
+      "prompt": "这份代码质量报告里列了 20 个问题，帮我独立核验一下哪些是真的，哪些是误报，要回到源码看。",
+      "expected_output": "The agent loads report verification, samples or checks claims against source, and classifies each as confirmed, partial, or false positive.",
+      "should_trigger": true,
+      "assertions": [
+        "Classifies report claims against source evidence.",
+        "Does not trust the report without reading code."
+      ]
+    },
+    {
+      "id": "qa-before-delivery",
+      "prompt": "报告准备发给团队前，先复核里面的统计数字、文件行号和安全结论有没有编造或过期。",
+      "expected_output": "The agent loads report verification and checks factual claims before delivery.",
+      "should_trigger": true,
+      "assertions": [
+        "Checks statistics and file evidence.",
+        "Flags stale or fabricated claims."
+      ]
+    },
+    {
+      "id": "create-new-quality-report",
+      "prompt": "从零开始帮我扫描这个仓库并写一份代码质量报告。",
+      "expected_output": "The agent should use code quality analysis or pipeline, not report verification as the first stage.",
+      "should_trigger": false,
+      "assertions": [
+        "Does not verify a report that does not exist."
+      ]
+    }
+  ]
+}
