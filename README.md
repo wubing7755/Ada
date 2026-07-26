@@ -2,7 +2,7 @@
 
 Ada 是一个可分发的 Hermes profile：一个偏软件工程、重正确性与可验证性的 agent。
 
-## 技能体系 (42 skills)
+## 技能体系 (44 skills)
 
 所有 Ada 专属技能均以 `ada-` 为前缀。以下分类列出：
 
@@ -10,7 +10,6 @@ Ada 是一个可分发的 Hermes profile：一个偏软件工程、重正确性�
 - `ada-srs-lifecycle` — SRS 全生命周期统一入口
 - `ada-tp-to-srs-derivation` — 从技术方案派生 SRS
 - `ada-srs-writing` / `ada-srs-review` / `ada-srs-revision` — 编写、审查、修订
-- `ada-srs-documentation` — SRS 文档化方法论
 - `ada-requirements-authoring` — 需求编写
 - `ada-doc-comparison-analysis` — 文档对比分析
 - `ada-docs-revision` — 文档结构化修订
@@ -58,9 +57,16 @@ Ada 是一个可分发的 Hermes profile：一个偏软件工程、重正确性�
 
 ### Hermes 配置
 - `ada-hermes-configuration` — Hermes 配置与人格设计
+- `ada-hermes-operations` — Hermes Agent 操作规范（命令、证据、上下文管理）
 - `ada-hermes-agent-skill-authoring` — Skill 编写规范
 - `ada-hermes-doc-sync` — 文档与实况同步
 - `ada-skill-optimization` — Skill 审计与优化
+
+### 文档与图表
+- `ada-document-artifacts` — DOCX/PDF/XLSX/SVG 文档与图表处理
+
+### 研究与规划
+- `ada-research-planning` — 审视、领域建模、大任务分解、战略阅读
 
 ## 外部依赖
 
