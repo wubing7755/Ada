@@ -1,0 +1,34 @@
+{
+  "skill_name": "ada-srs-lifecycle",
+  "evals": [
+    {
+      "id": "derive-from-technical-protocol",
+      "prompt": "这里有一份技术协议 TP，我想让 agent 基于它整理出一版 SRS 初稿，并且保留每条需求到协议条款的来源映射。",
+      "expected_output": "The agent loads ada-srs-lifecycle, routes to ada-tp-to-srs-derivation, and asks for or reads the TP source before drafting requirements.",
+      "should_trigger": true,
+      "assertions": [
+        "Routes to ada-tp-to-srs-derivation.",
+        "Mentions TP/source traceability before writing requirements."
+      ]
+    },
+    {
+      "id": "review-existing-srs",
+      "prompt": "帮我审查 docs/SRS.md，重点看有没有死需求、验收标准缺失、术语前后不一致、实现细节泄露。",
+      "expected_output": "The agent loads ada-srs-lifecycle, routes to ada-srs-review, and prepares a systematic SRS review rather than a generic document review.",
+      "should_trigger": true,
+      "assertions": [
+        "Routes to ada-srs-review.",
+        "Treats the target as an SRS quality review."
+      ]
+    },
+    {
+      "id": "general-readme-edit",
+      "prompt": "把 README 的安装说明改得更清楚一点，顺便修正几个错别字。",
+      "expected_output": "The agent should not load ada-srs-lifecycle; this is a general documentation edit.",
+      "should_trigger": false,
+      "assertions": [
+        "Does not route to SRS lifecycle skills."
+      ]
+    }
+  ]
+}

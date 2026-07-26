@@ -1,6 +1,6 @@
 ---
 name: ada-test-driven-development
-description: 'Use when following Test-Driven Development — enforce RED-GREEN-REFACTOR cycle: write failing tests first, implement minimal code to pass, then refactor with confidence. Tests must exist before implementation code. Triggered by: any "write a test first" signal before implementation, user says "TDD" or "先写测试", new feature or bug fix work where test coverage is expected. For throwaway prototypes, skip TDD.'
+description: 'Use when the user asks for TDD, 先写测试, regression coverage, or a new feature/bug fix where tests should drive the change. Enforce RED-GREEN-REFACTOR: failing test first, minimal implementation, then refactor. Skip for throwaway prototypes or explicitly testless work.'
 version: 1.1.0
 author: Hermes Agent (adapted from obra/superpowers)
 license: MIT
@@ -14,6 +14,32 @@ metadata:
 ## Overview
 
 Enforces the RED-GREEN-REFACTOR cycle: write failing tests first, implement minimal code to pass, then refactor with confidence. Tests are the specification — implementation follows.
+
+## Agent Execution Contract
+
+Inputs to identify first:
+- Behavior to specify, including edge cases and acceptance criteria.
+- Existing test framework and closest related tests.
+- The narrowest command that runs the new or affected test.
+
+Default workflow:
+1. Write the smallest behavior test first.
+2. Run it and confirm it fails for the expected reason.
+3. Implement the minimum production change.
+4. Re-run the focused test until green.
+5. Refactor only after green, then run the relevant regression gate.
+
+Stop conditions:
+- The desired behavior is not defined well enough to assert.
+- No test harness exists and creating one would be a larger architecture task.
+- The user explicitly asks for exploratory prototype work rather than TDD.
+
+Output contract:
+- Test added or changed.
+- RED result.
+- Implementation summary.
+- GREEN result.
+- Regression checks and remaining gaps.
 
 ## When to Use
 

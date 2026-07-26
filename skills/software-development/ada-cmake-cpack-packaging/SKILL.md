@@ -1,6 +1,6 @@
 ---
 name: ada-cmake-cpack-packaging
-description: "Use when building CMake/CPack packaging workflows — install rules, generator selection (NSIS vs WiX MSI vs productbuild), Windows Installer standard directories, desktop shortcut patterns, cross-platform portability, and package smoke validation. Triggered by: presence of CMakeLists.txt + CPackConfig.cmake, NSIS/WiX generator selection, desktop shortcut failures on Windows, MSYS path conversion issues during packaging."
+description: "Use when a C/CMake project needs packaging or installer work: CPack install rules, NSIS/WiX/MSI/productbuild generator choice, Windows desktop shortcuts, installed-layout smoke tests, or MSYS path issues. Trigger on CMakeLists.txt plus CPack/installer symptoms."
 version: 1.3.0
 author: Hermes Agent
 license: MIT

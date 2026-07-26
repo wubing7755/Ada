@@ -1,6 +1,6 @@
 ---
 name: ada-srs-review
-description: "Use when systematically reviewing a Software Requirements Specification (SRS) — find dead requirements, stale cross-references, concept confusion, scope violations, and implementation-detail leaks. Multi-pass review methodology with verification scripts.  Systematic 12-pass SRS document quality audit. For code quality analysis, use code-level static analysis instead — these are different artifact types."
+description: "Use when reviewing an SRS for quality: dead requirements, stale cross-references, concept confusion, scope leaks, implementation details, missing ACs, or terminology drift. For source code quality, use ada-code-quality-analysis; for large edits after findings, use ada-srs-revision."
 version: 1.1.0
 platforms: [linux, macos, windows]
 author: Hermes Agent
@@ -14,6 +14,32 @@ metadata:
 # SRS Review Methodology
 
 Systematically audit a Software Requirements Specification document to identify structural and logical flaws before the document drives design and implementation.
+
+## Agent Execution Contract
+
+Inputs to identify first:
+- SRS path and any linked terminology, architecture, traceability, or source-code references.
+- Review scope: full document, specific section, post-edit sync, framework gap analysis, or code coverage audit.
+- Requirement ID format and priority/actor conventions.
+
+Default workflow:
+1. Map the document structure before judging individual requirements.
+2. Choose the relevant passes instead of blindly running all passes for small scopes.
+3. Search cross-references globally before deleting, merging, or renumbering requirements.
+4. Separate findings from edits unless the user asked for direct revision.
+5. Route large-scale fixes to `ada-srs-revision`.
+
+Stop conditions:
+- A contradiction requires product/architecture intent, not editorial judgment.
+- Source documents or referenced sections are missing.
+- The requested fix would change requirement semantics without user approval.
+
+Output contract:
+- Review scope and passes run.
+- Findings with location, issue, risk, and recommended action.
+- Required user decisions.
+- Suggested next revision order.
+- Consistency checks performed.
 
 ## Overview
 

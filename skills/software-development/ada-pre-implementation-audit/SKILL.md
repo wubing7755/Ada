@@ -1,6 +1,6 @@
 ---
 name: ada-pre-implementation-audit
-description: "Use when creating implementation plans that reference existing code or documentation — verify traceability claims and implementation status against actual source code before proposing new work. Prevents building plans on stale or inaccurate docs.  Narrower scope than full project audit — focuses on verifying specific traceability claims before planning, not comprehensive project health assessment."
+description: "Use before writing an implementation plan when the plan depends on existing code, SRS, or traceability claims. Verify claimed status against source first so the agent does not plan work on stale docs. Use ada-project-audit for whole-project health."
 version: 1.0.0
 author: Hermes Agent
 license: MIT
@@ -14,6 +14,32 @@ metadata:
 ## Overview
 
 A pre-planning audit that verifies traceability claims against actual source code before any implementation plan is written. Prevents building multi-phase plans on stale documentation by first dispatching parallel subagent auditors, cross-checking findings, and quantifying the delta between what docs claim and what code actually contains.
+
+## Agent Execution Contract
+
+Inputs to identify first:
+- Planned feature/refactor scope.
+- SRS or traceability claims the plan would rely on.
+- Source/test files likely to implement the claimed behavior.
+
+Default workflow:
+1. Extract only the claims that affect the proposed plan.
+2. Inspect source and tests before writing the plan.
+3. Use parallel auditors only when scope spans independent module clusters.
+4. Cross-check auditor claims in the main context before trusting them.
+5. Present assumption-to-reality deltas before proposing phases.
+
+Stop conditions:
+- The planned scope is too vague to identify claims.
+- Docs and code conflict in a way that needs user/product decision.
+- Auditors report unverifiable claims without file evidence.
+
+Output contract:
+- Claims checked.
+- Code/test evidence found.
+- Deltas from documentation.
+- Planning implications.
+- Open questions before implementation planning.
 
 # Pre-Implementation Audit
 
@@ -43,7 +69,7 @@ From the requirements traceability matrix or SRS, extract the REQs relevant to t
 ### 2. Dispatch parallel subagent auditors
 
 Use `delegate_task` batch mode with 3 agents covering different module clusters.
-See the parallel subagent audit pattern documentation → `references/parallel-audit-pattern.md` for
+See the parallel subagent audit template documentation -> `references/subagent-audit-template.md` for
 the complete dispatch template, subagent prompt format, and pitfall guidance.
 
 Each agent gets:

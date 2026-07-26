@@ -1,6 +1,6 @@
 ---
 name: ada-systematic-debugging
-description: "Use when debugging complex or hard-to-reproduce bugs — four-phase methodology: understand the bug, isolate the root cause, design the fix, and verify the solution. Prioritizes understanding before patching."
+description: "Use when debugging complex, flaky, or unclear failures where root cause matters: test failures, build/runtime errors, regressions, production symptoms, or multiple related bugs. The agent must create a tight feedback loop and gather evidence before proposing fixes."
 version: 1.1.0
 author: Hermes Agent (adapted from obra/superpowers)
 license: MIT
@@ -14,6 +14,33 @@ metadata:
 ## Overview
 
 Four-phase debugging methodology: understand the bug, isolate the root cause, design the fix, and verify. Prioritizes diagnosis over patching to prevent fix-break-fix cycles.
+
+## Agent Execution Contract
+
+Inputs to identify first:
+- The exact symptom, error, failing test, or user-visible behavior.
+- The narrowest command or manual flow that can reproduce it.
+- Recent changes and relevant files.
+
+Default workflow:
+1. Build or identify a tight feedback loop that can go red on the symptom.
+2. Read the error, stack trace, logs, and nearby source before theorizing.
+3. Form ranked, falsifiable hypotheses.
+4. Test the smallest useful hypothesis.
+5. Implement one fix only after the root cause is supported by evidence.
+6. Re-run the narrow loop, then the relevant broader regression gate.
+
+Stop conditions:
+- No deterministic or high-probability reproduction exists after reasonable investigation.
+- Two fix attempts fail or introduce new symptoms.
+- Evidence points to a scope change, architecture issue, external service, or user decision.
+
+Output contract:
+- Reproduction command or evidence gathered.
+- Root cause with file/function evidence.
+- Fix summary.
+- Verification commands and results.
+- Residual risk or missing coverage.
 
 ## When to Use
 
@@ -375,54 +402,9 @@ If you catch yourself thinking:
 | **3. Hypothesis** | Form theory, test minimally, one variable at a time | Confirmed or new hypothesis |
 | **4. Implementation** | Create regression test, fix root cause, verify | Bug resolved, all tests pass |
 
-## Hermes Agent Integration
+## References
 
-### Investigation Tools
-
-Use these Hermes tools during Phase 1:
-
-- **`search_files`** — Find error strings, trace function calls, locate patterns
-- **`read_file`** — Read source code with line numbers for precise analysis
-- **`terminal`** — Run tests, check git history, reproduce bugs
-- **`web_search`/`web_extract`** — Research error messages, library docs
-
-### With delegate_task
-
-For complex multi-component debugging, dispatch investigation subagents:
-
-```python
-delegate_task(
-    goal="Investigate why [specific test/behavior] fails",
-    context="""
-    Follow systematic-debugging skill:
-    1. Read the error message carefully
-    2. Reproduce the issue
-    3. Trace the data flow to find root cause
-    4. Report findings — do NOT fix yet
-
-    Error: [paste full error]
-    File: [path to failing code]
-    Test command: [exact command]
-    """,
-    toolsets=['terminal', 'file']
-)
-```
-
-### With test-driven-development
-
-When fixing bugs:
-1. Write a test that reproduces the bug (RED)
-2. Debug systematically to find root cause
-3. Fix the root cause (GREEN)
-4. The test proves the fix and prevents regression
-
-## Real-World Impact
-
-From debugging sessions:
-- Systematic approach: 15-30 minutes to fix
-- Random fixes approach: 2-3 hours of thrashing
-- First-time fix rate: 95% vs 40%
-- New bugs introduced: Near zero vs common
+- `references/agent-integration.md` — Hermes delegation template, investigation tool selection, and TDD integration notes.
 
 ## Verification
 

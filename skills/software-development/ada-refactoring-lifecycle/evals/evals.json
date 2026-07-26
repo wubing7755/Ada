@@ -1,0 +1,34 @@
+{
+  "skill_name": "ada-refactoring-lifecycle",
+  "evals": [
+    {
+      "id": "dotnet-engineering-refactor",
+      "prompt": "这个 Blazor 组件库现在达不到工程级标准，我想分阶段做架构升级：领域原语、Orchestrator 抽取、公开 API 稳定化都要考虑。",
+      "expected_output": "The agent loads ada-refactoring-lifecycle, identifies .NET/Blazor signals, and routes to ada-dotnet-engineering-refactoring before proposing changes.",
+      "should_trigger": true,
+      "assertions": [
+        "Routes to ada-dotnet-engineering-refactoring.",
+        "Requires a phased plan before implementation."
+      ]
+    },
+    {
+      "id": "generic-architecture-refactor",
+      "prompt": "这个 Python 服务的业务流程和执行细节搅在一起了，想做一次工程级重构，把协议、编排和实现边界拆清楚。",
+      "expected_output": "The agent loads ada-refactoring-lifecycle and routes to ada-engineering-refactoring for non-.NET architecture work.",
+      "should_trigger": true,
+      "assertions": [
+        "Routes to ada-engineering-refactoring.",
+        "Does not apply .NET-specific patterns."
+      ]
+    },
+    {
+      "id": "small-formatting-change",
+      "prompt": "把这个文件里的变量名 typo 改一下，再跑一下格式化。",
+      "expected_output": "The agent should not load the refactoring lifecycle; this is an isolated small edit.",
+      "should_trigger": false,
+      "assertions": [
+        "Does not require a refactoring plan."
+      ]
+    }
+  ]
+}

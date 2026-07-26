@@ -1,6 +1,6 @@
 ---
 name: ada-blazor-interaction-pitfalls
-description: "Use when debugging Blazor WASM lifecycle and rendering issues — StateHasChanged skipping OnParametersSet, OnAfterRender ordering traps, render-state reset patterns, @ref in RenderFragment, paired-list IndexOutOfRange, and ShouldRender vs OnParametersSet timing. Triggered by: IndexOutOfRangeException in BuildRenderTree, StateHasChanged not updating UI, OnParametersSet skipped after internal state change, @ref inside RenderFragment silently failing. For JS interop event handling, use JS interop debugging patterns instead."
+description: "Use when a Blazor/Razor bug involves lifecycle or rendering behavior: StateHasChanged not updating UI, OnParametersSet/OnAfterRender ordering, ShouldRender state reset, @ref in RenderFragment, or BuildRenderTree IndexOutOfRange. Prefer ada-blazor-interop-pitfalls for JS/DOM event interop."
 version: 1.1.0
 author: Hermes Agent
 license: MIT
@@ -19,6 +19,31 @@ metadata:
 A catalog of silent Blazor WASM lifecycle and rendering failures — `StateHasChanged()` skipping `OnParametersSet`, `OnAfterRender` vs `OnAfterRenderAsync` ordering traps, `@ref` inside `RenderFragment` silently breaking, paired-list `IndexOutOfRange`, and render-state reset strategies. Each pitfall includes the root cause, why the obvious fix doesn't work, and a verified solution with code examples.
 
 For JS interop-specific pitfalls (`@onmouseenter`/`@onmouseleave`, `DotNetObjectReference`, `IJSRuntime`, `WeakMap` leaks), see JS interop debugging patterns.
+
+## Agent Execution Contract
+
+Inputs to identify first:
+- The Razor component(s), render fragments, and state fields involved.
+- The lifecycle method sequence relevant to the symptom.
+- Whether the symptom requires JS/DOM interop or pure Blazor rendering reasoning.
+
+Default workflow:
+1. Classify the issue: lifecycle ordering, render-state reset, `@ref`, paired collections, or re-registration.
+2. Inspect component state mutation and render-trigger path before editing.
+3. Prefer deterministic render data structures over mutable per-render counters when possible.
+4. Add or run a focused test/repro for the failing render behavior.
+5. Route to `ada-blazor-interop-pitfalls` if DOM event delegation or JS module code is involved.
+
+Stop conditions:
+- Browser behavior or component tree state cannot be observed enough to classify the issue.
+- The fix requires component architecture changes beyond the failing lifecycle path.
+- The symptom is actually JS interop, not Blazor rendering.
+
+Output contract:
+- Lifecycle path analyzed.
+- Root cause category.
+- Fix pattern used.
+- Verification steps and remaining render risks.
 
 ## When to Use
 

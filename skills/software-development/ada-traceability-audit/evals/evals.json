@@ -1,0 +1,34 @@
+{
+  "skill_name": "ada-traceability-audit",
+  "evals": [
+    {
+      "id": "matrix-vs-code-status",
+      "prompt": "检查 requirements-traceability.md 里 Not Implemented 的需求是不是真的没实现，要对照源码和测试。",
+      "expected_output": "The agent loads traceability audit, extracts REQ IDs/statuses, verifies them against code/tests, and reports mismatches.",
+      "should_trigger": true,
+      "assertions": [
+        "Treats source/test files as primary evidence.",
+        "Reports stale statuses with evidence."
+      ]
+    },
+    {
+      "id": "stale-line-counts",
+      "prompt": "traceability 里的文件行数和 appendix 统计好像过期了，帮我审计并修正。",
+      "expected_output": "The agent loads traceability audit and recomputes counts against actual files.",
+      "should_trigger": true,
+      "assertions": [
+        "Checks actual files and counts.",
+        "Reconciles summary statistics."
+      ]
+    },
+    {
+      "id": "srs-concept-review",
+      "prompt": "审查 SRS 里面 Region / Panel / Tab 这几个概念有没有混用。",
+      "expected_output": "The agent should use SRS review, not traceability matrix audit.",
+      "should_trigger": false,
+      "assertions": [
+        "Does not treat terminology review as matrix-vs-code traceability audit."
+      ]
+    }
+  ]
+}

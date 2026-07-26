@@ -1,6 +1,6 @@
 ---
 name: ada-refactoring-lifecycle
-description: "Use when planning and executing engineering-grade refactoring — unified entry point for general architectural refactoring and .NET-specific refactoring. Covers the full lifecycle from proposal design through phased execution."
+description: "Use when an agent is planning or executing engineering-grade refactoring, especially multi-phase architecture work, .NET/C#/Blazor refactors, domain primitives, orchestration extraction, or user requests like 工程级, 架构升级, 达不到标准. Load this router before choosing the stack-specific refactoring skill."
 version: 1.0.0
 platforms: [linux, macos, windows]
 author: Hermes Agent
@@ -9,7 +9,7 @@ metadata:
   hermes:
     tags: [refactoring, architecture, engineering, dotnet, umbrella]
     related_skills: [ada-engineering-refactoring, ada-dotnet-engineering-refactoring]
-    sub_skills: [engineering-refactoring, dotnet-engineering-refactoring]
+    sub_skills: [ada-engineering-refactoring, ada-dotnet-engineering-refactoring]
 ---
 
 # 工程级重构生命周期
@@ -73,6 +73,17 @@ Do **not** use for: single-file fixes, pre-commit formatting, one-off code revie
 ## 使用方式
 
 根据项目技术栈选择入口技能，执行前先出方案文档，确认后逐 Phase 推进。
+
+## Agent Activation
+
+Use this as a router when refactoring scope spans multiple files, phases, or architectural boundaries. Once the stack is known, read the routed sub-skill before proposing edits.
+
+| Project/task signal | Route to |
+|---------------------|----------|
+| `.sln`, `.csproj`, `.cs`, `.razor`, Blazor, C#, public API stabilization | `ada-dotnet-engineering-refactoring` |
+| Other stacks, general architecture refactor, interface/protocol/orchestration redesign | `ada-engineering-refactoring` |
+
+Do not use for one-line bug fixes, simple formatting, or isolated code review comments.
 
 ## Common Pitfalls
 

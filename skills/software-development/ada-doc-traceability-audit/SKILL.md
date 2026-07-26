@@ -1,6 +1,6 @@
 ---
 name: ada-doc-traceability-audit
-description: "Use when auditing a project's documentation against its SRS and codebase — find missing requirements, stale traceability entries, outdated status markers, and incomplete appendices. Covers the full doc cleanup decision tree: delete vs archive vs keep.  Focuses on documentation-internal consistency (SRS, traceability matrix, design docs). For code-vs-document discrepancy detection, use code-level traceability auditing instead."
+description: "Use when auditing documentation-internal traceability: SRS entries, traceability matrices, design docs, status markers, appendices, and delete/archive/keep cleanup decisions. For source-code-vs-matrix evidence checks, use ada-traceability-audit or ada-doc-implementation-audit."
 version: 1.0.0
 author: Hermes Agent
 license: MIT

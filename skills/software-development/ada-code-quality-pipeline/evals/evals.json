@@ -1,0 +1,34 @@
+{
+  "skill_name": "ada-code-quality-pipeline",
+  "evals": [
+    {
+      "id": "full-quality-report",
+      "prompt": "请对整个仓库做一份可交付的代码质量报告，我要拿它来安排整改，所以结论要经过验证，别只扫一遍就给我。",
+      "expected_output": "The agent loads ada-code-quality-pipeline and executes analysis, verification, and QA gate stages in order.",
+      "should_trigger": true,
+      "assertions": [
+        "Routes through all three stages.",
+        "Does not deliver after analysis only."
+      ]
+    },
+    {
+      "id": "compliance-style-audit",
+      "prompt": "这个 PR 影响面比较大，帮我做高置信度质量审计：复杂度、重复、安全、测试覆盖都要看，而且每个问题要能回到源码证据。",
+      "expected_output": "The agent loads ada-code-quality-pipeline or explicitly chooses its staged gates because the request is high confidence and evidence-based.",
+      "should_trigger": true,
+      "assertions": [
+        "Requires source evidence.",
+        "Includes verification before final delivery."
+      ]
+    },
+    {
+      "id": "quick-loop-review",
+      "prompt": "这个循环是不是有点慢？帮我看一下有没有明显的 N+1 或重复 IO。",
+      "expected_output": "The agent should prefer ada-code-efficiency-review instead of the full quality pipeline.",
+      "should_trigger": false,
+      "assertions": [
+        "Does not run the full quality pipeline for a focused efficiency review."
+      ]
+    }
+  ]
+}

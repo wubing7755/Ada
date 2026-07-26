@@ -1,6 +1,6 @@
 ---
 name: ada-srs-lifecycle
-description: "Use when managing the full SRS lifecycle — unified entry point routing from technical protocol derivation through authoring, reviewing, and large-scale revision. Dispatches to the appropriate sub-skill for each phase."
+description: "Use when an agent is doing SRS work: deriving requirements from a technical protocol, writing/refining an SRS, reviewing requirement quality, or revising SRS terminology and structure. Load this umbrella skill first to route to the correct ada-srs-* sub-skill."
 version: 1.0.0
 platforms: [linux, macos, windows]
 author: Hermes Agent
@@ -9,7 +9,7 @@ metadata:
   hermes:
     tags: [srs, lifecycle, requirements, umbrella]
     related_skills: [ada-srs-writing, ada-srs-review, ada-srs-revision, ada-tp-to-srs-derivation, ada-requirements-authoring]
-    sub_skills: [tp-to-srs-derivation, srs-writing, srs-review, srs-revision]
+    sub_skills: [ada-tp-to-srs-derivation, ada-srs-writing, ada-srs-review, ada-srs-revision, ada-requirements-authoring]
 ---
 
 # SRS 生命周期
@@ -65,6 +65,19 @@ Then  ...
 ## 使用方式
 
 加载本 skill 后，根据用户意图选择对应阶段，再加载对应子技能获取详细工作流。
+
+## Agent Activation
+
+Use this as a router, not as the final workflow. After identifying the phase, read the matching sub-skill before editing or reviewing an SRS.
+
+| User/task signal | Route to |
+|------------------|----------|
+| TP, technical protocol, "基于协议写 SRS", source clauses | `ada-tp-to-srs-derivation` |
+| New SRS, rewrite requirements, add REQ/AC, document structure | `ada-srs-writing` or `ada-requirements-authoring` |
+| Review/check/audit an existing SRS for quality, gaps, contradictions | `ada-srs-review` |
+| Large terminology/concept replacement or section restructuring | `ada-srs-revision` |
+
+Do not continue with this skill alone once the phase is known.
 
 ## Overview
 

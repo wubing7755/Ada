@@ -1,6 +1,6 @@
 ---
 name: ada-hermes-operations
-description: "Use when operating Hermes Agent itself — slash commands, evidence standards, context handoff, approval boundaries, Windows-specific tool behavior, and delegation patterns. Load before any complex multi-session or multi-agent workflow. Triggered by: complex multi-session workflows, multi-agent delegation, or any task requiring context management across /new boundaries. Defines evidence standards and approval boundaries that all agent tasks depend on. Should be preloaded for every non-trivial session."
+description: "Use when an agent task needs Hermes operating discipline: evidence standards, context handoff, slash-command boundaries, approvals, Windows shell/path handling, or multi-agent delegation. Load before complex multi-session work, reviews, or tasks where sub-agent claims must be independently verified."
 version: 1.0.0
 platforms: [linux, macos, windows]
 author: Hermes Agent

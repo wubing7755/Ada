@@ -1,6 +1,6 @@
 ---
 name: ada-engineering-refactoring
-description: 'Use when performing architectural-level code refactoring to meet Microsoft/.NET library engineering standards — value-type-first design, interface-based protocols, orchestration/implementation separation, and whole-project consistency enforcement. Triggered by: non-.NET project + "工程级", "architecture upgrade", "达不到标准" signals. For .NET/C#/Blazor projects, use stack-specific refactoring with domain primitives and orchestrator patterns.'
+description: 'Use when an agent is doing architecture-level refactoring outside .NET-specific workflows: type-system constraints, interface protocols, orchestration/implementation separation, and whole-project consistency. For C#/.NET/Blazor refactors, route through ada-refactoring-lifecycle to ada-dotnet-engineering-refactoring.'
 version: 1.0.0
 author: Hermes Agent
 license: MIT

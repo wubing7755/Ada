@@ -1,6 +1,6 @@
 ---
 name: ada-traceability-audit
-description: "Use when auditing a requirements-traceability matrix against actual source code — find status mismatches, missing REQ entries, stale line counts, and outdated appendixes. Treats code as primary evidence and docs as secondary.  Focuses on code-vs-matrix discrepancies. For documentation-internal consistency, use documentation traceability auditing instead."
+description: "Use when checking a requirements traceability matrix against source code: stale implementation statuses, missing REQ entries, wrong line counts, outdated appendices, or code-vs-doc discrepancies. Use ada-doc-traceability-audit for documentation-internal consistency."
 version: 1.0.0
 author: Hermes Agent
 license: MIT
@@ -14,6 +14,32 @@ metadata:
 ## Overview
 
 A focused requirements-traceability audit that systematically compares the traceability matrix against actual source code. Identifies status mismatches (e.g., "Not Implemented" where code exists), missing REQ entries, stale line counts, outdated appendixes, and cross-document inconsistencies.
+
+## Agent Execution Contract
+
+Inputs to identify first:
+- SRS file, traceability matrix, implementation directories, and test directories.
+- Requirement ID pattern and status vocabulary.
+- Whether the task is report-only or also updates documentation.
+
+Default workflow:
+1. Extract REQ IDs from SRS and traceability, then diff both directions.
+2. For each suspicious status, verify against source and tests before changing docs.
+3. Treat code and test files as primary evidence; docs are secondary.
+4. Recompute summary counts after any documentation update.
+5. Separate documentation-internal consistency issues from code-vs-matrix issues.
+
+Stop conditions:
+- Required source or traceability files are missing.
+- A status depends on ambiguous product intent rather than observable implementation.
+- Updating docs would delete or rewrite requirement semantics without approval.
+
+Output contract:
+- Files audited.
+- Missing/stale/mismatched REQs.
+- Evidence for each status correction.
+- Summary count changes.
+- Documentation updates made or recommended.
 
 # Traceability / Documentation Discrepancy Audit
 

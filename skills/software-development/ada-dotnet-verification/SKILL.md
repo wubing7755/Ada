@@ -1,6 +1,6 @@
 ---
 name: ada-dotnet-verification
-description: "Use when verifying .NET builds, tests, and code formatting during refactoring phases — focused TDD checks, ad-hoc verifier scripts for Windows IDE/testhost locks, and isolated artifact verification. Triggered by: MSB3021/MSB3027 DLL lock errors on Windows, dotnet test failures after refactoring, need for isolated artifact verification when default output path is locked by IDE/testhost."
+description: "Use after editing .NET/C#/Blazor projects or when dotnet build/test/format gates matter. Covers focused tests, formatting checks, Windows MSB3021/MSB3027 DLL locks, testhost/IDE output locks, and isolated artifact verification."
 version: 1.0.0
 author: Hermes Agent
 license: MIT
@@ -14,6 +14,31 @@ metadata:
 # .NET Verification
 
 Use this skill when a .NET repository phase needs evidence-backed verification: focused TDD checks, full build/test gates, `dotnet format`, `git diff --check`, or a temporary ad-hoc verifier script.
+
+## Agent Execution Contract
+
+Inputs to identify first:
+- Solution/project files (`.sln`, `.slnx`, `.csproj`) and touched test projects.
+- Whether the task is focused TDD, module regression, full phase verification, or lock recovery.
+- Repository-specific build/test/format commands.
+
+Default workflow:
+1. Run a focused test for the touched behavior when one exists.
+2. Run a focused regression set for the touched module.
+3. Run the project gate: build, tests, format, and `git diff --check` when feasible.
+4. If Windows output locks block verification, use isolated artifacts before claiming failure.
+
+Stop conditions:
+- Required SDK or dependencies are missing and need installation.
+- Test failures are unrelated to the change and cannot be triaged quickly.
+- Locks require closing the user's IDE or killing ambiguous processes.
+
+Output contract:
+- Verification tier used.
+- Exact commands run.
+- Pass/fail results.
+- Lock workaround used, if any.
+- Whether evidence is focused or full-suite.
 
 ## Overview
 

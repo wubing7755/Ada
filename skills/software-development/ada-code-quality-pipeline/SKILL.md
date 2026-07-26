@@ -1,6 +1,6 @@
 ---
 name: ada-code-quality-pipeline
-description: "Use when running the full code quality pipeline — three-phase unified entry point from analysis through verification to QA gate. Produces, validates, and delivers structured code quality reports."
+description: "Use when an agent must deliver an end-to-end code quality report, not just a quick review: analyze the codebase, verify report claims against source, and run a QA gate before delivery. Load this router for full-pipeline quality audits, compliance-style reviews, or high-stakes remediation planning."
 version: 1.0.0
 platforms: [linux, macos, windows]
 author: Hermes Agent
@@ -9,7 +9,7 @@ metadata:
   hermes:
     tags: [code-quality, pipeline, audit, qa, umbrella]
     related_skills: [ada-code-quality-analysis, ada-code-quality-report-verification, ada-quality-report-qa]
-    sub_skills: [code-quality-analysis, code-quality-report-verification, quality-report-qa]
+    sub_skills: [ada-code-quality-analysis, ada-code-quality-report-verification, ada-quality-report-qa]
 ---
 
 # 代码质量流水线
@@ -54,6 +54,16 @@ Stage 1 覆盖七大维度：
 ## 使用方式
 
 加载本 skill 后，从 Stage 1 开始，依次加载对应子技能。每个阶段完成后确认输出质量再进入下一阶段。
+
+## Agent Activation
+
+Use this as a gated router. Do not deliver a final quality report after only Stage 1 when the user asked for a full pipeline, high-confidence audit, or actionable remediation plan.
+
+| Stage | Route to | Gate |
+|-------|----------|------|
+| 1. Analyze | `ada-code-quality-analysis` | Report covers the required dimensions with concrete file evidence |
+| 2. Verify | `ada-code-quality-report-verification` | Claims are confirmed/partial/false-positive against source |
+| 3. QA Gate | `ada-quality-report-qa` | Statistics, coverage claims, and security omissions are checked |
 
 ## When to Use
 

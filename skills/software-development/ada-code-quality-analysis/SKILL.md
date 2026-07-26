@@ -1,6 +1,6 @@
 ---
 name: ada-code-quality-analysis
-description: 'Use when the user asks to "analyze code quality", "scan the codebase", or produce a multi-dimension audit — complexity, duplication, dead code, security vulnerabilities, dependency health, test coverage gaps, and code standards compliance. Language-agnostic methodology with per-language analysis scripts.  Multi-dimension code quality audit. For SRS document quality review, use document-level review methodologies instead — code and documents need different audit approaches.'
+description: 'Use when an agent must produce a code quality audit of source code: complexity, duplication, dead code, security risks, dependency health, test gaps, or standards compliance. Use ada-code-quality-pipeline for end-to-end verified reports; use SRS/document skills for document quality.'
 version: 1.0.0
 author: Hermes Agent
 license: MIT
@@ -19,6 +19,32 @@ structured markdown report with severity ratings and prioritized recommendations
 **Core principle:** Automate what's automatable (line counts, CC estimation, pattern
 matching), then manually read the hot spots. Never fabricate findings — every issue
 in the report must be traceable to a specific file:line.
+
+## Agent Execution Contract
+
+Inputs to identify first:
+- Repository root, target source directories, and excluded generated/build directories.
+- Languages/frameworks and available test/build/static-analysis tools.
+- Whether the user wants a quick audit, full report, or remediation plan.
+
+Default workflow:
+1. Discover source, test, config, and generated-file boundaries.
+2. Run lightweight automated counts/scans before manual conclusions.
+3. Read the highest-risk hot spots directly.
+4. Attach concrete file/line evidence to every finding.
+5. If the report will drive decisions, route through `ada-code-quality-pipeline` for verification and QA.
+
+Stop conditions:
+- The target scope is unclear or mixes unrelated repositories.
+- Findings cannot be tied to concrete source evidence.
+- Dependency/security checks require network access or credentials not available.
+
+Output contract:
+- Scope and exclusions.
+- Methods/tools used.
+- Findings with severity, evidence, risk, and recommendation.
+- Metrics summary.
+- Checks not run and confidence level.
 
 ## Overview
 

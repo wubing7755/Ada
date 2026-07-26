@@ -1,0 +1,34 @@
+{
+  "skill_name": "ada-cmake-cpack-packaging",
+  "evals": [
+    {
+      "id": "nsis-desktop-shortcut",
+      "prompt": "CMake/CPack 生成 NSIS 安装包时桌面快捷方式不对，帮我查 CPackConfig 和生成的 nsi。",
+      "expected_output": "The agent loads CMake/CPack packaging, inspects generated packaging files, and avoids guessing at NSIS behavior.",
+      "should_trigger": true,
+      "assertions": [
+        "Inspects CPackConfig or generated installer scripts.",
+        "Uses packaging-specific diagnostics."
+      ]
+    },
+    {
+      "id": "component-install-empty",
+      "prompt": "CPack 打出来的安装包几乎是空的，项目里用了 CPACK_COMPONENTS_ALL 和多个 install()。",
+      "expected_output": "The agent loads CMake/CPack packaging and checks component labels on install rules.",
+      "should_trigger": true,
+      "assertions": [
+        "Recognizes CPack component-system silent empty install risk.",
+        "Checks install() COMPONENT usage."
+      ]
+    },
+    {
+      "id": "normal-cmake-build-error",
+      "prompt": "cmake --build 编译 C 文件时报语法错误，帮我改代码。",
+      "expected_output": "The agent should not load packaging skill for a normal compile error unrelated to CPack/installers.",
+      "should_trigger": false,
+      "assertions": [
+        "Does not treat ordinary compile errors as packaging work."
+      ]
+    }
+  ]
+}

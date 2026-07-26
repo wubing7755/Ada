@@ -8,7 +8,7 @@ license: MIT
 metadata:
   hermes:
     tags: [srs, requirements, authoring, quality, specification]
-    related_skills: [ada-srs-writing, ada-srs-writing]
+    related_skills: [ada-srs-writing]
 ---
 
 # Requirements Authoring: SRS vs Design Boundary

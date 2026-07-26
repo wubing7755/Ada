@@ -1,0 +1,34 @@
+{
+  "skill_name": "ada-requesting-code-review",
+  "evals": [
+    {
+      "id": "pre-commit-review",
+      "prompt": "我刚改完这个功能，提交前帮我 review 一下，顺便跑该跑的检查。",
+      "expected_output": "The agent loads pre-commit review, inspects diff scope, runs security and quality checks, and reports findings before commit.",
+      "should_trigger": true,
+      "assertions": [
+        "Inspects git diff scope.",
+        "Runs or reports relevant verification commands."
+      ]
+    },
+    {
+      "id": "security-sensitive-diff",
+      "prompt": "这个 PR 加了登录 token 处理和 subprocess 调用，帮我重点看提交前有没有安全问题。",
+      "expected_output": "The agent loads code review and scans added lines for secrets, shell injection, and other security issues.",
+      "should_trigger": true,
+      "assertions": [
+        "Includes security scan of changed lines.",
+        "Reports severity and evidence."
+      ]
+    },
+    {
+      "id": "review-someone-elses-github-pr",
+      "prompt": "帮我去 GitHub 上 review PR #42，并留下 inline comments。",
+      "expected_output": "The agent should route to GitHub PR review tooling rather than this local pre-commit skill.",
+      "should_trigger": false,
+      "assertions": [
+        "Does not treat remote PR review as local pre-commit verification."
+      ]
+    }
+  ]
+}

@@ -8,7 +8,7 @@ license: MIT
 metadata:
   hermes:
     tags: [srs, tp, requirements, derivation, chinese, avionics]
-    related_skills: [ada-srs-writing, ada-srs-writing, ada-requirements-authoring, ada-srs-lifecycle]
+    related_skills: [ada-srs-writing, ada-requirements-authoring, ada-srs-lifecycle]
 ---
 
 # TP-to-SRS Derivation（从技术协议派生 SRS）

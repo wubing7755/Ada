@@ -1,6 +1,6 @@
 ---
 name: ada-docs-revision
-description: 'Use when the user says "全局替换这个术语", "大规模修订文档结构", or needs mass rename across a general technical document (not SRS-specific) — terminology alignment across large documents, mass renaming, and structural re-organization with blast-radius analysis.  For general technical documents (design docs, README, standards). For SRS-specific large-scale revision with terminology mapping and blast-radius analysis, use SRS-dedicated revision workflows.'
+description: 'Use when revising general technical documents at scale: terminology replacement, mass rename, section restructuring, README/design-doc cleanup, or blast-radius analysis. For SRS-specific requirement terminology, numbering, or traceability changes, use ada-srs-revision.'
 version: 1.0.0
 platforms: [linux, macos, windows]
 author: Hermes Agent

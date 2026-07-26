@@ -1,5 +1,7 @@
 # Ada
 
+当前版本：`0.2.2`
+
 Ada 是一个可分发的 Hermes profile：一个偏软件工程、重正确性与可验证性的 agent。
 
 ## 技能体系 (44 skills)
@@ -101,3 +103,5 @@ hermes profile update ada
 - 这个 distribution 不携带安装者的记忆、会话、API 密钥或本地日志。
 - 安装者使用自己的模型配置与凭据。
 - Ada 的 SOUL.md 定义工程判断与协作风格，skills 提供经过实战验证的工作流。
+- Ada skills 面向 Agent 自动加载与执行，遵循 Agent Skills 的 progressive disclosure 思路：`description` 负责触发，`SKILL.md` 负责核心执行协议，长案例/模板/脚本放入 `references/`、`scripts/` 或 `assets/`。
+- Skill 质量标准见 `docs/skill-quality-standard.md`。

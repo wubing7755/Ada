@@ -1,6 +1,6 @@
 ---
 name: ada-blazor-interop-pitfalls
-description: "Use when debugging Blazor JS interop issues, adding mouse/hover/keyboard event handlers in Razor components, or diagnosing silently-ignored Blazor event directives. Covers IJSRuntime patterns, DotNetObjectReference lifecycle, invisible drop targets, mouseenter/mouseleave fixes, and WeakMap memory management. Triggered by: @onmouseenter/@onmouseleave directives that compile but never fire, JSException on DotNetObjectReference disposal, memory growth from Map<K,V> in TypeScript, drag-and-drop targets disappearing after Blazor re-renders. For lifecycle or rendering issues, use lifecycle debugging patterns instead."
+description: "Use when a Blazor/Razor task involves JS interop, DOM events, hover/mouseenter handlers, DotNetObjectReference disposal, WeakMap/Map leaks, or drag/drop targets that disappear after render. Prefer ada-blazor-interaction-pitfalls for pure Blazor lifecycle/rendering issues."
 version: 1.3.0
 author: Hermes Agent
 license: MIT
@@ -18,6 +18,31 @@ metadata:
 Covers the most common Blazor .NET 6 JS interop failures encountered in production — non-bubbling DOM events, `IJSRuntime` patterns, `DotNetObjectReference` lifecycle management, drag-and-drop memory leaks, and invisible drop targets. Each pitfall is a standalone troubleshooting guide with verified fixes. Documented failures and fixes for Blazor .NET 6 JS interop event handling.
 
 For lifecycle and rendering pitfalls (`StateHasChanged`, `OnAfterRender`, `@ref` in `RenderFragment`), see lifecycle debugging patterns.
+
+## Agent Execution Contract
+
+Inputs to identify first:
+- Razor component, TypeScript/JavaScript module, and interop service files involved.
+- The event or interop call that fails, including browser console errors if available.
+- Whether the symptom is DOM event delegation, module loading, callback lifetime, or render-lifetime target loss.
+
+Default workflow:
+1. Confirm whether the event bubbles and is supported by Blazor directives.
+2. Inspect both Razor and JS/TS sides of the interop boundary.
+3. Verify `DotNetObjectReference` ownership and disposal lifetime.
+4. Prefer `IJSObjectReference` module imports over `eval` or dynamic string imports.
+5. For disappearing targets, check Blazor re-render lifecycle and re-registration.
+
+Stop conditions:
+- The symptom is pure Blazor rendering/lifecycle rather than JS interop; route to `ada-blazor-interaction-pitfalls`.
+- Browser/runtime evidence is needed but unavailable.
+- Fixing requires changing public component API or architecture beyond the local interop path.
+
+Output contract:
+- Interop boundary map: Razor -> C# service -> JS/TS.
+- Root cause category.
+- Fix pattern used.
+- Verification steps, including browser/event behavior when applicable.
 
 ## When to Use
 

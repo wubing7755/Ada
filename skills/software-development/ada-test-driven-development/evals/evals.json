@@ -1,0 +1,34 @@
+{
+  "skill_name": "ada-test-driven-development",
+  "evals": [
+    {
+      "id": "bugfix-test-first",
+      "prompt": "这个 parser 遇到空字段会崩，按 TDD 来修，先写回归测试。",
+      "expected_output": "The agent loads TDD, writes a failing regression test first, runs RED, then implements the minimal fix and verifies GREEN.",
+      "should_trigger": true,
+      "assertions": [
+        "Writes or identifies the test before production changes.",
+        "Reports RED and GREEN results separately."
+      ]
+    },
+    {
+      "id": "feature-with-acceptance-criteria",
+      "prompt": "新增导出 CSV 功能，验收标准是空列表只输出表头、特殊字符要转义。先用测试把行为钉住。",
+      "expected_output": "The agent loads TDD and turns acceptance criteria into focused tests before implementation.",
+      "should_trigger": true,
+      "assertions": [
+        "Creates tests from acceptance criteria.",
+        "Runs the narrow relevant test command."
+      ]
+    },
+    {
+      "id": "throwaway-prototype",
+      "prompt": "先快速做个一次性 demo，不用测试，看看交互感觉。",
+      "expected_output": "The agent should not force TDD because the user explicitly requested a throwaway prototype without tests.",
+      "should_trigger": false,
+      "assertions": [
+        "Does not enforce RED-GREEN-REFACTOR."
+      ]
+    }
+  ]
+}

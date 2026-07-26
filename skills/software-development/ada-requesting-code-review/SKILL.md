@@ -15,6 +15,32 @@ metadata:
 
 Pre-commit review pipeline: security scanning, formatting/linting checks, test execution, and auto-fix of common issues. Produces a structured review request ready for human or AI review.
 
+## Agent Execution Contract
+
+Inputs to identify first:
+- Git repository root and current branch.
+- Staged diff, unstaged diff, or commit range under review.
+- Project-specific verification commands from README, CI, package files, or build scripts.
+
+Default workflow:
+1. Inspect the diff scope before running broad checks.
+2. Scan added lines for secrets, injection, unsafe deserialization, and risky shell execution.
+3. Run the narrowest relevant tests first, then the repository quality gate when feasible.
+4. Use an independent review pass for non-trivial changes.
+5. Fix only confirmed issues and re-run the affected checks.
+
+Stop conditions:
+- The diff is empty or the review scope is ambiguous.
+- Verification requires destructive actions, external installs, credentials, or production systems.
+- The user explicitly asks to skip verification or review only a subset.
+
+Output contract:
+- Reviewed scope.
+- Findings ordered by severity with file/line evidence.
+- Commands run and results.
+- Fixes applied, if any.
+- Remaining risks and checks not run.
+
 ## When to Use
 
 Use when preparing code for submission or pull request
