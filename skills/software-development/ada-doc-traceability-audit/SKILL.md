@@ -29,6 +29,9 @@ markers match reality, and obsolete files are cleaned up.
 - When traceability counts don't match expectations (e.g., SRS says 151 but
   traceability says 152)
 
+
+Skip for: single-document typo fixes, greenfield projects with no traceability matrix, or code-only reviews without documentation dependencies.
+
 ## Audit Workflow
 
 ### Phase 1: Parallel Source Reading

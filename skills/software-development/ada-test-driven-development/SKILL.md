@@ -22,6 +22,9 @@ Use when the user explicitly requests TDD or test-first development
 Use when refactoring legacy code that lacks test coverage
 Use when the user says "write tests first" or "RED-GREEN-REFACTOR"
 
+
+Don't use for: throwaway prototypes, generated code, configuration-only changes, or exploratory spikes where the design is still unknown — load `spike` (Hermes built-in) instead.
+
 ## Common Pitfalls
 
 Tests that pass without asserting anything are worse than no tests. Avoid testing implementation details — test behavior. Flaky tests erode trust in the test suite.

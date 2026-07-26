@@ -71,6 +71,9 @@ Stage 1 覆盖七大维度：
 - When the cost of delivering an inaccurate quality report is high (e.g., mandatory compliance, team-wide action items)
 - User needs to chain the three quality skills together with enforced stage gating
 
+
+Don't use for: single-dimension analysis — load `ada-code-quality-analysis` directly. Quick spot-checks — this pipeline is for end-to-end gated delivery. Reports where false positives are acceptable — the verification stage blocks on ≥3 false positives.
+
 ## Common Pitfalls
 
 - **Skipping stages**: Each stage is a mandatory gate. Skipping verification or QA because "the analysis looks fine" defeats the purpose — the ~10% error rate in first-draft reports is exactly what these stages catch.

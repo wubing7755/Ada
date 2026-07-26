@@ -15,6 +15,9 @@ metadata:
 
 ## When to Use
 
+
+Don't use for: full SRS document authoring — load `ada-srs-writing`. Systematic SRS review — load `ada-srs-review`. Large-scale terminology revision — load `ada-srs-revision`.
+
 ## When to Load
 
 - User asks you to review an SRS for completeness or quality
@@ -114,6 +117,13 @@ These are often mistaken for design but are actually behavioral specifications:
 4. **"Timing values are design"** — No. "300ms delay before auto-hide" defines user-perceivable behavior. The user experiences the delay. It's a behavioral specification.
 
 ## Verification Checklist
+
+- [ ] Each requirement uses the canonical format: `REQ-F-XXX` + priority emoji (🔴🟡🟢) + `[Actor: Role]`
+- [ ] Requirements describe WHAT (behavior), not HOW (implementation details)
+- [ ] All acceptance criteria use Given/When/Then structure with concrete, testable conditions
+- [ ] Cross-references to other requirements are explicit and use correct REQ IDs
+- [ ] No implementation details leaked: pixel values, API field names, framework patterns removed or justified
+- [ ] Terminology consistent with project glossary; bilingual annotations follow `English（中文）` on first use
 
 ## Review Checklist
 

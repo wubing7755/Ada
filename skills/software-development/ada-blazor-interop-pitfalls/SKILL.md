@@ -28,6 +28,9 @@ For lifecycle and rendering pitfalls (`StateHasChanged`, `OnAfterRender`, `@ref`
 - `DotNetObjectReference` disposal errors or memory leaks
 - Drag-and-drop targets disappearing after Blazor re-renders
 
+
+Don't use for: lifecycle or rendering issues — load `ada-blazor-interaction-pitfalls`. General Blazor component architecture — load `ada-blazor-component-library`.
+
 ## Supported Mouse Events (.NET 6)
 
 Blazor .NET 6 supports these mouse event directives out of the box:

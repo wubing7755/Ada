@@ -31,6 +31,9 @@ and cross-machine skill export.
 - User encounters memory capacity issues (>80% full) or wants to batch-update memory entries
 - User asks "how do I configure Hermes", "优化 memory", "配置 Hermes personality", or "curator setup"
 
+
+Don't use for: skill authoring — load `ada-hermes-agent-skill-authoring`. Runtime debugging of Hermes itself — load `hermes-agent` (built-in).
+
 ## SOUL.md 编写
 
 **SOUL.md = 身份标识，不是操作手册。** 占据系统提示词第 1 个槽位。

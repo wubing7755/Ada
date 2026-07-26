@@ -22,6 +22,9 @@ metadata:
 - `hermes skills list` 输出与文档声称数量不一致
 - 发现文档中有过时或失效的技能引用
 
+
+Don't use for: regular skill content updates — use `patch` directly. New skill creation — load `ada-hermes-agent-skill-authoring`. General project documentation — this skill is specific to hermes-agent internal docs.
+
 ## 流程
 
 ### Step 0: 确认文件结构

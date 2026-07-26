@@ -39,6 +39,9 @@ directly to `~/.hermes/skills/` without `.usage.json` entries).
 - **When `hermes skills list` shows unexpected local skills** — suspect external tool injection
 - User says "这些 skill 有什么优化空间" or asks about skill quality
 
+
+Don't use for: creating new skills — load `ada-hermes-agent-skill-authoring`. One-off skill fixes — this skill is for systematic batch audits. Skill deletion decisions — this skill audits and recommends, but deletion requires user confirmation.
+
 ## Workflow
 
 ### 1. Inventory — full picture, not just `.usage.json`

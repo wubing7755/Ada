@@ -35,6 +35,9 @@ covers CMake/Ninja path conversion from MSYS/Unix-style to Windows-native using
 - User needs to invoke Windows-native tools (PowerShell, CMake/Ninja) from git-bash with proper path handling
 - User says "PowerShell from bash", "run ps1 from git-bash", or "MSYS_NO_PATHCONV"
 
+
+Don't use for: native PowerShell sessions (not via git-bash/MSYS), Linux/macOS shell scripting, or non-Windows environments.
+
 ## Problem 1: `$` variable expansion eaten by bash
 
 Bash treats `$` as variable expansion. Any `$env:USERPROFILE`, `$_.Name`, `$(...)` etc. in PowerShell gets mangled.

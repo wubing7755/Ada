@@ -29,6 +29,9 @@ Use when:
 - Debugging lifecycle order issues (parent-first vs child rendering order)
 - Paired lists (`List<T>`) with assumed-equal `.Count` diverge between renders
 
+
+Don't use for: JS interop event handling — load `ada-blazor-interop-pitfalls`. General Blazor component design — load `ada-blazor-component-library`. Simple compile errors — these are lifecycle issues, not syntax errors.
+
 ## Pitfall 1: `StateHasChanged()` Skips `OnParametersSet`
 
 `OnParametersSet` is ONLY called when the parent component passes parameters. `StateHasChanged()` triggered internally (e.g., after `TogglePanel` → `InvokeAsync(StateHasChanged)`) **skips** `OnParametersSet`.

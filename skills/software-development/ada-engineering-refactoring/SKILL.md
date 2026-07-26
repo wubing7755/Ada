@@ -31,6 +31,9 @@ Unlike mechanical dedup (extract-method, extract-helper), this skill targets the
 
 **Skip for**: single-file cleanup, pre-commit verification, bug fixes, small scoped changes.
 
+
+Don't use for: .NET/C#/Blazor projects — load `ada-dotnet-engineering-refactoring` for domain primitives, orchestrator patterns, and Blazor-specific patterns. Single-file cleanup — use `patch` or `ada-simplify-code`.
+
 ## Signal: When Mechanical Dedup is Not Enough
 
 The user will say things like:

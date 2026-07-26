@@ -30,6 +30,9 @@ documentation is secondary. When they disagree, fix the documentation.
 - When document counts (151 vs 152) don't reconcile across files
 - User says "核实", "审计文档", "traceability 是否准确", or "检查需求覆盖"
 
+
+Skip for: projects without a traceability matrix, single-requirement spot-checks, or codebases where source is the only artifact (no secondary documentation).
+
 ## Methodology
 
 ### Phase 1: Cross-reference REQ IDs

@@ -100,7 +100,12 @@ Build-tree vs install-tree layout mismatch is a common source of installer bugs.
 
 ## Verification Checklist
 
-The full 5-step checklist (CPack config → NSIS script → installed-layout smoke → desktop shortcuts → uninstall cleanup) with precise commands is in `references/cmake-packaging-workflow.md#verification-checklist`. Quick check after packaging changes: `grep CPACK_GENERATOR build/<preset>/CPackConfig.cmake` and inspect the generated `.nsi` for `CreateShortCut` lines.
+- [ ] `grep CPACK_GENERATOR build/<preset>/CPackConfig.cmake` confirms correct generator
+- [ ] Generated `.nsi` file contains `CreateShortCut` lines (desktop shortcut)
+- [ ] Installed-layout smoke test passes on Windows
+- [ ] Desktop shortcuts appear and resolve correctly after install
+- [ ] Uninstall removes all installed files and shortcuts cleanly
+- [ ] Full 5-step checklist: see `references/cmake-packaging-workflow.md#verification-checklist`
 
 ## Common Pitfalls
 

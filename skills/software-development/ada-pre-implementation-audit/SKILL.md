@@ -27,6 +27,9 @@ Verify assumptions about existing code and documentation before writing an imple
 - After docs have been through multiple revision cycles without corresponding code re-audit
 - User explicitly says "先探知代码再出方案" / "先确认再计划"
 
+
+Skip for: plans without traceability dependencies, greenfield projects, or when the user has just completed a full project audit — re-auditing within the same session is redundant.
+
 ## Core Principle
 
 > **Traceability is a lagging indicator. Code is the source of truth.**

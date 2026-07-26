@@ -22,6 +22,9 @@ Use when multiple symptoms may share a root cause
 Use when previous fix attempts have failed or introduced regressions
 Use when the user says "debug this" with limited information
 
+
+Don't use for: known, trivial bugs with an obvious one-line fix. Configuration issues — check environment and config files before debugging code. Performance tuning — load `ada-code-efficiency-review` for systematic efficiency analysis.
+
 ## Common Pitfalls
 
 Do NOT jump to a fix before isolating the root cause. Reproducing a bug is not the same as understanding it. Check git history — the bug may have been introduced recently.

@@ -56,6 +56,9 @@ Optional modifiers the user may add — honor them:
 Do NOT auto-run this after every edit. It costs three subagents' worth of
 tokens — invoke it only when the user explicitly asks.
 
+
+Don't use for: single-file cleanup — use `patch` directly. Architecture-level refactoring — load `ada-refactoring-lifecycle`. Bug fixes — load `ada-systematic-debugging`.
+
 ## The Process
 
 ### Phase 1 — Identify the changes

@@ -42,6 +42,9 @@ confirmed by re-running commands.
 - User expresses frustration with agent degradation ("越改越乱", "效果越来越差")
 - After a complex task completes — offer to generate a structured report
 
+
+Don't use for: single, isolated tool calls — use the tool directly. Throwaway experiments with no verification requirements — load `spike` (Hermes built-in). Work that fits in a single session with no context reset needed.
+
 ## The Meta-Pattern
 
 All five workflows share this skeleton:
@@ -64,13 +67,13 @@ Context management rules baked into every step:
 
 | User says | Workflow | Key skills loaded |
 |-----------|----------|-------------------|
-| "修复这个 bug" | Bug Fix (1) | systematic-debugging, test-driven-development, requesting-code-review |
+| "修复这个 bug" | Bug Fix (1) | ada-systematic-debugging, ada-test-driven-development, ada-requesting-code-review |
 | "实现 REQ-XXX" | Feature (2) | ada-srs-lifecycle, plan, ada-srs-writing |
-| "审查代码" | Code Review (3) | requesting-code-review, code-efficiency-review |
-| "优化/简化代码" | Quality (4) | simplify-code, code-dedup-audit |
+| "审查代码" | Code Review (3) | ada-requesting-code-review, ada-code-efficiency-review |
+| "优化/简化代码" | Quality (4) | ada-simplify-code, ada-code-dedup-audit |
 | "升级/重构架构" | Architecture (5) | ada-refactoring-lifecycle, plan, spike |
-| "SRS 覆盖率" | SRS Coverage (6) | ada-srs-review |
-| "代码质量报告" | Quality Report (7) | codebase-inspection, code-efficiency-review |
+| "SRS 覆盖率" | SRS Coverage (6) | ada-ada-srs-review |
+| "代码质量报告" | Quality Report (7) | codebase-inspection, ada-code-efficiency-review |
 
 ## §1 — Bug Fix Workflow
 

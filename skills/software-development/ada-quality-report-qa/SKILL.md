@@ -33,6 +33,9 @@ error rates — these four gates catch those errors before delivery.
 - 报告中有测试覆盖率数据
 - 交互式 Agent 手工编制报告（非全自动 pipeline）
 
+
+Don't use for: running the initial code quality analysis — load `ada-code-quality-analysis`. Verifying individual report claims — load `ada-code-quality-report-verification`. This is the final QA gate before delivery, not the first step.
+
 ## 四道门禁
 
 ### 门禁 1：统计公式一致性检查
