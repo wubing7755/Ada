@@ -20,16 +20,15 @@ SRS 文档从无到有、从初稿到终稿的完整流程。根据当前所处�
 
 ```
 TP 文档 ──→ [Phase 1: Derive] ──→ [Phase 2: Write] ──→ [Phase 3: Review] ──→ [Phase 4: Revise]
-              tp-to-srs-            srs-writing          srs-review            srs-revision
-              derivation
+              协议→SRS派生          结构化编写             12-pass审查           大规模修订
 ```
 
-| 阶段 | 技能 | 输入 | 输出 | 触发词 |
+| 阶段 | 功能 | 输入 | 输出 | 触发词 |
 |------|------|------|------|--------|
-| **Derive** | `tp-to-srs-derivation` | 技术协议 (TP .md/.docx) | SRS 初稿 | "基于这份协议写 SRS" |
-| **Write** | `srs-writing` | 需求描述/初稿 | 结构化 SRS | "编写 SRS""优化 SRS" |
-| **Review** | `srs-review` | 已有 SRS 文档 | 审查报告 | "审查 SRS""检查需求" |
-| **Revise** | `srs-revision` | SRS + 变更指令 | 修订后 SRS | "改这个概念""术语统一" |
+| **Derive** | 从技术协议派生需求结构 | 技术协议 (TP .md/.docx) | SRS 初稿 | "基于这份协议写 SRS" |
+| **Write** | 四阶段结构化编写与迭代优化 | 需求描述/初稿 | 结构化 SRS | "编写 SRS""优化 SRS" |
+| **Review** | 12-pass 系统性质量审查 | 已有 SRS 文档 | 审查报告 | "审查 SRS""检查需求" |
+| **Revise** | 大规模术语替换与结构修订 | SRS + 变更指令 | 修订后 SRS | "改这个概念""术语统一" |
 
 ## 共享约定
 
@@ -69,7 +68,7 @@ Then  ...
 
 ## Overview
 
-`ada-srs-lifecycle` is the umbrella entry point for the complete SRS document lifecycle — from deriving requirements from a Technical Protocol (TP), through structured writing, systematic review, to large-scale revision. Rather than re-implementing any single phase, it routes to the appropriate sub-skill based on where you are in the process, enforces shared conventions (REQ-F format, document structure, core principles), and ensures consistency across all four phases. Load this skill first whenever starting SRS work to get oriented, then follow its routing to the phase-specific sub-skill.
+This umbrella skill is the entry point for the complete SRS document lifecycle — from deriving requirements from a Technical Protocol (TP), through structured writing, systematic review, to large-scale revision. Rather than re-implementing any single phase, it routes to the appropriate sub-skill based on where you are in the process, enforces shared conventions (REQ-F format, document structure, core principles), and ensures consistency across all four phases. Load this skill first whenever starting SRS work to get oriented, then follow its routing to the phase-specific sub-skill.
 
 ## When to Use
 
@@ -90,7 +89,7 @@ Don't use for:
 1. **Skipping phase ordering.** The lifecycle is sequential for a reason: derivation produces raw material for writing, review findings feed revision, and revision output may need re-review. Jumping directly to revision without reviewing first misses issues that review would catch.
 2. **Loading this skill and stopping.** This skill is a router — after it identifies the correct phase, you must load the corresponding sub-skill to get detailed workflows, checklists, and pitfalls specific to that phase.
 3. **Mixing conventions across phases.** The shared conventions (REQ-F format, document structure, core principles) apply uniformly. Deviating in one phase (e.g., using a different requirement format during writing) creates inconsistency that downstream phases must clean up.
-4. **Not updating traceability during revision.** When revising, cross-references, statistics tables, and appendix entries silently rot. Always run the post-edit consistency sync from post-edit consistency sync after any revision.
+4. **Not updating traceability during revision.** When revising, cross-references, statistics tables, and appendix entries silently rot. Always run the post-edit consistency sync after any revision.
 
 ## Verification Checklist
 

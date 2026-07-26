@@ -136,5 +136,5 @@ After switching from `@on{event}` to JS interop:
 - Lifecycle and rendering debugging patterns
 - `references/mouseenter-mouseleave-fix.md` — complete three-layer fix pattern with render guard and try/catch
 - `references/invisible-drop-targets.md` — JS dynamic element creation for drop targets that survive Blazor conditional rendering
-- `references/lifecycle-pitfalls.md` — see lifecycle debugging documentation
-- `references/dom-lifetime-pitfalls.md` — see lifecycle debugging documentation
+- `references/lifecycle-pitfalls.md` — see lifecycle and rendering debugging documentation (StateHasChanged timing, OnAfterRender ordering, @ref in RenderFragment, paired-list IndexOutOfRange)
+- `references/dom-lifetime-pitfalls.md` — see lifecycle and rendering debugging documentation (StateHasChanged timing, OnAfterRender ordering, @ref in RenderFragment, paired-list IndexOutOfRange)

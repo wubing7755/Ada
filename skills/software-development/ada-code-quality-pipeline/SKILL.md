@@ -18,28 +18,20 @@ metadata:
 
 ## Overview
 
-This skill provides a unified three-stage gated pipeline for end-to-end code quality
-assurance. It chains three specialized skills — `code-quality-analysis` (Stage 1:
-multi-dimension audit), `code-quality-report-verification` (Stage 2: independent
-verification), and `quality-report-qa` (Stage 3: QA gate with four extra checks) —
-into a sequential workflow where each stage blocks the next if issues are found.
-The pipeline enforces a strict no-skip rule: analysis → verification → QA, in order.
-If verification finds ≥3 false positives or QA finds statistical drift, the pipeline
-sends the report back for correction before delivery.
+This skill provides a unified three-stage gated pipeline for end-to-end code quality assurance. It chains three specialized stages — Stage 1: multi-dimension audit, Stage 2: independent verification, Stage 3: QA gate with four extra checks — into a sequential workflow where each stage blocks the next if issues are found. The pipeline enforces a strict no-skip rule: analysis → verification → QA, in order. If verification finds ≥3 false positives or QA finds statistical drift, the pipeline sends the report back for correction before delivery.
 
 ## 三阶段流水线
 
 ```
 源代码 ──→ [Stage 1: Analyze] ──→ [Stage 2: Verify] ──→ [Stage 3: QA Gate] ──→ 交付用户
-            code-quality-           code-quality-           quality-report-qa
-            analysis                report-verification
+            多维度代码审计           独立验证报告结论         四道额外门禁
 ```
 
-| 阶段 | 技能 | 做什么 | 输入 | 输出 |
-|------|------|--------|------|------|
-| **Analyze** | `code-quality-analysis` | 多维度扫描代码库 | 源代码树 | 质量报告 (Markdown) |
-| **Verify** | `code-quality-report-verification` | 抽查/全量验证报告结论 | 质量报告 + 源代码 | 验证结果 (confirmed/partial/false-positive) |
-| **QA Gate** | `quality-report-qa` | 三道额外门禁 | 已验证的报告 | 放行/打回 |
+| 阶段 | 功能 | 输入 | 输出 |
+|------|------|------|------|
+| **Analyze** | 多维度扫描代码库（7 个维度） | 源代码树 | 质量报告 (Markdown) |
+| **Verify** | 独立验证报告结论（抽查/全量） | 质量报告 + 源代码 | 验证结果 (confirmed/partial/false-positive) |
+| **QA Gate** | 四道额外门禁检查 | 已验证的报告 | 放行/打回 |
 
 ## 流水线执行规则
 
@@ -70,7 +62,6 @@ Stage 1 覆盖七大维度：
 - User wants a code quality report that has been independently verified and QA-gated before acting on it
 - When the cost of delivering an inaccurate quality report is high (e.g., mandatory compliance, team-wide action items)
 - User needs to chain the three quality skills together with enforced stage gating
-
 
 Don't use for: single-dimension analysis — run a focused static scan directly. Quick spot-checks — this pipeline is for end-to-end gated delivery. Reports where false positives are acceptable — the verification stage blocks on ≥3 false positives.
 

@@ -18,7 +18,7 @@ metadata:
 
 ## Overview
 
-This skill serves as the unified entry point for engineering-grade refactoring across technology stacks. It routes .NET/C#/Blazor projects to .NET-specific refactoring patterns (domain primitives, orchestrator extraction) (which provides domain primitives, orchestrator patterns, and Blazor component patterns) and all other languages to language-agnostic architectural refactoring (language-agnostic architectural methodology). Both sub-skills share a common engineering philosophy: type systems carry constraints, interfaces carry protocols, orchestration is separated from implementation, and whole-project consistency is non-negotiable.
+This skill serves as the unified entry point for engineering-grade refactoring across technology stacks. It routes by project type: .NET/C#/Blazor projects use stack-specific patterns (domain primitives, orchestrator extraction, Blazor component patterns), while all other languages use language-agnostic architectural methodology. Both share a common engineering philosophy: type systems carry constraints, interfaces carry protocols, orchestration is separated from implementation, and whole-project consistency is non-negotiable.
 
 The lifecycle follows a strict sequence: produce a detailed plan document (`docs/refactoring/phase-N-M-plan.md`), get user approval, execute phase by phase, independently verify each phase (`dotnet build → dotnet test → dotnet format`), and commit each phase separately.
 
@@ -34,14 +34,12 @@ Do **not** use for: single-file fixes, pre-commit formatting, one-off code revie
 
 ## 技术栈路由
 
-| 项目类型 | 入口技能 | 说明 |
+| 项目类型 | 适用模式 | 说明 |
 |---------|---------|------|
-| **.NET / C# / Blazor** | `dotnet-engineering-refactoring` | 包含领域原语、Orchestrator 模式、Blazor 组件模式等 .NET 专项 |
-| **通用 / 其他语言** | `engineering-refactoring` | 语言无关的架构级重构方法论 |
+| **.NET / C# / Blazor** | .NET 专项重构 | 领域原语、Orchestrator 模式、Blazor 组件模式 |
+| **通用 / 其他语言** | 语言无关架构重构 | 类型系统约束、接口协议、编排分离 |
 
 ## 共享工程哲学
-
-两个子技能共享以下原则：
 
 ### 核心标准
 
@@ -81,7 +79,7 @@ Do **not** use for: single-file fixes, pre-commit formatting, one-off code revie
 - **Jumping straight to implementation without a plan.** The user's rejection of mechanical changes means the approach must be rethought — not just the code. Always write the plan document first and get explicit approval.
 - **Mixing changes across phases in a single commit.** Each phase must be independently verifiable and committed separately. Cross-phase mixing makes bisecting and reverting impossible.
 - **Skipping the verification step between phases.** `dotnet build → dotnet test → dotnet format` is mandatory after every phase. A phase that "looks correct" but fails the gate compounds errors in subsequent phases.
-- **Using the wrong sub-skill for the stack.** .NET/C#/Blazor projects need the domain-primitive and Blazor-component patterns in .NET-specific refactoring patterns (domain primitives, orchestrator extraction). Using the generic skill misses stack-specific optimizations.
+- **Using the wrong approach for the stack.** .NET/C#/Blazor projects need domain-primitive and Blazor-component patterns specific to that stack. Using the generic language-agnostic approach misses stack-specific optimizations.
 - **Abandoning the plan mid-way without updating it.** If a phase reveals new information that changes later phases, update the plan document before continuing — don't just improvise.
 
 ## Verification Checklist
@@ -90,4 +88,4 @@ Do **not** use for: single-file fixes, pre-commit formatting, one-off code revie
 - [ ] User has explicitly approved the plan before any code changes begin
 - [ ] Each phase passes `dotnet build`, `dotnet test`, and `dotnet format --verify-no-changes` independently
 - [ ] Each phase is committed as a separate, isolated git commit
-- [ ] The correct sub-skill was routed to based on technology stack (.NET → ada-dotnet-engineering-refactoring, other → ada-engineering-refactoring)
+- [ ] The correct approach was routed based on technology stack (.NET → stack-specific patterns, other → language-agnostic methodology)

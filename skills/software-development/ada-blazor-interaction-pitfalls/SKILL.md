@@ -113,4 +113,4 @@ Blazor reuses component instances. Use string-identity comparison (`_lastHeaderP
 
 ## Reference Files
 
-- `references/hover-interop-full-pattern.md` — Complete three-layer pattern for mouseenter/mouseleave (TypeScript → C# interop → Razor component)
+- `references/hover-interop-full-pattern.md` — Complete three-layer pattern for mouseenter/mouseleave: TypeScript addEventListener → DotNetObjectReference callback → Razor component integration with render guard and try/catch
