@@ -1,6 +1,6 @@
 ---
 name: ada-tp-to-srs-derivation
-description: Derive a Software Requirements Specification (SRS) from a Technical Protocol (TP) document — four derivation paths, multi-system SRS structure, REQ-F format with Chinese-English bilingual conventions, traceability matrix maintenance, and strict fidelity to source.
+description: "Use when deriving a Software Requirements Specification (SRS) from a Technical Protocol (TP) document — four derivation paths, multi-system SRS structure, REQ-F format with Chinese-English bilingual conventions, traceability matrix maintenance, and strict fidelity to the source protocol."
 version: 1.5.0
 platforms: [windows]
 author: Hermes Agent

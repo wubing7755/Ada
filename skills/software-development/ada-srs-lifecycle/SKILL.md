@@ -1,6 +1,6 @@
 ---
 name: ada-srs-lifecycle
-description: SRS 全生命周期管理 — 从 TP 派生、编写、审查到大规模修订的统一入口。按阶段路由到对应的子技能。
+description: "Use when managing the full SRS lifecycle — unified entry point routing from technical protocol derivation through authoring, reviewing, and large-scale revision. Dispatches to the appropriate sub-skill for each phase."
 version: 1.0.0
 platforms: [linux, macos, windows]
 author: Hermes Agent

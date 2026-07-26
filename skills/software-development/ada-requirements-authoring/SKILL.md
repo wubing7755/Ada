@@ -1,6 +1,6 @@
 ---
 name: ada-requirements-authoring
-description: Write and review software requirements specifications (SRS). Use when authoring, reviewing, or supplementing requirements documents — especially for keeping SRS at the right abstraction level and avoiding design-level details.
+description: "Use when writing or reviewing software requirements specifications (SRS) — authoring new requirements, reviewing existing ones for abstraction-level issues, and keeping SRS free of design-level implementation details."
 version: 1.0.0
 platforms: [linux, macos, windows]
 author: Hermes Agent

@@ -1,6 +1,6 @@
 ---
 name: ada-srs-documentation
-description: Author and review Software Requirements Specification (SRS) documents — structure patterns, quality rules, common pitfalls, and VS Code-style design referencing.
+description: "Use when authoring or reviewing Software Requirements Specification (SRS) documents — structure patterns, quality rules, common pitfalls, VS Code-style design referencing, and iterative refinement."
 version: 1.0.0
 platforms: [linux, macos, windows]
 author: Hermes Agent

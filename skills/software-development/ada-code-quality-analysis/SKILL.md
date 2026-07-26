@@ -1,6 +1,6 @@
 ---
 name: ada-code-quality-analysis
-description: "Multi-dimension code quality audit producing a structured report (complexity, duplication, dead code, security, dependencies, test coverage, code standards). Language-agnostic methodology with per-language analysis scripts."
+description: "Use when producing a multi-dimension code quality audit report — complexity, duplication, dead code, security vulnerabilities, dependency health, test coverage gaps, and code standards compliance. Language-agnostic methodology with per-language analysis scripts."
 version: 1.0.0
 author: Hermes Agent
 license: MIT
@@ -8,7 +8,7 @@ platforms: [linux, macos, windows]
 metadata:
   hermes:
     tags: [code-quality, static-analysis, audit, metrics, report]
-    related_skills: [ada-code-efficiency-review, requesting-code-review, codebase-inspection, ada-code-quality-pipeline]
+    related_skills: [ada-code-efficiency-review, ada-requesting-code-review, codebase-inspection, ada-code-quality-pipeline]
 ---
 
 # Code Quality Analysis

@@ -1,6 +1,6 @@
 ---
 name: ada-doc-traceability-audit
-description: Use when auditing a project's documentation against its SRS and codebase — find missing requirements, stale traceability entries, outdated status markers, and incomplete appendices. Covers the full doc cleanup decision tree (delete vs archive vs keep).
+description: "Use when auditing a project's documentation against its SRS and codebase — find missing requirements, stale traceability entries, outdated status markers, and incomplete appendices. Covers the full doc cleanup decision tree: delete vs archive vs keep."
 version: 1.0.0
 author: Hermes Agent
 license: MIT
@@ -10,6 +10,10 @@ metadata:
     tags: [documentation, audit, srs, traceability, cleanup, maintenance]
     related_skills: [ada-blazor-component-library, ada-srs-documentation, ada-srs-review]
 ---
+
+## Overview
+
+A systematic audit process for verifying that project documentation — SRS, traceability matrix, status reports, and appendices — accurately reflects the current source code. Designed to catch drift between documentation claims and implementation reality before they mislead planning or release decisions.
 
 # Documentation & Traceability Audit
 
@@ -144,6 +148,13 @@ After moving files to `docs/archive/`, update `docs/README.md`:
 - Remove entries for deleted files
 - Add an "Archive" section linking archived files with one-line descriptions
 - Verify all remaining links resolve
+
+## Common Pitfalls
+
+- **Stale line counts** — `wc -l` output in traceability docs rots on every code change. Always recount, never trust the doc.
+- **Deleted files still referenced** — cross-document links (README → traceability → SRS) break silently when files move. Verify every link resolves.
+- **Status markers out of sync** — "✅ Implemented" markers may be months stale. Code is the source of truth, not the status column.
+- **Appendix totals don't match** — after cleanup, appendix totals (REQ count, file count) must be recalculated from scratch, not decremented.
 
 ## Verification Checklist
 

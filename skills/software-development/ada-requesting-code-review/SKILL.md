@@ -1,6 +1,6 @@
 ---
-name: requesting-code-review
-description: "Pre-commit review: security scan, quality gates, auto-fix."
+name: ada-requesting-code-review
+description: "Use when preparing code for review or submission — pre-commit security scan, quality gates (linting, formatting, tests), auto-fix common issues, and generate structured review requests."
 version: 2.0.0
 author: Hermes Agent (adapted from obra/superpowers + MorAlekss)
 license: MIT
@@ -8,7 +8,25 @@ platforms: [linux, macos, windows]
 metadata:
   hermes:
     tags: [code-review, security, verification, quality, pre-commit, auto-fix]
-    related_skills: [subagent-driven-development, plan, test-driven-development, github-code-review]
+    related_skills: [plan, ada-test-driven-development, github-code-review]
+---
+
+
+## Overview
+
+Pre-commit review pipeline: security scanning, formatting/linting checks, test execution, and auto-fix of common issues. Produces a structured review request ready for human or AI review.
+
+## When to Use
+
+Use when preparing code for submission or pull request
+Use when the user says "review this" or "check my code"
+Use when integrating quality gates into a development workflow
+Use when running automated checks before a manual review
+
+## Common Pitfalls
+
+Automated checks cannot replace human judgment. Security scanners produce false positives — triage before fixing. Do not auto-fix without reviewing the changes.
+
 ---
 
 # Pre-Commit Code Verification
@@ -278,3 +296,14 @@ tests exist, tests pass, no regressions.
 - **No test framework found** — skip regression check, reviewer verdict still runs
 - **Lint tools not installed** — skip that check silently, don't fail
 - **Auto-fix introduces new issues** — counts as a new failure, cycle continues
+
+## Verification
+
+- [ ] `git diff --stat` confirms changes are limited to intended files
+- [ ] Security scan passes (no new secrets, injection vectors, or unsafe patterns)
+- [ ] Lint checks pass (or tools not installed — skip silently)
+- [ ] Tests pass (or skip if no test framework found)
+- [ ] Reviewer spec-compliance verdict is `PASS`
+- [ ] Reviewer code-quality verdict is `PASS`
+- [ ] Auto-fix round did not introduce new failures
+- [ ] Final review summary is ready for human/PR submission

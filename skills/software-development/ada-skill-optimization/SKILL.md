@@ -1,6 +1,6 @@
 ---
 name: ada-skill-optimization
-description: Use when auditing, optimizing, or maintaining Hermes agent-created skills — frontmatter fixes, description compression, content dedup, memory migration, curator setup, and cross-machine export.
+description: "Use when auditing, optimizing, or maintaining Hermes agent-created skills — frontmatter fixes, description compression, content dedup, memory migration, curator setup, and cross-machine skill export."
 version: 1.0.0
 platforms: [linux, macos, windows]
 author: Hermes Agent

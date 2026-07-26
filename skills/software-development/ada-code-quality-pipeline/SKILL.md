@@ -1,6 +1,6 @@
 ---
 name: ada-code-quality-pipeline
-description: 代码质量全流水线 — 从分析、验证到 QA 门禁的三阶段统一入口。产生、验证、交付结构化的代码质量报告。
+description: "Use when running the full code quality pipeline — three-phase unified entry point from analysis through verification to QA gate. Produces, validates, and delivers structured code quality reports."
 version: 1.0.0
 platforms: [linux, macos, windows]
 author: Hermes Agent

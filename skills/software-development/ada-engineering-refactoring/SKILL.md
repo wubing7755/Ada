@@ -1,6 +1,6 @@
 ---
 name: ada-engineering-refactoring
-description: Architectural-level code refactoring that meets Microsoft/.NET library engineering standards — value-type-first, interface-based protocols, orchestration/implementation separation, and whole-project consistency. Use when the user rejects mechanical dedup and asks for engineering-level quality.
+description: "Use when performing architectural-level code refactoring to meet Microsoft/.NET library engineering standards — value-type-first design, interface-based protocols, orchestration/implementation separation, and whole-project consistency enforcement."
 version: 1.0.0
 author: Hermes Agent
 license: MIT
@@ -8,7 +8,7 @@ platforms: [linux, macos, windows]
 metadata:
   hermes:
     tags: [refactoring, architecture, engineering-quality, dotnet, blazor]
-    related_skills: [hermes-operations, deviation-analysis-refactoring, blazor-razor-authoring, ada-refactoring-lifecycle]
+    related_skills: [ada-refactoring-lifecycle]
 ---
 
 # Engineering-Grade Refactoring

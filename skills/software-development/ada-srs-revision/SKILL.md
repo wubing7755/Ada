@@ -1,6 +1,6 @@
 ---
 name: ada-srs-revision
-description: Systematically revise SRS and large technical requirements documents — semantic-concept replacement, mass terminology standardization, iterative review-then-execute workflow, and safe replace_all techniques. Use when the user asks to change core concepts, rename terms, or restructure sections across a large spec document.
+description: "Use when revising SRS or large technical requirements documents at scale — semantic concept replacement, mass terminology standardization, iterative review-then-execute workflow, and safe replace_all techniques for large documents."
 version: 1.1.0
 platforms: [linux, macos, windows]
 author: Hermes Agent

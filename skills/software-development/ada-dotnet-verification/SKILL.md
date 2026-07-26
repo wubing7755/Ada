@@ -1,6 +1,6 @@
 ---
 name: ada-dotnet-verification
-description: .NET build/test/format verification for refactoring phases, including focused TDD checks, ad-hoc verifier scripts, and isolated artifacts for Windows IDE/testhost locks.
+description: "Use when verifying .NET builds, tests, and code formatting during refactoring phases — focused TDD checks, ad-hoc verifier scripts for Windows IDE/testhost locks, and isolated artifact verification."
 version: 1.0.0
 author: Hermes Agent
 license: MIT
@@ -8,7 +8,7 @@ platforms: [windows]
 metadata:
   hermes:
     tags: [dotnet, testing, verification, refactoring, windows]
-    related_skills: [systematic-refactoring, test-driven-development]
+    related_skills: [ada-test-driven-development]
 ---
 
 # .NET Verification

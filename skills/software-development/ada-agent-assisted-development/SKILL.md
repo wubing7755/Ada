@@ -1,6 +1,6 @@
 ---
 name: ada-agent-assisted-development
-description: "Structured workflows for software development with Hermes Agent — bug fixes, features, reviews, quality, architecture. Covers context management, sub-agent orchestration, and risk-tiered verification."
+description: "Use when executing structured software development workflows with Hermes Agent — bug fixes, feature development, code reviews, quality audits, and architectural analysis. Covers context management, sub-agent orchestration, and risk-tiered verification strategies."
 version: 1.0.0
 author: Hermes Agent
 license: MIT
@@ -8,7 +8,7 @@ platforms: [linux, macos, windows]
 metadata:
   hermes:
     tags: [workflow, development, context, subagent, review, quality, orchestration]
-    related_skills: [requesting-code-review, systematic-debugging, ada-simplify-code, test-driven-development, plan]
+    related_skills: [ada-requesting-code-review, ada-systematic-debugging, ada-simplify-code, ada-test-driven-development, plan]
 ---
 
 # Agent-Assisted Development
@@ -188,130 +188,15 @@ Results are merged, deduped, and applied by risk tier:
 
 ---
 
-## §5 — Architecture Upgrade Workflow
+## Advanced Workflows (§5–§7)
 
-```
-Goal → Research → Plan → Confirm → Phased Implement → Per-Phase Review → Cross-Phase Review → Report
-```
+Detailed workflow guides for Architecture Upgrade, SRS Coverage Analysis, and Code Quality Report generation: `skill_view(name="ada-agent-assisted-development", file_path="references/detailed-workflows.md")`.
 
-This workflow is unique: it includes **per-phase retrospectives** and a
-**cross-phase review** — the user's preferred pattern for high-risk changes.
+Quick reference:
+- **§5 Architecture Upgrade** — Research → Plan → Phased Implement with per-phase retrospectives + cross-phase review
+- **§6 SRS Coverage** — Parse SRS → Map to code → Cross-reference → Gap report; supports full scan and incremental update
+- **§7 Quality Report** — Statistical baseline → Parallel subagent audits (complexity/duplication/security) → Verify → Deliver
 
-### Step-by-step prompts (user → agent)
-
-**1. Research:**
-> "分析当前架构 → 评估方案可行性 + 风险 → 调研报告 + 升级方案（含 Phase 拆分）。"
-
-**2. Phased execution with retrospectives:**
-> "方案确认。按 Phase 实施。每个 Phase 完成后:
-> 1. 跑 build + test
-> 2. 主动回顾本 Phase，分析有没有更好的写法
-> 3. 有则二次优化，无则进入下一 Phase"
-
-**3. Cross-phase review:**
-> "全部 Phase 完成。跨阶段审视: 对比升级前后、分析整体层面更好的设计、
-> 检查旧代码路径是否全部迁移。输出最终架构升级报告。"
-
-### Pitfalls
-
-- **Mixing feature work with architectural change.** Architecture upgrades
-  should be pure refactors — behaviour must stay identical. If new features
-  are needed, do them in a separate workflow.
-- **Skipping per-phase retrospectives.** The user's pattern is "implement
-  → review → optimize → next phase", not "implement all → review once".
-  Per-phase optimization catches design issues early.
-- **No cross-phase review.** Even if each phase passed, the combined result
-  might have integration issues or a simpler overall design. Always do the
-  final cross-phase pass.
-
----
-
-## 6 — SRS Coverage Analysis
-
-```
-SRS + Codebase -> Extract Requirements -> Scan Code -> Cross-Reference -> Gap Analysis -> Sub-Agent Review -> Report
-```
-
-**When:** User has an SRS document and wants to know which requirements are
-implemented. Triggers: "SRS 覆盖率", "需求覆盖率分析", "生成覆盖率报告".
-
-### Step-by-step prompts (user -> agent)
-
-**1. Full scan (recommended for first run):**
-> "分析 docs/requirements.md 中的全部需求，对照代码库重新扫描验证。
-> 不要依赖旧的 traceability-matrix.md。输出覆盖率报告。"
-
-**2. Incremental update (faster, for small changes):**
-> "以 docs/traceability-matrix.md 为基础，只重新验证 Planned/Deferred 条目。"
-
-**3. Sub-agent review:**
-> "复核覆盖率报告: 抽样验证 10 条 Tested 条目、检查遗漏、验证统计数字。"
-
-**4. Re-review decision tree (same as all workflows):**
-> Errors <5% mechanical -> fix directly. 5-15% substantive -> fix + light re-review of corrected items only. >15% -> re-scan from scratch. Hard cap: 2 rounds.
-
-### Pitfalls
-
-- **Trusting old matrix.** Always do a fresh scan on first run. The old
-  traceability matrix may be stale.
-- **Partial status misjudgment.** Agent may mark a requirement as "Implemented"
-  just because it found a function signature, without verifying all ACs.
-  Sub-agent review MUST spot-check Partial entries.
-- **Infinite re-review loops.** Max 2 rounds. Two independent reviews finding
-  significant problems = methodology issue, not a report issue.
-
----
-
-## 7 — Code Quality Report
-
-```
-Scope -> Static Analysis Tools -> Categorize + Risk-Tier -> Report -> Sub-Agent Review -> Deliver
-```
-
-**When:** User wants a project-wide health check. Triggers: "代码质量报告",
-"项目健康度", "技术债务盘点", "质量巡检". This workflow is **report-only** —
-it does not modify code. After the report, route findings to Bug Fix (1) for
-Critical issues or Quality (4) for optimization.
-
-### Step-by-step prompts (user -> agent)
-
-**1. Full analysis:**
-> "对 src/ 做全量质量分析。维度: 复杂度、重复、死代码、安全、依赖、测试覆盖、代码规范。
-> 按严重/高/中/低分级，输出到 docs/reports/code-quality-YYYY-MM-DD.md。"
-
-**2. Scoped analysis (large projects):**
-> "对 src/services/ 做质量分析，重点关注安全漏洞和复杂度。"
-
-**3. Trend comparison:**
-> "做质量分析，与上月报告对比，标注趋势变化。"
-
-**4. Sub-agent review (3-agent parallel):**
-> "复核报告: 用 3 个子 agent 独立复核 —
-> ① 抽查 5 个严重/高风险问题验证真伪;
-> ② 全局搜索遗漏的安全问题 (eval/硬编码密钥/XSS/路径遍历);
-> ③ 验证统计数字自洽 (文件数/行数/测试数)。
-> 合并输出复核报告，标注不一致项。"
-
-This 3-agent pattern — issue verification, security sweep, stats audit — catches
-the three most common report-quality failure modes: false positives, missed
-vulnerabilities, and numerical errors.
-
-### Output format
-
-Report must include: overall scorecard (A-F per dimension), Critical issues
-table, High priority table, per-module breakdown, Top 5 improvement
-recommendations ranked by ROI.
-
-### Pitfalls
-
-- **Mixing report with fixes.** This workflow is analysis-only. Fixing belongs
-  in other workflows. "边诊断边手术" produces chaos.
-- **Drowning in Low-tier findings.** Prioritize: Critical first, then High.
-  Don't let 100 Medium/Low items distract from 3 Critical ones.
-- **Single-point analysis.** One report is a snapshot. Trends over 3+ months
-  tell the real story. Use Hermes cronjob for monthly auto-analysis.
-
----
 
 ## Context Management: The Foundation
 

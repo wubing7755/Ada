@@ -1,6 +1,6 @@
 ---
 name: ada-srs-writing
-description: Author and refine SRS (Software Requirements Specification) documents — structural patterns, quality rules, VS Code design referencing, and iterative refinement workflow
+description: "Use when authoring or refining a Software Requirements Specification (SRS) — structural patterns, quality rules, VS Code-style design referencing, spatial diagram templates, requirement renumbering, and iterative refinement workflow."
 version: 1.0.0
 platforms: [linux, macos, windows]
 author: Hermes Agent
@@ -8,7 +8,7 @@ license: MIT
 metadata:
   hermes:
     tags: [srs, writing, requirements, documentation, chinese]
-    related_skills: [ada-srs-documentation, ada-srs-revision, srs-terminology-audit, ada-srs-lifecycle]
+    related_skills: [ada-srs-documentation, ada-srs-revision, ada-srs-lifecycle]
 ---
 
 # SRS 文档编写与优化

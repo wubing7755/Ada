@@ -1,6 +1,6 @@
 ---
 name: ada-refactoring-lifecycle
-description: 工程级重构全流程 — 通用架构重构与 .NET 专项重构的统一入口。从方案设计到分阶段执行的完整方法论。
+description: "Use when planning and executing engineering-grade refactoring — unified entry point for general architectural refactoring and .NET-specific refactoring. Covers the full lifecycle from proposal design through phased execution."
 version: 1.0.0
 platforms: [linux, macos, windows]
 author: Hermes Agent

@@ -1,6 +1,6 @@
 ---
 name: ada-blazor-interaction-pitfalls
-description: Blazor WASM interaction patterns that silently fail — non-bubbling event directives, lifecycle traps, JS interop for native events, and render-state reset patterns.
+description: "Use when debugging Blazor WASM interaction issues — non-bubbling event directives that silently fail, lifecycle timing traps, JS interop workarounds for native DOM events, and render-state reset patterns."
 version: 1.0.0
 author: Hermes Agent
 license: MIT
@@ -11,6 +11,10 @@ metadata:
     related_skills: [ada-blazor-component-library, ada-blazor-interop-pitfalls]
     trigger_keywords: ['Blazor WASM', 'onmouseenter', 'onmouseleave', 'hover', 'ShouldRender', 'OnParametersSet', 'StateHasChanged', 'IndexOutOfRange', 'BuildRenderTree', 'non-bubbling', 'DotNetObjectReference', 'HoverCallback']
 ---
+
+## Overview
+
+A catalog of silent Blazor WASM interaction failures — event directives that compile cleanly but never fire, lifecycle timing traps that corrupt render state, JS interop teardown patterns that leak memory, and render-index reset strategies. Each pitfall includes the root cause, why the obvious fix doesn't work, and a verified solution with code examples.
 
 # Blazor Interaction Pitfalls
 
@@ -105,6 +109,19 @@ Blazor frequently recreates DOM elements during render cycles. Each re-render:
 
 When editing the same file across multiple phases within one session, `write_file` silently discards all changes made by prior `patch` calls. Use `patch` (not `write_file`) for follow-up edits to files already modified in the current session. If a file needs a full rewrite mid-session, read it first with `read_file` to capture the current state, then `write_file` the merged result.
 
+## Common Pitfalls
+
+The six pitfalls below cover the most frequent Blazor WASM interaction failures encountered in production: non-bubbling event directives (Pitfall 1), render-state lifecycle ordering (Pitfalls 2–3), JS interop callback lifecycle management (Pitfall 4), drag-and-drop memory leaks (Pitfall 5), and session-state file-editing hazards (Pitfall 6). Each entry is a standalone troubleshooting guide — match the symptom to the pitfall and apply the verified fix.
+
 ## Cross-Reference: Verification Pattern
 
 After every Blazor JS interop or lifecycle change, run a focused ad-hoc verification script:
+
+## Verification
+
+- [ ] Browser console shows 0 JS errors after page load
+- [ ] All event handlers fire correctly (manual browser test on each event type)
+- [ ] No `DisposeAsync` / `DotNetObjectReference` leaks (check for "disposed reference" errors)
+- [ ] Drag-and-drop still works after Blazor re-renders (toggle panels, re-drag)
+- [ ] `write_file` used only for initial file creation; all follow-up edits use `patch`
+- [ ] `OnAfterRenderAsync` guards verified: leaf components have guards, parent components do not

@@ -1,6 +1,6 @@
 ---
 name: ada-hermes-agent-skill-authoring
-description: "Author in-repo SKILL.md: frontmatter, validator, structure, and writing-quality principles."
+description: "Use when authoring or validating SKILL.md files — frontmatter structure, YAML validation, writing-quality principles, and the complete skill lifecycle from creation to publishing."
 version: 1.1.0
 author: Hermes Agent
 license: MIT
@@ -8,7 +8,7 @@ platforms: [linux, macos, windows]
 metadata:
   hermes:
     tags: [skills, authoring, hermes-agent, conventions, skill-md]
-    related_skills: [plan, requesting-code-review]
+    related_skills: [plan, ada-requesting-code-review]
 ---
 
 # Authoring Hermes-Agent Skills (in-repo)

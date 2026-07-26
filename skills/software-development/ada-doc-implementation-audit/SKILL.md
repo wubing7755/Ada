@@ -1,6 +1,6 @@
 ---
 name: ada-doc-implementation-audit
-description: Use when verifying that project documentation (SRS, traceability matrix, design docs, README) accurately reflects actual source code and test state. Full-project audit with parallel subagent source reading, cross-referencing, and structured gap reports.
+description: "Use when verifying that project documentation (SRS, traceability matrix, design docs, README) accurately reflects actual source code and test state — full-project audit with parallel subagent source reading, cross-referencing, and structured gap reports."
 version: 1.0.0
 author: Hermes Agent
 license: MIT

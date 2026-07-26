@@ -1,6 +1,6 @@
 ---
-name: test-driven-development
-description: "TDD: enforce RED-GREEN-REFACTOR, tests before code."
+name: ada-test-driven-development
+description: "Use when following Test-Driven Development — enforce RED-GREEN-REFACTOR cycle: write failing tests first, implement minimal code to pass, then refactor with confidence. Tests must exist before implementation code."
 version: 1.1.0
 author: Hermes Agent (adapted from obra/superpowers)
 license: MIT
@@ -8,7 +8,25 @@ platforms: [linux, macos, windows]
 metadata:
   hermes:
     tags: [testing, tdd, development, quality, red-green-refactor]
-    related_skills: [systematic-debugging, plan, subagent-driven-development]
+    related_skills: [ada-systematic-debugging, plan]
+---
+
+
+## Overview
+
+Enforces the RED-GREEN-REFACTOR cycle: write failing tests first, implement minimal code to pass, then refactor with confidence. Tests are the specification — implementation follows.
+
+## When to Use
+
+Use when writing new features or fixing bugs with test coverage
+Use when the user explicitly requests TDD or test-first development
+Use when refactoring legacy code that lacks test coverage
+Use when the user says "write tests first" or "RED-GREEN-REFACTOR"
+
+## Common Pitfalls
+
+Tests that pass without asserting anything are worse than no tests. Avoid testing implementation details — test behavior. Flaky tests erode trust in the test suite.
+
 ---
 
 # Test-Driven Development (TDD)

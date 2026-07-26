@@ -1,6 +1,6 @@
 ---
-name: systematic-debugging
-description: "4-phase root cause debugging: understand bugs before fixing."
+name: ada-systematic-debugging
+description: "Use when debugging complex or hard-to-reproduce bugs — four-phase methodology: understand the bug, isolate the root cause, design the fix, and verify the solution. Prioritizes understanding before patching."
 version: 1.1.0
 author: Hermes Agent (adapted from obra/superpowers)
 license: MIT
@@ -8,7 +8,25 @@ platforms: [linux, macos, windows]
 metadata:
   hermes:
     tags: [debugging, troubleshooting, problem-solving, root-cause, investigation]
-    related_skills: [test-driven-development, plan, subagent-driven-development]
+    related_skills: [ada-test-driven-development, plan]
+---
+
+
+## Overview
+
+Four-phase debugging methodology: understand the bug, isolate the root cause, design the fix, and verify. Prioritizes diagnosis over patching to prevent fix-break-fix cycles.
+
+## When to Use
+
+Use when debugging complex or hard-to-reproduce bugs
+Use when multiple symptoms may share a root cause
+Use when previous fix attempts have failed or introduced regressions
+Use when the user says "debug this" with limited information
+
+## Common Pitfalls
+
+Do NOT jump to a fix before isolating the root cause. Reproducing a bug is not the same as understanding it. Check git history — the bug may have been introduced recently.
+
 ---
 
 # Systematic Debugging
@@ -407,5 +425,15 @@ From debugging sessions:
 - Random fixes approach: 2-3 hours of thrashing
 - First-time fix rate: 95% vs 40%
 - New bugs introduced: Near zero vs common
+
+## Verification
+
+- [ ] Bug is reproduced before any fix is attempted (confirm the test fails)
+- [ ] Root cause is isolated to a specific code path, not a symptom cluster
+- [ ] Fix addresses the root cause, not just the observable symptom
+- [ ] The reproduction test now passes
+- [ ] No regressions: existing test suite passes unchanged
+- [ ] `git log --oneline -5` confirms the bug was introduced recently (if applicable)
+- [ ] Related code paths checked for the same class of bug (prevent whack-a-mole)
 
 **No shortcuts. No guessing. Systematic always wins.**

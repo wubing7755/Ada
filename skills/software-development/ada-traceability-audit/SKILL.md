@@ -1,6 +1,6 @@
 ---
 name: ada-traceability-audit
-description: Use when auditing requirements-traceability.md against actual source code to find status mismatches, missing REQs, stale line counts, or outdated appendixes. Code is primary evidence, docs are secondary.
+description: "Use when auditing a requirements-traceability matrix against actual source code — find status mismatches, missing REQ entries, stale line counts, and outdated appendixes. Treats code as primary evidence and docs as secondary."
 version: 1.0.0
 author: Hermes Agent
 license: MIT
@@ -10,6 +10,10 @@ metadata:
     tags: [traceability, audit, srs, documentation, verification, discrepancy]
     related_skills: [ada-srs-review, ada-docs-revision, codebase-inspection]
 ---
+
+## Overview
+
+A focused requirements-traceability audit that systematically compares the traceability matrix against actual source code. Identifies status mismatches (e.g., "Not Implemented" where code exists), missing REQ entries, stale line counts, outdated appendixes, and cross-document inconsistencies.
 
 # Traceability / Documentation Discrepancy Audit
 
@@ -138,6 +142,13 @@ that's already done.
 - [ ] All traceability status labels verified against actual code
 - [ ] Appendix A lists all real test files with accurate method counts
 - [ ] Appendix B lists all real source files with accurate line counts (no "—")
+
+## Common Pitfalls
+
+- **Trusting doc status markers over code.** "✅ Implemented" in a traceability doc means nothing without code verification. Always read the actual source.
+- **Stale line counts.** `wc -l` numbers in appendixes rot silently. Recount every file.
+- **Renumbered REQs.** If the SRS was renumbered, the traceability matrix is almost certainly stale. Run a full REQ ID reconciliation before auditing.
+- **Partial implementations.** A requirement marked "Implemented" may only have happy-path coverage. Check every AC individually.
 - [ ] Summary statistics (Tested + Implemented + Partial + Not Implemented = Total) correct
 - [ ] Priority subtotals sum to Total
 - [ ] Cross-document REQ count references consistent (README, traceability header, SRS)

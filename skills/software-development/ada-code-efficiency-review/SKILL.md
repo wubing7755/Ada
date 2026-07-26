@@ -1,6 +1,6 @@
 ---
 name: ada-code-efficiency-review
-description: "Efficiency-focused code review: spot redundant work, N+1, missed concurrency, hot-path bloat, TOCTOU races, memory leaks, excessive reads, and silent failures. Language-agnostic checklist with actionable fix recommendations."
+description: "Use when reviewing code for performance and efficiency — spot redundant work, N+1 queries, missed concurrency opportunities, hot-path bloat, TOCTOU races, memory leaks, excessive reads, and silent failures. Language-agnostic with actionable fix recommendations."
 version: 1.0.0
 author: Hermes Agent
 license: MIT
@@ -8,7 +8,7 @@ platforms: [linux, macos, windows]
 metadata:
   hermes:
     tags: [code-review, efficiency, performance, audit, optimization]
-    related_skills: [requesting-code-review, systematic-debugging, systematic-refactoring]
+    related_skills: [ada-requesting-code-review, ada-systematic-debugging]
 ---
 
 # Efficiency-Focused Code Review

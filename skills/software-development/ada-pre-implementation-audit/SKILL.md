@@ -1,6 +1,6 @@
 ---
 name: ada-pre-implementation-audit
-description: Use when creating implementation plans that reference existing code or documentation — verify traceability claims and implementation status against actual code before proposing new work. Prevents building plans on stale docs.
+description: "Use when creating implementation plans that reference existing code or documentation — verify traceability claims and implementation status against actual source code before proposing new work. Prevents building plans on stale or inaccurate docs."
 version: 1.0.0
 author: Hermes Agent
 license: MIT
@@ -10,6 +10,10 @@ metadata:
     tags: [audit, investigation, planning, traceability, pre-implementation, code-review]
     related_skills: [plan, ada-blazor-component-library, ada-code-dedup-audit]
 ---
+
+## Overview
+
+A pre-planning audit that verifies traceability claims against actual source code before any implementation plan is written. Prevents building multi-phase plans on stale documentation by first dispatching parallel subagent auditors, cross-checking findings, and quantifying the delta between what docs claim and what code actually contains.
 
 # Pre-Implementation Audit
 

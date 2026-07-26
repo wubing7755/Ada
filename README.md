@@ -2,24 +2,15 @@
 
 Ada 是一个可分发的 Hermes profile：一个偏软件工程、重正确性与可验证性的 agent。
 
-## 技能体系 (57 skills)
+## 技能体系 (42 skills)
 
-### 自主 AI Agent
-- `claude-code`, `codex`, `opencode` — 编码 agent CLI 委托
-- `hermes-agent` — Hermes Agent 自身配置与扩展
-- `coding-agent-readiness` — 编码 agent 环境就绪检查
-
-### GitHub 工作流
-- `github-pr-workflow`, `github-code-review`, `github-issues` — PR/审查/Issue 管理
-- `github-auth`, `github-repo-management` — 认证与仓库管理
-- `github-ci-debug` — CI 故障诊断
-- `git-cross-platform-pitfalls` — Git 跨平台陷阱
-- `codebase-inspection` — 代码库统计审计
+所有 Ada 专属技能均以 `ada-` 为前缀。以下分类列出：
 
 ### SRS 全生命周期
 - `ada-srs-lifecycle` — SRS 全生命周期统一入口
 - `ada-tp-to-srs-derivation` — 从技术方案派生 SRS
 - `ada-srs-writing` / `ada-srs-review` / `ada-srs-revision` — 编写、审查、修订
+- `ada-srs-documentation` — SRS 文档化方法论
 - `ada-requirements-authoring` — 需求编写
 - `ada-doc-comparison-analysis` — 文档对比分析
 - `ada-docs-revision` — 文档结构化修订
@@ -55,11 +46,9 @@ Ada 是一个可分发的 Hermes profile：一个偏软件工程、重正确性�
 
 ### 工作流
 - `ada-agent-assisted-development` — Agent 辅助开发工作流
-- `plan` — 可执行开发计划
-- `spike` — 一次性验证实验
-- `test-driven-development` — TDD RED-GREEN-REFACTOR
-- `systematic-debugging` — 四阶段根因调试
-- `requesting-code-review` — 提交前审查
+- `ada-requesting-code-review` — 提交前审查
+- `ada-systematic-debugging` — 四阶段根因调试
+- `ada-test-driven-development` — TDD RED-GREEN-REFACTOR
 
 ### 工具链
 - `ada-cmake-cpack-packaging` — CMake/CPack 跨平台打包
@@ -72,6 +61,16 @@ Ada 是一个可分发的 Hermes profile：一个偏软件工程、重正确性�
 - `ada-hermes-agent-skill-authoring` — Skill 编写规范
 - `ada-hermes-doc-sync` — 文档与实况同步
 - `ada-skill-optimization` — Skill 审计与优化
+
+## 外部依赖
+
+Ada 依赖 Hermes ≥0.19.0 提供以下内置技能：
+
+| 类别 | 技能 |
+|------|------|
+| 自主 AI Agent | `claude-code`, `codex`, `opencode`, `hermes-agent`, `coding-agent-readiness` |
+| GitHub 工作流 | `github-pr-workflow`, `github-code-review`, `github-issues`, `github-auth`, `github-repo-management`, `github-ci-debug`, `codebase-inspection`, `git-cross-platform-pitfalls` |
+| 通用工作流 | `plan`, `spike` |
 
 ## 安装
 

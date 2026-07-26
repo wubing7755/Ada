@@ -1,6 +1,6 @@
 ---
 name: ada-docs-revision
-description: Structured revision of technical documentation — terminology alignment, large-scale renaming, and SRS refinement with real-world product references.
+description: "Use when revising technical documentation at scale — terminology alignment across large documents, mass renaming with safe replace_all techniques, and SRS refinement with real-world product references."
 version: 1.0.0
 platforms: [linux, macos, windows]
 author: Hermes Agent

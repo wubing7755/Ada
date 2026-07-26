@@ -1,6 +1,6 @@
 ---
 name: ada-hermes-configuration
-description: Hermes Agent configuration patterns — SOUL.md design, memory/profile optimization, personality tuning, and configuration best practices. Covers what goes where (SOUL vs AGENTS vs skill) and batch memory operations.
+description: "Use when configuring Hermes Agent — SOUL.md design, memory and profile optimization, personality tuning, and deciding what goes where (SOUL vs AGENTS.md vs skill). Also covers batch memory operations and configuration best practices."
 version: 1.0.0
 author: Hermes Agent
 license: MIT
@@ -8,7 +8,7 @@ platforms: [linux, macos, windows]
 metadata:
   hermes:
     tags: [hermes, configuration, soul, memory, personality, optimization]
-    related_skills: [hermes-agent, hermes-operations]
+    related_skills: [hermes-agent]
 ---
 
 # Hermes 配置与人格设计

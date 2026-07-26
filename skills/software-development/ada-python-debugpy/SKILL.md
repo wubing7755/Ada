@@ -1,6 +1,6 @@
 ---
 name: ada-python-debugpy
-description: "Debug Python: pdb REPL + debugpy remote (DAP)."
+description: "Use when debugging Python applications — pdb REPL for quick inspection, debugpy for remote DAP (Debug Adapter Protocol) attachment, breakpoints, and variable inspection."
 version: 1.0.0
 author: Hermes Agent
 license: MIT
@@ -8,7 +8,7 @@ platforms: [linux, macos]
 metadata:
   hermes:
     tags: [debugging, python, pdb, debugpy, breakpoints, dap, post-mortem]
-    related_skills: [systematic-debugging, ada-node-inspect-debugger, debugging-hermes-tui-commands]
+    related_skills: [ada-systematic-debugging, ada-node-inspect-debugger]
 ---
 
 # Python Debugger (pdb + debugpy)

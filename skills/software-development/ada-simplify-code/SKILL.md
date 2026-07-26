@@ -1,6 +1,6 @@
 ---
 name: ada-simplify-code
-description: "Parallel 3-agent cleanup of recent code changes."
+description: "Use when cleaning up recent code changes — parallel three-agent pipeline that reviews, simplifies, and validates code for readability, consistency, and correctness."
 version: 1.0.0
 author: Hermes Agent (inspired by Claude Code /simplify)
 license: MIT
@@ -8,7 +8,7 @@ platforms: [linux, macos, windows]
 metadata:
   hermes:
     tags: [code-review, cleanup, refactor, delegation, subagent, parallel, simplify]
-    related_skills: [requesting-code-review, test-driven-development, plan]
+    related_skills: [ada-requesting-code-review, ada-test-driven-development, plan]
 ---
 
 # Simplify Code — Parallel Review & Cleanup

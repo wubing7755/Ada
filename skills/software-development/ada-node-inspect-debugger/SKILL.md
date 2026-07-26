@@ -1,6 +1,6 @@
 ---
 name: ada-node-inspect-debugger
-description: "Debug Node.js via --inspect + Chrome DevTools Protocol CLI."
+description: "Use when debugging Node.js applications — attach via --inspect flag, drive Chrome DevTools Protocol (CDP) from CLI, set breakpoints, inspect variables, and profile performance."
 version: 1.0.0
 author: Hermes Agent
 license: MIT
@@ -8,7 +8,7 @@ platforms: [linux, macos, windows]
 metadata:
   hermes:
     tags: [debugging, nodejs, node-inspect, cdp, breakpoints, ui-tui]
-    related_skills: [systematic-debugging, ada-python-debugpy, debugging-hermes-tui-commands]
+    related_skills: [ada-systematic-debugging, ada-python-debugpy]
 ---
 
 # Node.js Inspect Debugger

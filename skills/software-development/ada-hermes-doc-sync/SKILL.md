@@ -1,6 +1,6 @@
 ---
 name: ada-hermes-doc-sync
-description: "Keep Hermes project documentation in sync with the live Hermes installation — skill inventory diffing, command reference updates, version upgrade checklists. Use when hermes-agent skill updates or during periodic project maintenance."
+description: "Use when keeping Hermes project documentation in sync with a live Hermes installation — skill inventory diffing, command reference updates, version upgrade checklists, and periodic maintenance audits."
 version: 1.1.0
 author: Hermes Agent
 license: MIT

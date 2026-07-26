@@ -1,6 +1,6 @@
 ---
 name: ada-project-audit
-description: Use when auditing a software project for implementation status, documentation accuracy, and traceability drift — before planning, before releases, or after major refactoring phases. Covers parallel source-code audit, doc cross-check, and traceability correction workflow.
+description: "Use when auditing a software project for implementation status, documentation accuracy, and traceability drift — before planning, before releases, or after major refactoring phases. Covers parallel source-code audit, doc cross-check, and traceability correction."
 version: 1.0.0
 author: Hermes Agent
 license: MIT
@@ -8,8 +8,12 @@ platforms: [linux, macos, windows]
 metadata:
   hermes:
     tags: [audit, verification, traceability, documentation, planning, code-review]
-    related_skills: [ada-blazor-component-library, plan, requesting-code-review]
+    related_skills: [ada-blazor-component-library, plan, ada-requesting-code-review]
 ---
+
+## Overview
+
+A comprehensive audit protocol for detecting drift between source code, traceability matrices, requirement specifications, and status reports. Runs parallel source-code audits, cross-checks documentation claims, and produces a delta report that corrects traceability before planning begins.
 
 # Project Audit: Code ↔ Documentation Verification
 
