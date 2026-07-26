@@ -8,7 +8,7 @@ platforms: [linux, macos, windows]
 metadata:
   hermes:
     tags: [documentation, comparison, srs, synthesis]
-    related_skills: [ada-srs-documentation, ada-docs-revision]
+    related_skills: [ada-srs-writing, ada-docs-revision]
 ---
 
 # Document Comparison & Optimization

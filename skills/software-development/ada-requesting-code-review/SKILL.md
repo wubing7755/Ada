@@ -11,7 +11,6 @@ metadata:
     related_skills: [plan, ada-test-driven-development, github-code-review]
 ---
 
-
 ## Overview
 
 Pre-commit review pipeline: security scanning, formatting/linting checks, test execution, and auto-fix of common issues. Produces a structured review request ready for human or AI review.
@@ -35,8 +34,6 @@ Automated verification pipeline before code lands. Static scans, baseline-aware
 quality gates, an independent reviewer subagent, and an auto-fix loop.
 
 **Core principle:** No agent should verify its own work. Fresh context finds what you miss.
-
-## When to Use
 
 - After implementing a feature or bug fix, before `git commit` or `git push`
 - When user says "commit", "push", "ship", "done", "verify", or "review before merge"

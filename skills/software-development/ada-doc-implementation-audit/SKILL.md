@@ -66,47 +66,13 @@ documentation claims.
 
 ### Phase 2 — Parallel Subagent Source Reading
 
-Dispatch **3 subagents in parallel** via `delegate_task` batch mode:
+Dispatch 3 subagents in parallel via `delegate_task` batch mode, splitting the
+codebase by module cluster (Domain + Results + Interop, Services + Commands +
+Dto, Components + Demo). See `references/parallel-audit-pattern.md` for the
+complete dispatch template, subagent prompt format, and pitfall guidance.
 
-| Agent | Module | Files |
-|-------|--------|-------|
-| **Agent 1** | Domain + Results + Interop | All `.cs` in Domain/, Results/, Interop/ + `ClientScripts/index.ts` + matching test files |
-| **Agent 2** | Services + Commands + Dto | All `.cs` in Services/ (including Abstractions/, Commands/, Dto/) + matching test files |
-| **Agent 3** | Components + Demo | All `.razor` in Components/ + `.css` + `.csproj` + matching test files |
-
-**Crucial:** Every subagent gets the **absolute repo path** and instructions to
-use `read_file` on every file. Provide the exact file list — the subagent has
-no context about the project structure.
-
-Each subagent must report per file:
-1. File path and line count
-2. Key types/classes defined
-3. SRS requirements referenced (grep for `REQ-F-XXX` comments)
-4. Any TODO, FIXME, or incomplete markers
-5. Test coverage: which test files cover this code
-
-Subagent prompt template (adjust paths per module):
-
-```
-Repo root: C:\Users\usr\source\repos\<Project>
-
-Your job: Read every source file in these directories and produce a structured
-implementation report for each.
-
-Files to read: [list exact paths]
-
-Test files to read: [list exact paths]
-
-For each file, report:
-1. File path and line count
-2. Key types/classes defined
-3. SRS requirements referenced (look for comments mentioning REQ-F-XXX)
-4. Any TODO, FIXME, or incomplete markers
-5. Test coverage: which test files and methods cover this code
-
-Output format: structured markdown sections per file.
-Do NOT modify any files.
-```
+Each subagent must report per file: path and line count, key types, REQ
+references, TODOs/FIXMEs, and test coverage.
 
 ### Phase 3 — Documentation Reading (Orchestrator)
 

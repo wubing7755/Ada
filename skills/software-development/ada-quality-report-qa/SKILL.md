@@ -27,7 +27,6 @@ double-counted. Based on empirical data, first-draft hand-written reports have ~
 error rates — these four gates catch those errors before delivery.
 
 ## When to Use
-## 何时使用
 
 - 完成代码质量报告撰写后、交付用户前
 - 报告中包含附录 A 文件统计表
@@ -92,7 +91,6 @@ find Services -type f -name "*.cs" ...  # 包含 Commands/
 根据实践统计，手工编制的报告在第一版中约有 10% 的错误率（统计偏差 + 覆盖分类错误）。这属于可接受范围——但必须经过本 QA pipeline 修正后再交付。
 
 ## Verification Checklist
-## 检查清单
 
 - [ ] 附录 A 子目录行数和 == 统一 find 公式的计算总数
 - [ ] 报告头部文件数 == 附录 A 文件数

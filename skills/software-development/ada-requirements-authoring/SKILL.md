@@ -8,12 +8,13 @@ license: MIT
 metadata:
   hermes:
     tags: [srs, requirements, authoring, quality, specification]
-    related_skills: [ada-srs-writing, ada-srs-documentation]
+    related_skills: [ada-srs-writing, ada-srs-writing]
 ---
 
 # Requirements Authoring: SRS vs Design Boundary
 
 ## When to Use
+
 ## When to Load
 
 - User asks you to review an SRS for completeness or quality
@@ -113,6 +114,7 @@ These are often mistaken for design but are actually behavioral specifications:
 4. **"Timing values are design"** — No. "300ms delay before auto-hide" defines user-perceivable behavior. The user experiences the delay. It's a behavioral specification.
 
 ## Verification Checklist
+
 ## Review Checklist
 
 When reviewing an SRS for design-level leakage, scan for:

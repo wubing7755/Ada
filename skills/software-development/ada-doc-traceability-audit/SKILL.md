@@ -8,7 +8,7 @@ platforms: [linux, macos, windows]
 metadata:
   hermes:
     tags: [documentation, audit, srs, traceability, cleanup, maintenance]
-    related_skills: [ada-blazor-component-library, ada-srs-documentation, ada-srs-review]
+    related_skills: [ada-blazor-component-library, ada-srs-writing, ada-srs-review]
 ---
 
 ## Overview

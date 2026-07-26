@@ -11,7 +11,6 @@ metadata:
     related_skills: [ada-systematic-debugging, plan]
 ---
 
-
 ## Overview
 
 Enforces the RED-GREEN-REFACTOR cycle: write failing tests first, implement minimal code to pass, then refactor with confidence. Tests are the specification — implementation follows.
@@ -31,15 +30,11 @@ Tests that pass without asserting anything are worse than no tests. Avoid testin
 
 # Test-Driven Development (TDD)
 
-## Overview
-
 Write the test first. Watch it fail. Write minimal code to pass.
 
 **Core principle:** If you didn't watch the test fail, you don't know if it tests the right thing.
 
 **Violating the letter of the rules is violating the spirit of the rules.**
-
-## When to Use
 
 **Always:**
 - New features

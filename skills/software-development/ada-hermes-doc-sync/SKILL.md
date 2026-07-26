@@ -16,7 +16,6 @@ metadata:
 当 `hermes-agent` skill 版本升级或定期维护 Hermes 项目文档时，系统性同步技能清单、命令引用和功能描述。
 
 ## When to Use
-## 适用时机
 
 - `hermes-agent` skill 版本号变化
 - 定期（月度）项目文档巡检
@@ -180,7 +179,6 @@ for i, line in enumerate(text.split('\n')):
 每轮进化后更新（详见 `references/evolution-checklist.md`）。
 
 ## Common Pitfalls
-## 常见陷阱
 
 | 陷阱 | 症状 | 对策 |
 |------|------|------|

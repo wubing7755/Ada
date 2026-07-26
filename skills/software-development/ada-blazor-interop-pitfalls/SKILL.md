@@ -1,23 +1,23 @@
 ---
 name: ada-blazor-interop-pitfalls
-description: "Use when debugging Blazor JS interop issues, adding mouse/hover/keyboard event handlers in Razor components, or diagnosing silently-ignored Blazor event directives. Covers IJSRuntime patterns, invisible drop targets, and mouseenter/mouseleave fixes."
-version: 1.2.0
+description: "Use when debugging Blazor JS interop issues, adding mouse/hover/keyboard event handlers in Razor components, or diagnosing silently-ignored Blazor event directives. Covers IJSRuntime patterns, DotNetObjectReference lifecycle, invisible drop targets, mouseenter/mouseleave fixes, and WeakMap memory management."
+version: 1.3.0
 author: Hermes Agent
 license: MIT
 platforms: [windows, linux, macos]
 metadata:
   hermes:
     tags: [blazor, interop, js, events, pitfalls, wasm]
-    related_skills: [ada-blazor-component-library, ada-dotnet-blazor-library]
+    related_skills: [ada-blazor-component-library, ada-dotnet-blazor-library, ada-blazor-interaction-pitfalls]
 ---
 
 # Blazor JS Interop Pitfalls
 
 ## Overview
 
-Covers the most common Blazor .NET 6 JS interop failures encountered in production — non-bubbling DOM events, render-state lifecycle traps, JS interop callback lifecycle management, drag-and-drop memory leaks, and session-state file-editing hazards. Each pitfall is a standalone troubleshooting guide with verified fixes from Atlas PanelDrag (2026-07-24).
+Covers the most common Blazor .NET 6 JS interop failures encountered in production — non-bubbling DOM events, `IJSRuntime` patterns, `DotNetObjectReference` lifecycle management, drag-and-drop memory leaks, and invisible drop targets. Each pitfall is a standalone troubleshooting guide with verified fixes. Documented failures and fixes for Blazor .NET 6 JS interop event handling.
 
-Documented failures and fixes for Blazor .NET 6 JS interop event handling.
+For lifecycle and rendering pitfalls (`StateHasChanged`, `OnAfterRender`, `@ref` in `RenderFragment`), see `ada-blazor-interaction-pitfalls`.
 
 ## When to Use
 
@@ -25,6 +25,8 @@ Documented failures and fixes for Blazor .NET 6 JS interop event handling.
 - Adding mouseenter/mouseleave, focus/blur, or other non-bubbling DOM event handlers
 - Replacing `@on{event}` directives with JS interop for unsupported events
 - Debugging silent event failures in Blazor WASM
+- `DotNetObjectReference` disposal errors or memory leaks
+- Drag-and-drop targets disappearing after Blazor re-renders
 
 ## Supported Mouse Events (.NET 6)
 
@@ -35,20 +37,84 @@ Blazor .NET 6 supports these mouse event directives out of the box:
 @onmousemove, @onmouseover, @onmouseout, @onmousewheel, @oncontextmenu
 ```
 
-Any directive NOT in this list **compiles without error but is silently ignored** at runtime.
-Razor does not validate event attribute names against a whitelist — the handler becomes
-unreachable dead code.
+Any directive NOT in this list **compiles without error but is silently ignored** at runtime. Razor does not validate event attribute names against a whitelist — the handler becomes unreachable dead code.
 
 ## Non-Bubbling Events Must Use JS Interop
 
-Events that do not bubble (mouseenter, mouseleave, focus, blur, load, unload) cannot be
-handled by Blazor's event delegation system (which listens at the document level and
-relies on event propagation). For these, register native listeners via JS interop.
+Events that do not bubble (mouseenter, mouseleave, focus, blur, load, unload) cannot be handled by Blazor's event delegation system (which listens at the document level and relies on event propagation). For these, register native listeners via JS interop.
 
 ### Fix Pattern
 
-See `references/mouseenter-mouseleave-fix.md` for the complete three-layer pattern
-(TypeScript → C# interop → Razor component integration) used to fix this in Atlas.
+See `references/mouseenter-mouseleave-fix.md` for the complete three-layer pattern (TypeScript → C# interop → Razor component integration) used to fix this in Atlas.
+
+### Why not `@onmouseover`/`@onmouseout`?
+
+They fire when entering/leaving child elements, causing flicker for flyout UIs. `mouseenter`/`mouseleave` only fire when crossing the target element boundary.
+
+## JS Interop: `IJSObjectReference` Pattern
+
+### Avoid `eval` + `import()`
+
+Using `js.InvokeVoidAsync("eval", $"...import('...').then(...)")` for ES module loading is brittle and hard to debug. Use the `IJSObjectReference` pattern instead.
+
+### Initialize once at startup
+
+```csharp
+private static IJSObjectReference? _module;
+public static async ValueTask InitializeAsync(IJSRuntime js)
+{
+    _module = await js.InvokeAsync<IJSObjectReference>("import", "./xdocker/xdocker.js");
+}
+
+// Then call module methods directly
+await _module!.InvokeVoidAsync("attachDragHandlers", element, dragType, dragData, callback);
+```
+
+### TypeScript side
+
+Export plain functions (no default export needed):
+
+```typescript
+export function attachDragHandlers(
+  element: HTMLElement,
+  dragType: string,
+  dragData: string,
+  dotNetHelper: DotNet.DotNetObject
+): void { ... }
+```
+
+### C# → JS callback pattern
+
+Use `DotNetObjectReference<T>` with `[JSInvokable]` methods. Pass to JS via `DotNetObjectReference.Create(callback)` — the runtime handles reference counting automatically.
+
+### Drag type: pass explicitly from JS to C#
+
+**Wrong** — infer drag type on the C# side:
+```csharp
+_dragType = _context.State.FindTab(dragData) is not null ? DragType.Tab : DragType.Panel;
+```
+
+**Right** — include it as a parameter in the JS → C# callback:
+```typescript
+dotNet.invokeMethodAsync('OnDragStarted', dragData, dragType, clientX, clientY);
+```
+
+## JS Interop Callback Lifecycle
+
+When registering JS event listeners that call back to .NET via `DotNetObjectReference`:
+
+1. **Guard against re-registration**: Use string identity comparison (`_lastRegisteredPanelId`) — avoids DOTNET object create/dispose on every render.
+2. **try/catch on registration**: `JSException` can occur if the DOM element was removed between renders.
+3. **Unregister before dispose**: Always call `UnregisterHoverEvents` BEFORE `DisposeAsync` — prevents stale DOTNET references in JS closures.
+4. **DisposeAsync cleanup**: Both `DisposeAsync` and the re-registration path must pair `UnregisterHoverEvents` + `DisposeAsync`.
+
+## dropTargets Map Memory Leak
+
+**Pitfall**: `dragHandlers` uses `WeakMap<HTMLElement, ...>` (auto-cleanup). `dropTargets` uses `Map<HTMLElement, ...>` (no cleanup). Blazor DOM recreation causes unbounded growth.
+
+**Impact**: Low. `findDropTarget` hit-tests with `getBoundingClientRect()` — removed elements return zero-area, never match. Memory growth proportional to panel count changes, not drags.
+
+**Fix**: Deferred. WeakMap is non-iterable, so `findDropTarget` would break. Proper fix: periodic purge after drag ends or migration to a cleanable structure.
 
 ## Verification
 
@@ -58,48 +124,14 @@ After switching from `@on{event}` to JS interop:
 - [ ] `dotnet test` full suite passes
 - [ ] Browser console shows 0 JS errors after page load
 - [ ] Manual browser test confirms the event fires (e.g., hover triggers flyout)
-
-## Lifecycle & Render-State Pitfalls
-
-Two deep-dive references cover the most common Blazor lifecycle issues that silently corrupt JS interop state:
-
-- `skill_view(name="ada-blazor-interop-pitfalls", file_path="references/lifecycle-pitfalls.md")` — **StateHasChanged skipping OnParametersSet** (stale render-index → IndexOutOfRange), `ShouldRender()` as the only guaranteed reset point, and **pre-computation pattern** (eliminate mutable render state with dictionary caches)
-- `skill_view(name="ada-blazor-interop-pitfalls", file_path="references/dom-lifetime-pitfalls.md")` — **Blazor @if removing JS-dependent DOM elements**, JS dynamic element creation fix, **OnAfterRenderAsync re-registration guards** (leaf vs parent), and **parent-first lifecycle ordering** (OnAfterRender sync vs OnAfterRenderAsync)
-
-## Paired-List Defensive Iteration
-
-**Pitfall**: When a parent component maintains multiple `List<T>` fields that should always
-have the same `.Count` (e.g., `_entryPanelIds`, `_entryRefs`, `_entryWrapperRefs` — all
-built in the same `ComputeGroupsAndIndex` loop), Blazor lifecycle timing can cause them to
-diverge. Use `Math.Min` to prevent `IndexOutOfRange`.
-
-```csharp
-// WRONG
-for (var i = 0; i < _entryWrapperRefs.Count; i++)
-    var panelId = _entryPanelIds[i];  // ← 💥 if shorter
-
-// RIGHT
-var count = Math.Min(_entryWrapperRefs.Count, _entryPanelIds.Count);
-for (var i = 0; i < count; i++)
-    var panelId = _entryPanelIds[i];
-```
-
-## dropTargets Map Leak
-
-**Pitfall**: `dragHandlers` uses `WeakMap<HTMLElement, ...>` (auto-cleanup). `dropTargets`
-uses `Map<HTMLElement, ...>` (no cleanup). Blazor DOM recreation causes unbounded growth.
-
-**Impact**: Low. `findDropTarget` hit-tests with `getBoundingClientRect()` — removed elements
-return zero-area, never match. Memory growth proportional to panel count changes, not drags.
-
-**Fix**: Deferred. WeakMap is non-iterable, so `findDropTarget` would break. Proper fix:
-periodic purge after drag ends or migration to a cleanable structure.
+- [ ] No `DisposeAsync` / `DotNetObjectReference` leaks
 
 ## Related
 
 - `ada-blazor-component-library` — general Blazor component library patterns
 - `ada-dotnet-blazor-library` — RCL setup, naming conventions, NuGet packaging
-- `references/mouseenter-mouseleave-fix.md` — complete three-layer fix pattern with render guard and try/catch (Atlas, 2026-07-24)
-- `references/invisible-drop-targets.md` — JS dynamic element creation for drop targets that survive Blazor conditional rendering; **v2 corrected approach** replacing the failed v1 C#-rendered pattern (Atlas, 2026-07-24)
-
-## Related
+- `ada-blazor-interaction-pitfalls` — lifecycle and rendering pitfalls
+- `references/mouseenter-mouseleave-fix.md` — complete three-layer fix pattern with render guard and try/catch
+- `references/invisible-drop-targets.md` — JS dynamic element creation for drop targets that survive Blazor conditional rendering
+- `references/lifecycle-pitfalls.md` — delegated to `ada-blazor-interaction-pitfalls`
+- `references/dom-lifetime-pitfalls.md` — delegated to `ada-blazor-interaction-pitfalls`

@@ -65,11 +65,11 @@ Context management rules baked into every step:
 | User says | Workflow | Key skills loaded |
 |-----------|----------|-------------------|
 | "修复这个 bug" | Bug Fix (1) | systematic-debugging, test-driven-development, requesting-code-review |
-| "实现 REQ-XXX" | Feature (2) | srs-driven-development, plan, srs-writing |
+| "实现 REQ-XXX" | Feature (2) | ada-srs-lifecycle, plan, ada-srs-writing |
 | "审查代码" | Code Review (3) | requesting-code-review, code-efficiency-review |
 | "优化/简化代码" | Quality (4) | simplify-code, code-dedup-audit |
-| "升级/重构架构" | Architecture (5) | systematic-refactoring, plan, spike, codeagent |
-| "SRS 覆盖率" | SRS Coverage (6) | srs-review, srs-terminology-audit |
+| "升级/重构架构" | Architecture (5) | ada-refactoring-lifecycle, plan, spike |
+| "SRS 覆盖率" | SRS Coverage (6) | ada-srs-review |
 | "代码质量报告" | Quality Report (7) | codebase-inspection, code-efficiency-review |
 
 ## §1 — Bug Fix Workflow

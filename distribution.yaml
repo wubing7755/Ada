@@ -21,7 +21,6 @@ skills:
   - software-development/ada-test-driven-development
   # ── Software Development: SRS Lifecycle ──
   - software-development/ada-requirements-authoring
-  - software-development/ada-srs-documentation
   - software-development/ada-srs-lifecycle
   - software-development/ada-srs-review
   - software-development/ada-srs-revision

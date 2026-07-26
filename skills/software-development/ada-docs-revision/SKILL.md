@@ -8,7 +8,7 @@ license: MIT
 metadata:
   hermes:
     tags: [documentation, revision, terminology, srs, markdown]
-    related_skills: [ada-srs-revision, ada-srs-documentation]
+    related_skills: [ada-srs-revision, ada-srs-writing]
 ---
 
 # Documentation Revision

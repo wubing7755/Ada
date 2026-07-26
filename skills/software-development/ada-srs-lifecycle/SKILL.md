@@ -8,7 +8,7 @@ license: MIT
 metadata:
   hermes:
     tags: [srs, lifecycle, requirements, umbrella]
-    related_skills: [ada-srs-writing, ada-srs-documentation, ada-srs-review, ada-srs-revision, ada-tp-to-srs-derivation, ada-requirements-authoring]
+    related_skills: [ada-srs-writing, ada-srs-review, ada-srs-revision, ada-tp-to-srs-derivation, ada-requirements-authoring]
     sub_skills: [tp-to-srs-derivation, srs-writing, srs-review, srs-revision]
 ---
 

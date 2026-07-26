@@ -39,24 +39,9 @@ From the requirements traceability matrix or SRS, extract the REQs relevant to t
 
 ### 2. Dispatch parallel subagent auditors
 
-Use `delegate_task` batch mode with 3 agents covering different modules:
-
-```python
-delegate_task(tasks=[
-    {
-        "goal": "Audit Domain/Results/Interop files...",
-        "context": "Repo root: ... Read every file, report implementation status per REQ..."
-    },
-    {
-        "goal": "Audit Services/Commands/Dto files...",
-        "context": "Repo root: ... Read every file, report implementation status per REQ..."
-    },
-    {
-        "goal": "Audit Components/Razor files...",
-        "context": "Repo root: ... Read every file, report JS interop, TODOs, REQ references..."
-    }
-])
-```
+Use `delegate_task` batch mode with 3 agents covering different module clusters.
+See `ada-doc-implementation-audit` → `references/parallel-audit-pattern.md` for
+the complete dispatch template, subagent prompt format, and pitfall guidance.
 
 Each agent gets:
 - Full file paths to read

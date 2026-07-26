@@ -280,8 +280,6 @@ var registry = Context?.ContentRegistry ?? new ContentRegistry();
 Pre-register demo/fallback components in `LayoutContext`'s constructor.
 See `references/content-registry-wiring.md` for the full pattern.
 
-## Common Pitfalls
-
 - **Domain model / component name clash after prefix application.** When adding a common prefix (e.g., "Atlas") to all types, both `DockPanelModel` and the `DockPanel` component become `AtlasDockPanel`. Fix: add `Model` suffix to domain types (`AtlasDockPanelModel`) so component tags stay clean (`<AtlasDockPanel>`).
 - **RCL static assets not using `_content/{AssemblyName}/` prefix.** Every reference to RCL `wwwroot/` from outside the RCL must use this prefix — JS imports, CSS links, image paths. Missing it produces silent 404s.
 - **Referencing another project's scoped CSS.** Scoped CSS bundles (`{ProjectName}.styles.css`) are per-project. An RCL's scoped CSS is not available to the demo app unless the RCL owns the `.razor.css` files.

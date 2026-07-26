@@ -91,10 +91,8 @@ Every in-repo skill follows roughly:
 ```
 # <Title>
 
-## Overview
 One or two paragraphs: what and why.
 
-## When to Use
 - Bulleted triggers
 - "Don't use for:" counter-triggers
 
@@ -159,8 +157,6 @@ Pick the closest existing category. Don't invent new top-level categories casual
 - **Adding supporting files:** `write_file` to `skills/<category>/<name>/references/<file>.md`, `templates/<file>`, or `scripts/<file>`. `skill_manage(action='write_file')` also works and enforces the references/templates/scripts/assets subdir allowlist.
 - **Always commit** the edit — in-repo skills are source, not runtime state.
 
-## Common Pitfalls
-
 1. **Using `skill_manage(action='create')` for an in-repo skill.** It writes to `~/.hermes/skills/`, not the repo tree. Use `write_file` for in-repo creation.
 
 2. **Leading whitespace before `---`.** The validator checks `content.startswith("---")`; any leading blank line or BOM fails validation.
@@ -178,8 +174,6 @@ Pick the closest existing category. Don't invent new top-level categories casual
 8. **Writing no-op prose.** "Be careful," "be thorough," and "use best practices" rarely change model behavior. Replace with a checkable completion criterion or a stronger leading word.
 
 9. **Linking to skills that don't exist in-repo.** `related_skills: [some-user-local-skill]` works for you but breaks for other clones. Prefer only in-repo links.
-
-## Verification Checklist
 
 - [ ] File is at `skills/<category>/<name>/SKILL.md` (not in `~/.hermes/skills/`)
 - [ ] Frontmatter starts at byte 0 with `---`, closes with `\n---\n`
