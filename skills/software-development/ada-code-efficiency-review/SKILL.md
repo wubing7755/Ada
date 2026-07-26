@@ -1,6 +1,6 @@
 ---
 name: ada-code-efficiency-review
-description: "Use when reviewing code for performance and efficiency — spot redundant work, N+1 queries, missed concurrency opportunities, hot-path bloat, TOCTOU races, memory leaks, excessive reads, and silent failures. Language-agnostic with actionable fix recommendations."
+description: 'Use when the user says "这个循环太慢了", "有没有N+1查询", or asks for a performance-focused review — spot redundant work, N+1 queries, missed concurrency opportunities, hot-path bloat, TOCTOU races, memory leaks, excessive reads, and silent failures. Language-agnostic with actionable fix recommendations.'
 version: 1.0.0
 author: Hermes Agent
 license: MIT

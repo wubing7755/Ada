@@ -1,6 +1,6 @@
 ---
 name: ada-doc-comparison-analysis
-description: "Use when comparing two technical documents (SRS, design docs, API specs) — synthesize an optimized version by extracting complementary strengths from each while respecting phase boundaries and avoiding regressions."
+description: 'Use when comparing two versions of a technical document, merging SRS drafts, or the user asks "这两个版本有什么区别", "合并两份SRS" — synthesize an optimized version by identifying complementary strengths, resolving conflicts, and preserving phase boundaries.'
 version: 1.0.0
 author: Hermes Agent
 license: MIT
@@ -196,9 +196,9 @@ Use when:
 - Cross-pollinating navigation aids (quick-finders, section indexes, role-based summaries) from a well-structured document into a less-structured one
 
 Don't use for:
-- Comparing a document against a live product (not another document) — use `ada-srs-review` Pass G (framework coverage) or Pass K (SRS-to-code coverage)
+- Comparing a document against a live product (not another document) — use framework coverage analysis (Pass G) (framework coverage) or Pass K (SRS-to-code coverage)
 - Simple diff/merge of two versions of the same document — use git diff/merge tooling
-- Single-document review or quality audit — load `ada-srs-review`
+- Single-document review or quality audit — use systematic document review methodology
 
 ## Verification Checklist
 

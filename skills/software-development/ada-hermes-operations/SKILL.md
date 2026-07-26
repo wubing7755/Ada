@@ -1,6 +1,6 @@
 ---
 name: ada-hermes-operations
-description: "Use when operating Hermes Agent itself — slash commands, evidence standards, context handoff, approval boundaries, Windows-specific tool behavior, and delegation patterns. Load before any complex multi-session or multi-agent workflow."
+description: "Use when operating Hermes Agent itself — slash commands, evidence standards, context handoff, approval boundaries, Windows-specific tool behavior, and delegation patterns. Load before any complex multi-session or multi-agent workflow. Triggered by: complex multi-session workflows, multi-agent delegation, or any task requiring context management across /new boundaries. Defines evidence standards and approval boundaries that all agent tasks depend on. Should be preloaded for every non-trivial session."
 version: 1.0.0
 platforms: [linux, macos, windows]
 author: Hermes Agent
@@ -96,7 +96,7 @@ Hermes Agent 自身的操作知识——命令、工具选择、证据标准、�
 - CMake from MSYS：用 `cygpath -w` 转换 Unix→Windows 路径
 - 递归删除或移动：先解析验证目标路径
 
-详见 `ada-powershell-from-bash` 和 `ada-cmake-cpack-packaging`。
+详见 PowerShell-from-bash documentation 和 CMake/CPack packaging documentation。
 
 ## Common Pitfalls
 

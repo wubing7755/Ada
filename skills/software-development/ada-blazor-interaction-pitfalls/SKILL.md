@@ -1,6 +1,6 @@
 ---
 name: ada-blazor-interaction-pitfalls
-description: "Use when debugging Blazor WASM lifecycle and rendering issues — StateHasChanged skipping OnParametersSet, OnAfterRender ordering traps, render-state reset patterns, @ref in RenderFragment, paired-list IndexOutOfRange, and ShouldRender vs OnParametersSet timing."
+description: "Use when debugging Blazor WASM lifecycle and rendering issues — StateHasChanged skipping OnParametersSet, OnAfterRender ordering traps, render-state reset patterns, @ref in RenderFragment, paired-list IndexOutOfRange, and ShouldRender vs OnParametersSet timing. Triggered by: IndexOutOfRangeException in BuildRenderTree, StateHasChanged not updating UI, OnParametersSet skipped after internal state change, @ref inside RenderFragment silently failing. For JS interop event handling, use JS interop debugging patterns instead."
 version: 1.1.0
 author: Hermes Agent
 license: MIT
@@ -18,19 +18,19 @@ metadata:
 
 A catalog of silent Blazor WASM lifecycle and rendering failures — `StateHasChanged()` skipping `OnParametersSet`, `OnAfterRender` vs `OnAfterRenderAsync` ordering traps, `@ref` inside `RenderFragment` silently breaking, paired-list `IndexOutOfRange`, and render-state reset strategies. Each pitfall includes the root cause, why the obvious fix doesn't work, and a verified solution with code examples.
 
-For JS interop-specific pitfalls (`@onmouseenter`/`@onmouseleave`, `DotNetObjectReference`, `IJSRuntime`, `WeakMap` leaks), see `ada-blazor-interop-pitfalls`.
+For JS interop-specific pitfalls (`@onmouseenter`/`@onmouseleave`, `DotNetObjectReference`, `IJSRuntime`, `WeakMap` leaks), see JS interop debugging patterns.
 
 ## When to Use
 
 Use when:
 - `StateHasChanged()` triggers `IndexOutOfRange` or stale render-state bugs
 - `@ref` assignments work in `.razor` templates but silently fail inside `RenderFragment`
-- Adding hover/flyout behavior to Blazor components (for JS interop, load `ada-blazor-interop-pitfalls`)
+- Adding hover/flyout behavior to Blazor components (for JS interop, use JS interop debugging patterns instead)
 - Debugging lifecycle order issues (parent-first vs child rendering order)
 - Paired lists (`List<T>`) with assumed-equal `.Count` diverge between renders
 
 
-Don't use for: JS interop event handling — load `ada-blazor-interop-pitfalls`. General Blazor component design — load `ada-blazor-component-library`. Simple compile errors — these are lifecycle issues, not syntax errors.
+Don't use for: JS interop event handling — use JS interop debugging patterns. General Blazor component design — use component library design patterns instead. Simple compile errors — these are lifecycle issues, not syntax errors.
 
 ## Pitfall 1: `StateHasChanged()` Skips `OnParametersSet`
 
@@ -113,4 +113,4 @@ Blazor reuses component instances. Use string-identity comparison (`_lastHeaderP
 
 ## Reference Files
 
-- `references/hover-interop-full-pattern.md` — Complete three-layer pattern for mouseenter/mouseleave (TypeScript → C# interop → Razor component), delegated to `ada-blazor-interop-pitfalls`
+- `references/hover-interop-full-pattern.md` — Complete three-layer pattern for mouseenter/mouseleave (TypeScript → C# interop → Razor component)

@@ -1,6 +1,6 @@
 ---
 name: ada-dotnet-blazor-library
-description: "Use when structuring, developing, or publishing .NET Blazor component libraries — Razor Class Library setup, public API naming conventions, demo app separation, content registry wiring, and NuGet packaging considerations."
+description: "Use when structuring, developing, or publishing .NET Blazor component libraries — Razor Class Library setup, public API naming conventions, demo app separation, content registry wiring, and NuGet packaging considerations. Triggered by: .csproj with RazorClassLibrary SDK, CS0234 namespace collisions, RCL NuGet packaging tasks, component tag registration failures."
 version: 1.0.0
 platforms: [windows, linux, macos]
 author: Hermes Agent

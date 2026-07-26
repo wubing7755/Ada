@@ -1,6 +1,6 @@
 ---
 name: ada-powershell-from-bash
-description: "Use when running PowerShell commands or scripts from git-bash/MSYS on Windows — avoid path mangling, encoding issues, and variable expansion problems when crossing between POSIX shell and PowerShell."
+description: "Use when running PowerShell commands or scripts from git-bash/MSYS on Windows — avoid path mangling, encoding issues, and variable expansion problems when crossing between POSIX shell and PowerShell. Triggered by: $ variable expansion errors in bash, MSYS path mangling (backslash stripping), powershell.exe -Command failures from git-bash. Only applies on Windows with git-bash/MSYS."
 version: 1.0.0
 platforms: [windows]
 author: Hermes Agent

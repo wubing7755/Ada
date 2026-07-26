@@ -1,6 +1,6 @@
 ---
 name: ada-srs-revision
-description: "Use when revising SRS or large technical requirements documents at scale — semantic concept replacement, mass terminology standardization, iterative review-then-execute workflow, and safe replace_all techniques for large documents."
+description: "Use when revising SRS or large technical requirements documents at scale — semantic concept replacement, mass terminology standardization, iterative review-then-execute workflow, and safe replace_all techniques for large documents.  For SRS-specific large-scale revision with terminology mapping tables, blast-radius analysis, and SRS-aware consistency checks. For general document revision, use generic document revision workflows."
 version: 1.1.0
 platforms: [linux, macos, windows]
 author: Hermes Agent
@@ -199,9 +199,9 @@ Use when:
 
 Don't use for:
 - Single-line typo fixes — use a simple `patch` call
-- Writing new content from scratch — load `ada-srs-writing`
-- Auditing or reviewing a document — load `ada-srs-review` first to identify what needs changing, then use this skill to execute the changes
-- Changes that don't affect terminology or structure (e.g., adding a single new requirement) — load `ada-srs-writing`
+- Writing new content from scratch — use direct SRS authoring
+- Auditing or reviewing a document — run a systematic document audit first to identify what needs changing, then use this skill to execute the changes
+- Changes that don't affect terminology or structure (e.g., adding a single new requirement) — use direct SRS authoring
 
 ## References
 

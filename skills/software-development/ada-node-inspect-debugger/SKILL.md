@@ -1,6 +1,6 @@
 ---
 name: ada-node-inspect-debugger
-description: "Use when debugging Node.js applications — attach via --inspect flag, drive Chrome DevTools Protocol (CDP) from CLI, set breakpoints, inspect variables, and profile performance."
+description: "Use when debugging Node.js applications — attach via --inspect flag, drive Chrome DevTools Protocol (CDP) from CLI, set breakpoints, inspect variables, and profile performance. Triggered by: .js/.ts files + debugging intent, --inspect flag usage, CDP protocol operations, breakpoint management from CLI. For Python debugging, use the equivalent Python debugger patterns."
 version: 1.0.0
 author: Hermes Agent
 license: MIT

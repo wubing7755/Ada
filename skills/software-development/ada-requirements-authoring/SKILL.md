@@ -1,6 +1,6 @@
 ---
 name: ada-requirements-authoring
-description: "Use when writing or reviewing software requirements specifications (SRS) — authoring new requirements, reviewing existing ones for abstraction-level issues, and keeping SRS free of design-level implementation details."
+description: "Use for lightweight, single-requirement authoring — writing one REQ, adding acceptance criteria, or reviewing individual requirements for quality. For full multi-section SRS documents, use document-level authoring workflows instead. Covers format conventions, quality rules, and bilingual terminology patterns."
 version: 1.0.0
 platforms: [linux, macos, windows]
 author: Hermes Agent
@@ -16,7 +16,7 @@ metadata:
 ## When to Use
 
 
-Don't use for: full SRS document authoring — load `ada-srs-writing`. Systematic SRS review — load `ada-srs-review`. Large-scale terminology revision — load `ada-srs-revision`.
+Don't use for: full SRS document authoring — use document-level authoring workflows. Systematic SRS review — use structured review methodology. Large-scale terminology revision — use revision workflows for large-scale changes.
 
 ## When to Load
 

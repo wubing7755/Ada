@@ -1,6 +1,6 @@
 ---
 name: ada-blazor-interop-pitfalls
-description: "Use when debugging Blazor JS interop issues, adding mouse/hover/keyboard event handlers in Razor components, or diagnosing silently-ignored Blazor event directives. Covers IJSRuntime patterns, DotNetObjectReference lifecycle, invisible drop targets, mouseenter/mouseleave fixes, and WeakMap memory management."
+description: "Use when debugging Blazor JS interop issues, adding mouse/hover/keyboard event handlers in Razor components, or diagnosing silently-ignored Blazor event directives. Covers IJSRuntime patterns, DotNetObjectReference lifecycle, invisible drop targets, mouseenter/mouseleave fixes, and WeakMap memory management. Triggered by: @onmouseenter/@onmouseleave directives that compile but never fire, JSException on DotNetObjectReference disposal, memory growth from Map<K,V> in TypeScript, drag-and-drop targets disappearing after Blazor re-renders. For lifecycle or rendering issues, use lifecycle debugging patterns instead."
 version: 1.3.0
 author: Hermes Agent
 license: MIT
@@ -17,7 +17,7 @@ metadata:
 
 Covers the most common Blazor .NET 6 JS interop failures encountered in production — non-bubbling DOM events, `IJSRuntime` patterns, `DotNetObjectReference` lifecycle management, drag-and-drop memory leaks, and invisible drop targets. Each pitfall is a standalone troubleshooting guide with verified fixes. Documented failures and fixes for Blazor .NET 6 JS interop event handling.
 
-For lifecycle and rendering pitfalls (`StateHasChanged`, `OnAfterRender`, `@ref` in `RenderFragment`), see `ada-blazor-interaction-pitfalls`.
+For lifecycle and rendering pitfalls (`StateHasChanged`, `OnAfterRender`, `@ref` in `RenderFragment`), see lifecycle debugging patterns.
 
 ## When to Use
 
@@ -29,7 +29,7 @@ For lifecycle and rendering pitfalls (`StateHasChanged`, `OnAfterRender`, `@ref`
 - Drag-and-drop targets disappearing after Blazor re-renders
 
 
-Don't use for: lifecycle or rendering issues — load `ada-blazor-interaction-pitfalls`. General Blazor component architecture — load `ada-blazor-component-library`.
+Don't use for: lifecycle or rendering issues — use lifecycle debugging patterns instead. General Blazor component architecture — use component library design patterns instead.
 
 ## Supported Mouse Events (.NET 6)
 
@@ -131,10 +131,10 @@ After switching from `@on{event}` to JS interop:
 
 ## Related
 
-- `ada-blazor-component-library` — general Blazor component library patterns
-- `ada-dotnet-blazor-library` — RCL setup, naming conventions, NuGet packaging
-- `ada-blazor-interaction-pitfalls` — lifecycle and rendering pitfalls
+- Blazor component library design patterns — general Blazor component library patterns
+- .NET Blazor library setup patterns — RCL setup, naming conventions, NuGet packaging
+- Lifecycle and rendering debugging patterns
 - `references/mouseenter-mouseleave-fix.md` — complete three-layer fix pattern with render guard and try/catch
 - `references/invisible-drop-targets.md` — JS dynamic element creation for drop targets that survive Blazor conditional rendering
-- `references/lifecycle-pitfalls.md` — delegated to `ada-blazor-interaction-pitfalls`
-- `references/dom-lifetime-pitfalls.md` — delegated to `ada-blazor-interaction-pitfalls`
+- `references/lifecycle-pitfalls.md` — see lifecycle debugging documentation
+- `references/dom-lifetime-pitfalls.md` — see lifecycle debugging documentation

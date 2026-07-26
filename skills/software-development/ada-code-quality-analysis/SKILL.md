@@ -1,6 +1,6 @@
 ---
 name: ada-code-quality-analysis
-description: "Use when producing a multi-dimension code quality audit report — complexity, duplication, dead code, security vulnerabilities, dependency health, test coverage gaps, and code standards compliance. Language-agnostic methodology with per-language analysis scripts."
+description: 'Use when the user asks to "analyze code quality", "scan the codebase", or produce a multi-dimension audit — complexity, duplication, dead code, security vulnerabilities, dependency health, test coverage gaps, and code standards compliance. Language-agnostic methodology with per-language analysis scripts.  Multi-dimension code quality audit. For SRS document quality review, use document-level review methodologies instead — code and documents need different audit approaches.'
 version: 1.0.0
 author: Hermes Agent
 license: MIT

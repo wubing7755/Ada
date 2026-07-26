@@ -1,6 +1,6 @@
 ---
 name: ada-traceability-audit
-description: "Use when auditing a requirements-traceability matrix against actual source code — find status mismatches, missing REQ entries, stale line counts, and outdated appendixes. Treats code as primary evidence and docs as secondary."
+description: "Use when auditing a requirements-traceability matrix against actual source code — find status mismatches, missing REQ entries, stale line counts, and outdated appendixes. Treats code as primary evidence and docs as secondary.  Focuses on code-vs-matrix discrepancies. For documentation-internal consistency, use documentation traceability auditing instead."
 version: 1.0.0
 author: Hermes Agent
 license: MIT

@@ -32,7 +32,7 @@ and cross-machine skill export.
 - User asks "how do I configure Hermes", "优化 memory", "配置 Hermes personality", or "curator setup"
 
 
-Don't use for: skill authoring — load `ada-hermes-agent-skill-authoring`. Runtime debugging of Hermes itself — load `hermes-agent` (built-in).
+Don't use for: skill authoring — use skill authoring workflows directly. Runtime debugging of Hermes itself — load `hermes-agent` (built-in).
 
 ## SOUL.md 编写
 

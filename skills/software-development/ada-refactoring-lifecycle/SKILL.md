@@ -18,7 +18,7 @@ metadata:
 
 ## Overview
 
-This skill serves as the unified entry point for engineering-grade refactoring across technology stacks. It routes .NET/C#/Blazor projects to `ada-dotnet-engineering-refactoring` (which provides domain primitives, orchestrator patterns, and Blazor component patterns) and all other languages to `ada-engineering-refactoring` (language-agnostic architectural methodology). Both sub-skills share a common engineering philosophy: type systems carry constraints, interfaces carry protocols, orchestration is separated from implementation, and whole-project consistency is non-negotiable.
+This skill serves as the unified entry point for engineering-grade refactoring across technology stacks. It routes .NET/C#/Blazor projects to .NET-specific refactoring patterns (domain primitives, orchestrator extraction) (which provides domain primitives, orchestrator patterns, and Blazor component patterns) and all other languages to language-agnostic architectural refactoring (language-agnostic architectural methodology). Both sub-skills share a common engineering philosophy: type systems carry constraints, interfaces carry protocols, orchestration is separated from implementation, and whole-project consistency is non-negotiable.
 
 The lifecycle follows a strict sequence: produce a detailed plan document (`docs/refactoring/phase-N-M-plan.md`), get user approval, execute phase by phase, independently verify each phase (`dotnet build → dotnet test → dotnet format`), and commit each phase separately.
 
@@ -81,7 +81,7 @@ Do **not** use for: single-file fixes, pre-commit formatting, one-off code revie
 - **Jumping straight to implementation without a plan.** The user's rejection of mechanical changes means the approach must be rethought — not just the code. Always write the plan document first and get explicit approval.
 - **Mixing changes across phases in a single commit.** Each phase must be independently verifiable and committed separately. Cross-phase mixing makes bisecting and reverting impossible.
 - **Skipping the verification step between phases.** `dotnet build → dotnet test → dotnet format` is mandatory after every phase. A phase that "looks correct" but fails the gate compounds errors in subsequent phases.
-- **Using the wrong sub-skill for the stack.** .NET/C#/Blazor projects need the domain-primitive and Blazor-component patterns in `ada-dotnet-engineering-refactoring`. Using the generic skill misses stack-specific optimizations.
+- **Using the wrong sub-skill for the stack.** .NET/C#/Blazor projects need the domain-primitive and Blazor-component patterns in .NET-specific refactoring patterns (domain primitives, orchestrator extraction). Using the generic skill misses stack-specific optimizations.
 - **Abandoning the plan mid-way without updating it.** If a phase reveals new information that changes later phases, update the plan document before continuing — don't just improvise.
 
 ## Verification Checklist

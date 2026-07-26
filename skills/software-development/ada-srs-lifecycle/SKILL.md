@@ -75,10 +75,10 @@ Then  ...
 
 Use when:
 - Starting SRS work and unsure which phase to begin with — this skill diagnoses the current state and routes accordingly
-- You have a TP document and need to produce an SRS from it (routes to `ada-tp-to-srs-derivation`)
-- You need to write or refine an SRS from scratch (routes to `ada-srs-writing`)
-- You need to audit an existing SRS for quality issues (routes to `ada-srs-review`)
-- You need to perform large-scale terminology or concept changes (routes to `ada-srs-revision`)
+- You have a TP document and need to produce an SRS from it (routes to the derivation phase)
+- You need to write or refine an SRS from scratch (routes to the authoring phase)
+- You need to audit an existing SRS for quality issues (routes to the review phase)
+- You need to perform large-scale terminology or concept changes (routes to the revision phase)
 
 Don't use for:
 - Single, isolated edits that don't span multiple phases — load the specific sub-skill directly
@@ -90,7 +90,7 @@ Don't use for:
 1. **Skipping phase ordering.** The lifecycle is sequential for a reason: derivation produces raw material for writing, review findings feed revision, and revision output may need re-review. Jumping directly to revision without reviewing first misses issues that review would catch.
 2. **Loading this skill and stopping.** This skill is a router — after it identifies the correct phase, you must load the corresponding sub-skill to get detailed workflows, checklists, and pitfalls specific to that phase.
 3. **Mixing conventions across phases.** The shared conventions (REQ-F format, document structure, core principles) apply uniformly. Deviating in one phase (e.g., using a different requirement format during writing) creates inconsistency that downstream phases must clean up.
-4. **Not updating traceability during revision.** When revising, cross-references, statistics tables, and appendix entries silently rot. Always run the post-edit consistency sync from `ada-srs-review` Pass J after any revision.
+4. **Not updating traceability during revision.** When revising, cross-references, statistics tables, and appendix entries silently rot. Always run the post-edit consistency sync from post-edit consistency sync after any revision.
 
 ## Verification Checklist
 

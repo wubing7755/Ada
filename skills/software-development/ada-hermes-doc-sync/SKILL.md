@@ -23,7 +23,7 @@ metadata:
 - 发现文档中有过时或失效的技能引用
 
 
-Don't use for: regular skill content updates — use `patch` directly. New skill creation — load `ada-hermes-agent-skill-authoring`. General project documentation — this skill is specific to hermes-agent internal docs.
+Don't use for: regular skill content updates — use `patch` directly. New skill creation — follow standard skill authoring conventions. General project documentation — this skill is specific to hermes-agent internal docs.
 
 ## 流程
 

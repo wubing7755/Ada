@@ -40,7 +40,7 @@ directly to `~/.hermes/skills/` without `.usage.json` entries).
 - User says "这些 skill 有什么优化空间" or asks about skill quality
 
 
-Don't use for: creating new skills — load `ada-hermes-agent-skill-authoring`. One-off skill fixes — this skill is for systematic batch audits. Skill deletion decisions — this skill audits and recommends, but deletion requires user confirmation.
+Don't use for: creating new skills — follow standard skill authoring conventions. One-off skill fixes — this skill is for systematic batch audits. Skill deletion decisions — this skill audits and recommends, but deletion requires user confirmation.
 
 ## Workflow
 

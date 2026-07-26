@@ -1,6 +1,6 @@
 ---
 name: ada-agent-assisted-development
-description: "Use when executing structured software development workflows with Hermes Agent — bug fixes, feature development, code reviews, quality audits, and architectural analysis. Covers context management, sub-agent orchestration, and risk-tiered verification strategies."
+description: 'Use when the user says "用子agent审查", "分阶段实施", "越改越乱", or expresses frustration with agent degradation — executing structured software development workflows with Hermes Agent: bug fixes, feature development, code reviews, quality audits, and architectural analysis. Covers context management, sub-agent orchestration, and risk-tiered verification strategies.'
 version: 1.0.0
 author: Hermes Agent
 license: MIT

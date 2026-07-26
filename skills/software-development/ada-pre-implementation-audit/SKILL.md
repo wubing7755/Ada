@@ -1,6 +1,6 @@
 ---
 name: ada-pre-implementation-audit
-description: "Use when creating implementation plans that reference existing code or documentation — verify traceability claims and implementation status against actual source code before proposing new work. Prevents building plans on stale or inaccurate docs."
+description: "Use when creating implementation plans that reference existing code or documentation — verify traceability claims and implementation status against actual source code before proposing new work. Prevents building plans on stale or inaccurate docs.  Narrower scope than full project audit — focuses on verifying specific traceability claims before planning, not comprehensive project health assessment."
 version: 1.0.0
 author: Hermes Agent
 license: MIT
@@ -43,7 +43,7 @@ From the requirements traceability matrix or SRS, extract the REQs relevant to t
 ### 2. Dispatch parallel subagent auditors
 
 Use `delegate_task` batch mode with 3 agents covering different module clusters.
-See `ada-doc-implementation-audit` → `references/parallel-audit-pattern.md` for
+See the parallel subagent audit pattern documentation → `references/parallel-audit-pattern.md` for
 the complete dispatch template, subagent prompt format, and pitfall guidance.
 
 Each agent gets:

@@ -1,6 +1,6 @@
 ---
 name: ada-dotnet-verification
-description: "Use when verifying .NET builds, tests, and code formatting during refactoring phases — focused TDD checks, ad-hoc verifier scripts for Windows IDE/testhost locks, and isolated artifact verification."
+description: "Use when verifying .NET builds, tests, and code formatting during refactoring phases — focused TDD checks, ad-hoc verifier scripts for Windows IDE/testhost locks, and isolated artifact verification. Triggered by: MSB3021/MSB3027 DLL lock errors on Windows, dotnet test failures after refactoring, need for isolated artifact verification when default output path is locked by IDE/testhost."
 version: 1.0.0
 author: Hermes Agent
 license: MIT

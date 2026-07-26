@@ -1,6 +1,6 @@
 ---
 name: ada-dotnet-engineering-refactoring
-description: "Use when performing engineering-grade .NET refactoring — domain primitives, orchestrator extraction, command base classes, public API stabilization, and Blazor component patterns. Upgrades codebase quality beyond superficial cleanup."
+description: "Use when performing engineering-grade .NET refactoring — domain primitives, orchestrator extraction, command base classes, public API stabilization, and Blazor component patterns. Upgrades codebase quality beyond superficial cleanup. Triggered by: .cs files + refactoring intent + C# domain model patterns, orchestrator extraction, value-type migrations. For non-.NET projects, use language-agnostic architectural refactoring instead."
 version: 1.3.0
 author: Hermes Agent
 license: MIT

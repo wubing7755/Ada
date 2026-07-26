@@ -1,6 +1,6 @@
 ---
 name: ada-code-dedup-audit
-description: "Use when auditing new or uncommitted code against the existing codebase — find duplicated patterns, reinvention of existing utilities, and missed reuse opportunities before code review."
+description: 'Use before code review when the user has uncommitted changes, or says "检查有没有重复", "这段是不是已经有了" — audit new or uncommitted code against the existing codebase to find duplicated patterns, reinvention of existing utilities, and missed reuse opportunities.'
 version: 1.0.0
 author: Hermes Agent
 license: MIT

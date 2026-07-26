@@ -1,6 +1,6 @@
 ---
 name: ada-python-debugpy
-description: "Use when debugging Python applications — pdb REPL for quick inspection, debugpy for remote DAP (Debug Adapter Protocol) attachment, breakpoints, and variable inspection."
+description: "Use when debugging Python applications — pdb REPL for quick inspection, debugpy for remote DAP (Debug Adapter Protocol) attachment, breakpoints, and variable inspection. Triggered by: .py files + debugging intent, pdb/breakpoint() usage, DAP attach requests, post-mortem debugging needs. For Node.js debugging, use the equivalent JS debugger patterns."
 version: 1.0.0
 author: Hermes Agent
 license: MIT

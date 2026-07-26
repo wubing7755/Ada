@@ -72,7 +72,7 @@ Stage 1 覆盖七大维度：
 - User needs to chain the three quality skills together with enforced stage gating
 
 
-Don't use for: single-dimension analysis — load `ada-code-quality-analysis` directly. Quick spot-checks — this pipeline is for end-to-end gated delivery. Reports where false positives are acceptable — the verification stage blocks on ≥3 false positives.
+Don't use for: single-dimension analysis — run a focused static scan directly. Quick spot-checks — this pipeline is for end-to-end gated delivery. Reports where false positives are acceptable — the verification stage blocks on ≥3 false positives.
 
 ## Common Pitfalls
 

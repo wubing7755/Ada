@@ -23,7 +23,7 @@ Use when previous fix attempts have failed or introduced regressions
 Use when the user says "debug this" with limited information
 
 
-Don't use for: known, trivial bugs with an obvious one-line fix. Configuration issues — check environment and config files before debugging code. Performance tuning — load `ada-code-efficiency-review` for systematic efficiency analysis.
+Don't use for: known, trivial bugs with an obvious one-line fix. Configuration issues — check environment and config files before debugging code. Performance tuning — use systematic efficiency analysis for systematic efficiency analysis.
 
 ## Common Pitfalls
 

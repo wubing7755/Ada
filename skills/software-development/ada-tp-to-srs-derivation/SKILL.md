@@ -22,7 +22,7 @@ metadata:
 - 从合同/协议条款中系统化派生出软件需求
 
 
-Don't use for: writing SRS from scratch without a TP source — load `ada-srs-writing`. Reviewing an existing SRS — load `ada-srs-review`. The TP must exist and be complete before derivation begins.
+Don't use for: writing SRS from scratch without a TP source — use direct SRS authoring workflows. Reviewing an existing SRS — use structured SRS review methodology. The TP must exist and be complete before derivation begins.
 
 ## TP-to-SRS 工作流
 

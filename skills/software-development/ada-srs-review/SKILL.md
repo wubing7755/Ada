@@ -1,6 +1,6 @@
 ---
 name: ada-srs-review
-description: "Use when systematically reviewing a Software Requirements Specification (SRS) — find dead requirements, stale cross-references, concept confusion, scope violations, and implementation-detail leaks. Multi-pass review methodology with verification scripts."
+description: "Use when systematically reviewing a Software Requirements Specification (SRS) — find dead requirements, stale cross-references, concept confusion, scope violations, and implementation-detail leaks. Multi-pass review methodology with verification scripts.  Systematic 12-pass SRS document quality audit. For code quality analysis, use code-level static analysis instead — these are different artifact types."
 version: 1.1.0
 platforms: [linux, macos, windows]
 author: Hermes Agent
@@ -31,9 +31,9 @@ Use when:
 - Auditing an existing coverage report for accuracy (Pass K — "复核 SRS 覆盖率报告的准确性")
 
 Don't use for:
-- Writing new requirements — load `ada-srs-writing` or `ada-requirements-authoring`
-- Deriving SRS from a TP — load `ada-tp-to-srs-derivation`
-- Executing fixes found during review — use `ada-srs-revision` for large-scale changes or `ada-srs-writing` for surgical edits
+- Writing new requirements — use direct authoring or lightweight requirement writing
+- Deriving SRS from a TP — use protocol-to-SRS derivation
+- Executing fixes found during review — use large-scale revision for global changes or surgical authoring for targeted edits
 
 ## Workflow
 

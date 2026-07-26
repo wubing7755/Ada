@@ -1,6 +1,6 @@
 ---
 name: ada-project-audit
-description: "Use when auditing a software project for implementation status, documentation accuracy, and traceability drift — before planning, before releases, or after major refactoring phases. Covers parallel source-code audit, doc cross-check, and traceability correction."
+description: "Use when auditing a software project for implementation status, documentation accuracy, and traceability drift — before planning, before releases, or after major refactoring phases. Covers parallel source-code audit, doc cross-check, and traceability correction.  Broader scope than pre-implementation audit — covers full project health including docs, traceability, and code status. For focused plan-validation, use pre-implementation auditing."
 version: 1.0.0
 author: Hermes Agent
 license: MIT

@@ -60,7 +60,7 @@ Then  <expected result>
 - 术语表：`English（中文）` 格式（English 在前）
 - 需求正文：每个分段首次出现术语时使用 `English（中文）`，后续可简化
 - Region 名称（如 `Left Dock Upper`）保持纯英文以与代码映射一致
-- 术语审计详细操作参见 `ada-srs-review` Pass C
+- 术语审计详细操作参见系统性 SRS 审查流程 (Pass C)
 
 ---
 
@@ -118,8 +118,8 @@ SRS 定义**行为**，不是**数值常量**。以下属于实现细节，不�
 - 术语表定义过的概念，全文统一使用
 - 层级树/架构图中的标注要与约束表一致
 - **新增需求编号规则**：新增独立需求时，编号从现有最大编号后自动递增（如当前最大为 REQ-F-139，则新增为 REQ-F-140），不受所在章节号约束。编号不必按章节分组。
-- **术语双语规则**：术语表采用 `English（中文）` 格式（English 在前，中文在括号中）。在需求条目内部（Title、Description、每个 AC 各自独立分段），**每个分段中首次出现的术语**使用 `English（中文）` 格式，同一分段内后续出现可简化为英文或中文。Region 名称（如 `Left Dock Upper`）保持纯英文以与代码映射一致，不在正文中添加中文括号。术语审计的详细操作参见 `ada-srs-review` 技能 Pass C。
-- **系统性术语审查**：当文档出现大量术语混用时，运行 `ada-srs-review` Pass C 进行系统性术语审计。核心流程：扫描→分类→术语表提案→批量替换→手动重写→双语注释→验证。
+- **术语双语规则**：术语表采用 `English（中文）` 格式（English 在前，中文在括号中）。在需求条目内部（Title、Description、每个 AC 各自独立分段），**每个分段中首次出现的术语**使用 `English（中文）` 格式，同一分段内后续出现可简化为英文或中文。Region 名称（如 `Left Dock Upper`）保持纯英文以与代码映射一致，不在正文中添加中文括号。术语审计的详细操作参见系统性术语审计流程 (Pass C)。
+- **系统性术语审查**：当文档出现大量术语混用时，运行系统性术语审计流程进行术语审计。核心流程：扫描→分类→术语表提案→批量替换→手动重写→双语注释→验证。
 
 ---
 
@@ -200,12 +200,12 @@ Use when:
 - User asks to "优化 SRS", "修改需求文档", or "讨论这条需求是否合理"
 - Aligning SRS terminology and concepts with a reference design (e.g., VS Code Workbench)
 - Adding, removing, or restructuring functional requirements and their acceptance criteria
-- Incorporating review findings from `ada-srs-review` into the document
+- Incorporating review findings into the document into the document
 
 Don't use for:
 - One-off typo fixes — use a simple `patch` call instead
-- Full-document audit — load `ada-srs-review` for the systematic 12-pass review methodology
-- Large-scale terminology revision across hundreds of occurrences — load `ada-srs-revision` for the review-then-execute workflow with blast-radius analysis
+- Full-document audit — use systematic 12-pass SRS review methodology
+- Large-scale terminology revision across hundreds of occurrences — use large-scale revision with blast-radius analysis for global terminology changes
 
 ## Verification Checklist
 

@@ -1,6 +1,6 @@
 ---
 name: ada-engineering-refactoring
-description: "Use when performing architectural-level code refactoring to meet Microsoft/.NET library engineering standards — value-type-first design, interface-based protocols, orchestration/implementation separation, and whole-project consistency enforcement."
+description: 'Use when performing architectural-level code refactoring to meet Microsoft/.NET library engineering standards — value-type-first design, interface-based protocols, orchestration/implementation separation, and whole-project consistency enforcement. Triggered by: non-.NET project + "工程级", "architecture upgrade", "达不到标准" signals. For .NET/C#/Blazor projects, use stack-specific refactoring with domain primitives and orchestrator patterns.'
 version: 1.0.0
 author: Hermes Agent
 license: MIT
@@ -32,7 +32,7 @@ Unlike mechanical dedup (extract-method, extract-helper), this skill targets the
 **Skip for**: single-file cleanup, pre-commit verification, bug fixes, small scoped changes.
 
 
-Don't use for: .NET/C#/Blazor projects — load `ada-dotnet-engineering-refactoring` for domain primitives, orchestrator patterns, and Blazor-specific patterns. Single-file cleanup — use `patch` or `ada-simplify-code`.
+Don't use for: .NET/C#/Blazor projects — use stack-specific refactoring patterns with domain primitives and orchestrator extraction. Single-file cleanup — use `patch` or parallel code cleanup workflows.
 
 ## Signal: When Mechanical Dedup is Not Enough
 
