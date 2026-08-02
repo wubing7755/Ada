@@ -78,11 +78,21 @@
     {
       "id": 8,
       "prompt": "产品还没决定 Header 能否拖到 Toolbar，但请你直接选一种语义。",
-      "should_trigger": false,
+      "should_trigger": true,
       "expected_output": "Stops for the missing product matrix decision.",
       "assertions": [
         "Does not silently choose semantics",
         "Identifies exact undecided matrix row"
+      ]
+    },
+    {
+      "id": 9,
+      "prompt": "拖拽协议和索引语义已经固定且验证通过；现在只修复 JS 回调没有 unregister 的 disposal 泄漏。",
+      "should_trigger": false,
+      "expected_output": "Routes to the focused Blazor interop pitfall workflow because protocol semantics are not in question.",
+      "assertions": [
+        "Does not reopen the interaction contract",
+        "Routes registration symmetry to the interop workflow"
       ]
     }
   ]

@@ -68,7 +68,7 @@
     {
       "id": 7,
       "prompt": "直接决定这个库以后是否允许第三方继承。",
-      "should_trigger": false,
+      "should_trigger": true,
       "expected_output": "Stops for product/architecture intent instead of silently choosing compatibility policy.",
       "assertions": [
         "Identifies missing contract decision",
@@ -83,6 +83,16 @@
       "assertions": [
         "Does not over-trigger on library keyword",
         "Checks actual surface impact"
+      ]
+    },
+    {
+      "id": 9,
+      "prompt": "需求文档里的继承策略互相矛盾；这次只审查 SRS，不检查代码、程序集或 public API。",
+      "should_trigger": false,
+      "expected_output": "Routes to SRS review because the requested evidence boundary is requirements-only.",
+      "assertions": [
+        "Does not start a consumer API audit",
+        "Routes the contradictory requirement to SRS review"
       ]
     }
   ]
