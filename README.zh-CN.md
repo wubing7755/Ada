@@ -1,3 +1,7 @@
+[English](README.md) | 简体中文
+
+> **状态：** Synchronized（与英文主版本同步维护；如有冲突，以英文版为准）
+
 # Ada — Hermes Profile Distribution
 
 Ada 是一个可分发的 Hermes Profile：偏软件工程、重正确性与可验证性的 agent。名字来自 Ada Lovelace——第一位看见机器不仅能够计算数字，也能够表达思想的人。
@@ -208,7 +212,8 @@ Ada 依赖 Hermes `>=0.19.0` 提供以下内置技能（随 Hermes 安装，不�
 Ada/
 ├── distribution.yaml           # Profile distribution manifest（名称、版本、技能清单）
 ├── SOUL.md                     # Ada 的人设与工程原则
-├── README.md                   # 本文件：入口文档
+├── README.md                   # 英文主版本（Canonical）
+├── README.zh-CN.md             # 简体中文版本（Synchronized）
 ├── docs/                       # 质量标准（skill-quality-standard.md）
 ├── scripts/                    # 验证器、隔离 smoke 测试与单元测试
 ├── .github/workflows/          # GitHub Actions 质量门禁
