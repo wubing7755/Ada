@@ -1,7 +1,7 @@
 ---
 name: ada-dotnet-blazor-library
 description: "Use when building, restructuring, or publishing .NET Blazor component libraries: Razor Class Library setup, demo app separation, public API naming, content registry wiring, static assets, NuGet packaging, CS0234 namespace collisions, or component tag registration failures."
-version: 1.0.0
+version: 1.1.0
 platforms: [windows, linux, macos]
 author: Hermes Agent
 license: MIT
@@ -38,6 +38,28 @@ Do **not** use for: writing individual Blazor components, general .NET library d
 - "Split this Blazor app into a library + demo"
 - "Structure this as a NuGet package"
 - "Add Atlas prefix to all public types"
+
+## Scaffolding Baseline
+
+Before generating files, inspect the active SDK and template help instead of
+assuming an older layout:
+
+```sh
+dotnet --info
+dotnet new sln --help
+dotnet new razorclasslib --help
+dotnet new xunit --help
+```
+
+Current SDKs may default to `.slnx`; either use the generated solution format or
+request `.sln` explicitly when repository/tool compatibility requires it. Verify
+the actual test-framework package version before copying old bUnit APIs, because
+major releases can rename the test context and render methods.
+
+For Razor code-behind, confirm the generated component namespace. Directory
+segments can become part of the namespace; use `_Imports.razor` `@namespace`
+deliberately so `.razor` and `.razor.cs` partial declarations merge. Do not hide
+an unresolved namespace root cause by permanently moving all code inline.
 
 ## Project Structure
 

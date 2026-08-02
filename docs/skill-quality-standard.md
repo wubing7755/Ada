@@ -124,24 +124,37 @@ merge; existing warnings are explicit quality debt, not a passing-quality claim.
 
 ## Automated Distribution Gate
 
-Run both commands before each commit and again before opening a pull request:
+Run all commands before each commit and again before opening a pull request:
 
 ```bash
 python -m unittest scripts/tests/test_validate_skill_quality.py -v
 python scripts/validate_skill_quality.py
+python scripts/smoke_profile_distribution.py
 ```
+
+The validator uses PyYAML, which is already a Hermes runtime dependency. If it
+is run from an unrelated Python environment, install PyYAML there first; the
+gate deliberately fails closed rather than approximating YAML with regular
+expressions.
+
+The smoke test redirects `HERMES_HOME` to a temporary directory, installs a
+temporary copy of the repository, updates distribution-owned content, and
+verifies that memory, session, and `local/` markers survive. It never installs
+the test Profile into the user's real Hermes home.
 
 The validator enforces:
 
 - exact agreement between `distribution.yaml`, the physical Skill directories,
   and the README catalog/count;
 - manifest and README version agreement;
-- Agent Skills-compatible names, required frontmatter, and the 500-line main-file
-  progressive-disclosure limit;
-- existing local `references/`, `assets/`, and `evals/` links;
+- parseable YAML manifest/frontmatter, an exact opening fence, a non-empty body,
+  Agent Skills-compatible names, and the 500-line main-file progressive-disclosure
+  limit;
+- existing local `references/`, `assets/`, and `evals/` links, plus local
+  `scripts/` and `templates/` links when those resource directories exist;
 - valid references to other distributed `ada-*` Skills;
-- parseable evals with unique IDs, trigger booleans, expected output, and
-  non-empty assertions;
+- parseable object-shaped evals with unique IDs, typed prompts/expected output,
+  trigger booleans, and non-empty assertions;
 - exclusion of common private runtime-state paths such as credentials, memories,
   sessions, logs, cache, and state databases.
 

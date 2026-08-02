@@ -1,7 +1,7 @@
 ---
 name: ada-project-audit
-description: "Use when an agent must audit a whole software project for implementation status, documentation accuracy, tests, and traceability drift before planning, release, or after major refactoring. Use ada-pre-implementation-audit for a narrower plan-validation check."
-version: 1.0.0
+description: "Use when auditing a whole or legacy software project for implementation status, code health, documentation accuracy, tests, and traceability drift before planning, modernization, release, or after major refactoring. Produces severity-ranked file:line evidence and a correction order; use ada-pre-implementation-audit for a narrower plan-validation check."
+version: 1.1.0
 author: Hermes Agent
 license: MIT
 platforms: [linux, macos, windows]
@@ -34,10 +34,27 @@ greenfield projects with no secondary documentation.
 
 ## Core Principle
 
-**Secondary documents drift.** Traceability matrices, coverage reports,
-deviation analyses — all are manually maintained and can be stale within
-hours. A "Not Implemented" row may be fully implemented; a "Completed"
-checkbox may be aspirational. The source code is the only source of truth.
+**Secondary documents drift.** Traceability matrices, coverage reports, and
+status analyses can become stale. Source and executable evidence are the source
+of truth for current implementation state; normative requirements and accepted
+ADRs remain the source of truth for intended behavior. Never replace one with
+the other.
+
+## Legacy Health Mode
+
+When the request is to understand an old, hand-written, or inherited codebase
+before modernization, extend the protocol beyond traceability:
+
+1. Read docs first, then manifests/project files, dependencies, source in
+   dependency order, static assets, demos/hosts, and tests.
+2. Build and test every owned project where practical; warnings and failing
+   tests are evidence to trace, not noise to dismiss.
+3. Cross-check README feature claims, shipped demo/security surfaces, JS/native
+   call chains, package assets, TODO/FIXME/HACK markers, and stub/fake code.
+4. Rank findings: exploitable/data-loss/correctness defects first, then broken
+   tests and shipped stubs, architecture/quality debt, coverage, and docs.
+5. Propose a repair order grounded in risk and dependency, without mixing the
+   audit itself with unrequested refactoring.
 
 ## The Protocol
 

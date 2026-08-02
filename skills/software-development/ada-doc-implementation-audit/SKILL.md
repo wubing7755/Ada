@@ -1,7 +1,7 @@
 ---
 name: ada-doc-implementation-audit
-description: 'Use when the user says "核实文档是否正确", "verify docs match code", or after major refactoring — verify that project documentation (SRS, traceability matrix, design docs, README) accurately reflects actual source code and test state. Full-project audit with parallel subagent source reading and gap reports.'
-version: 1.0.0
+description: 'Use when verifying that project documentation or one change record accurately reflects source code, tests, architecture decisions, and the current Git diff. Supports full-project parallel audits and a targeted read-only document↔diff mode; use ada-srs-review for requirements quality rather than implementation truth.'
+version: 1.1.0
 author: Hermes Agent
 license: MIT
 platforms: [linux, macos, windows]
@@ -41,8 +41,30 @@ orchestrator reads documentation in parallel, then synthesizes findings.
 - Periodic project maintenance — monthly documentation health check
 - User says "阅读最新项目代码，核实功能实现状态，核实文档是否正确"
 
-**Skip for:** single-file documentation changes, code-only reviews, adding new
-documentation from scratch.
+**Skip for:** code-only reviews, adding new documentation from scratch, or a
+single prose edit with no checkable implementation claims.
+
+## Targeted Change-Record Mode
+
+When one remediation note, fix record, release note, or implementation report
+must be checked against one working-tree/commit diff, do not run the full-project
+parallel audit:
+
+1. Read the document fully and extract every checkable claim, named file, test,
+   count, status, and explicit review question.
+2. Freeze `git status`, changed-file list, diff stat, branch, and commit range.
+3. Map each claim to current `file:line` evidence and the exact test/artifact
+   evidence; do not cite only diff line numbers.
+4. Reconcile every changed hunk to some document or explicitly classify it as
+   pre-existing/out of scope.
+5. Re-freeze the live diff before verdict; concurrent changes invalidate stale
+   file counts and test claims.
+6. Return PASS or severity-ranked mismatches in the output shape requested by
+   the user. The audit remains read-only unless correction was explicitly asked.
+
+Numerically identical formulas are not sufficient evidence when two paths use
+different state models or index domains. Trace the claim through the owning
+operation and assert its side effects.
 
 ## The Audit Workflow
 

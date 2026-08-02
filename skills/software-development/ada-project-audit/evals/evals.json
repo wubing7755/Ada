@@ -1,0 +1,85 @@
+{
+  "skill_name": "ada-project-audit",
+  "evals": [
+    {
+      "id": "whole-project",
+      "prompt": "全面审计这个项目的实现状态、测试、文档和追溯漂移，输出证据和修复顺序。",
+      "should_trigger": true,
+      "expected_output": "Produces a severity-ranked whole-project evidence map and correction order.",
+      "assertions": [
+        "Reads docs and source in dependency order",
+        "Separates current state from intended behavior"
+      ]
+    },
+    {
+      "id": "legacy-health",
+      "prompt": "接手一个旧代码库，现代化前先审计构建、依赖、源码、Demo、测试、stub 和安全风险。",
+      "should_trigger": true,
+      "expected_output": "Runs legacy health mode without mixing in unrequested refactoring.",
+      "assertions": [
+        "Builds and tests owned projects",
+        "Ranks correctness/security before debt"
+      ]
+    },
+    {
+      "id": "release-readiness",
+      "prompt": "发布前核实 README 功能声明、追溯矩阵、包、测试和实际实现是否一致。",
+      "should_trigger": true,
+      "expected_output": "Audits release claims across artifacts and implementation evidence.",
+      "assertions": [
+        "Checks package/demo surfaces",
+        "Reports stale status documents"
+      ]
+    },
+    {
+      "id": "post-refactor",
+      "prompt": "大规模重构后，检查模块边界、测试覆盖和架构文档是否发生漂移。",
+      "should_trigger": true,
+      "expected_output": "Audits post-refactor architecture and documentation state.",
+      "assertions": [
+        "Traces current dependencies",
+        "Checks executable and documentary evidence"
+      ]
+    },
+    {
+      "id": "plan-only",
+      "prompt": "只核对这份实施计划是否漏读关键文件，尚未开始实现。",
+      "should_trigger": false,
+      "expected_output": "Routes narrow plan validation to ada-pre-implementation-audit.",
+      "assertions": [
+        "Does not run whole-project health audit",
+        "Routes to pre-implementation audit"
+      ]
+    },
+    {
+      "id": "one-record",
+      "prompt": "核对一份修复记录是否准确对应当前 git diff。",
+      "should_trigger": false,
+      "expected_output": "Routes the narrow claim/diff check to targeted doc implementation audit.",
+      "assertions": [
+        "Does not broaden scope",
+        "Routes to targeted document audit"
+      ]
+    },
+    {
+      "id": "one-bug",
+      "prompt": "登录按钮偶发失效，先复现并定位根因。",
+      "should_trigger": false,
+      "expected_output": "Routes one defect to systematic debugging.",
+      "assertions": [
+        "Does not perform whole-project audit",
+        "Requires reproduction first"
+      ]
+    },
+    {
+      "id": "api-surface",
+      "prompt": "只审查这个类库 public API 的兼容性和消费者可用性。",
+      "should_trigger": false,
+      "expected_output": "Routes focused API review to ada-library-public-api-review.",
+      "assertions": [
+        "Does not broaden to whole project",
+        "Uses external-consumer boundary"
+      ]
+    }
+  ]
+}

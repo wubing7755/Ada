@@ -1,0 +1,85 @@
+{
+  "skill_name": "ada-doc-implementation-audit",
+  "evals": [
+    {
+      "id": "full-doc-code-audit",
+      "prompt": "核实 README、SRS、追溯矩阵和设计文档是否与当前源码和测试一致，先只读审计。",
+      "should_trigger": true,
+      "expected_output": "Builds a claim-to-implementation matrix with current file:line and executable evidence.",
+      "assertions": [
+        "Separates intended and implemented truth",
+        "Reports severity-ranked mismatches"
+      ]
+    },
+    {
+      "id": "target-change-record",
+      "prompt": "核对这份修复记录是否准确描述当前工作树 diff、测试和文件数量，不要改文件。",
+      "should_trigger": true,
+      "expected_output": "Uses targeted change-record mode and re-freezes the live diff before verdict.",
+      "assertions": [
+        "Extracts every checkable claim",
+        "Maps claims to current source/test evidence"
+      ]
+    },
+    {
+      "id": "release-note-claims",
+      "prompt": "验证发布说明里“已实现、已测试、兼容”的每个声明是否有当前证据。",
+      "should_trigger": true,
+      "expected_output": "Reconciles release claims with source, tests, packaging, and compatibility evidence.",
+      "assertions": [
+        "Checks each named claim",
+        "Labels unsupported or stale claims"
+      ]
+    },
+    {
+      "id": "post-refactor-doc-drift",
+      "prompt": "大重构完成后，审计架构文档、状态表和 README 是否仍反映实际模块边界。",
+      "should_trigger": true,
+      "expected_output": "Performs a broad post-refactor documentation drift audit.",
+      "assertions": [
+        "Reads implementation dependency order",
+        "Checks secondary status documents"
+      ]
+    },
+    {
+      "id": "srs-quality-only",
+      "prompt": "只审查 SRS 的术语、矛盾和验收标准，不核对源码。",
+      "should_trigger": false,
+      "expected_output": "Routes normative requirements quality to ada-srs-review.",
+      "assertions": [
+        "Does not require implementation mapping",
+        "Routes to SRS review"
+      ]
+    },
+    {
+      "id": "write-new-guide",
+      "prompt": "根据源码从零写一份新的用户指南。",
+      "should_trigger": false,
+      "expected_output": "Routes authoring rather than consistency auditing.",
+      "assertions": [
+        "Does not pretend an existing claim set",
+        "Uses documentation authoring workflow"
+      ]
+    },
+    {
+      "id": "code-quality-only",
+      "prompt": "审查 src 的复杂度、重复和安全缺陷，不看文档。",
+      "should_trigger": false,
+      "expected_output": "Routes source quality analysis to code/project audit Skills.",
+      "assertions": [
+        "Does not activate document audit",
+        "Preserves code-focused scope"
+      ]
+    },
+    {
+      "id": "compare-docs",
+      "prompt": "只比较这两版 Markdown 的差异和遗漏。",
+      "should_trigger": false,
+      "expected_output": "Routes document-to-document comparison to ada-doc-comparison-analysis.",
+      "assertions": [
+        "Does not require source truth",
+        "Routes to comparison workflow"
+      ]
+    }
+  ]
+}

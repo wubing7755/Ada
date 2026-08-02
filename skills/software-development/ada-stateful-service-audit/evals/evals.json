@@ -1,0 +1,89 @@
+{
+  "skill_name": "ada-stateful-service-audit",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "审计这个 Store 的所有 mutation 路径、导入原子性、事件、自动保存和 Undo/Redo。",
+      "should_trigger": true,
+      "expected_output": "Reconstructs production mutation paths and verifies invariants, transaction, events, persistence, and history.",
+      "assertions": [
+        "Builds mutation matrix",
+        "Checks failure atomicity",
+        "Names violated invariants"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Context 声称所有修改都经过命令，但 JS 回调和 resize 可能直接写状态。",
+      "should_trigger": true,
+      "expected_output": "Traces every production entry point and identifies boundary bypasses.",
+      "assertions": [
+        "Verifies actual callers",
+        "Does not trust architecture claims",
+        "Maps notification/persistence coverage"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "检查异步 guard、revision、取消和 Dispose 期间回调 drain 的并发语义。",
+      "should_trigger": true,
+      "expected_output": "Audits linearization, stale operations, cancellation, disposal, and adversarial probes.",
+      "assertions": [
+        "Identifies revision model",
+        "Requires deterministic probes",
+        "Separates waiter cancellation from callback lifetime"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "持久化恢复后旧的 undo 还能执行，请审计 round trip 和 history barrier。",
+      "should_trigger": true,
+      "expected_output": "Checks restore transaction, identity/order fidelity, and stale-history invalidation.",
+      "assertions": [
+        "Checks equal-state restore barrier",
+        "Requires unchanged state on failure",
+        "Names missing regression test"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "审查无状态字符串格式化函数。",
+      "should_trigger": false,
+      "expected_output": "Does not activate because there is no aggregate mutable state.",
+      "assertions": [
+        "Keeps scope to stateful services",
+        "Routes simple code review"
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "Blazor CSS 的 drop target 没有命中。",
+      "should_trigger": false,
+      "expected_output": "Routes UI reachability to the Blazor/UI protocol audit.",
+      "assertions": [
+        "Does not treat UI geometry as service audit",
+        "Routes correctly"
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "已经定位到一个空指针，只需要最小修复。",
+      "should_trigger": false,
+      "expected_output": "Uses systematic debugging/TDD for the isolated defect.",
+      "assertions": [
+        "Does not broaden into full audit",
+        "Preserves focused workflow"
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "评估整个仓库的依赖、安全和复杂度等级。",
+      "should_trigger": false,
+      "expected_output": "Routes broad repository grading to code-quality analysis.",
+      "assertions": [
+        "Does not claim whole-repo quality coverage",
+        "Keeps behavioral depth scope"
+      ]
+    }
+  ]
+}

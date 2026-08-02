@@ -1,0 +1,85 @@
+{
+  "skill_name": "ada-blazor-interaction-pitfalls",
+  "evals": [
+    {
+      "id": "shouldrender-reset",
+      "prompt": "Blazor 组件展开后立刻又折叠，怀疑 ShouldRender 或参数生命周期重置了本地状态。",
+      "should_trigger": true,
+      "expected_output": "Diagnoses state ownership and lifecycle order with a focused regression.",
+      "assertions": [
+        "Traces lifecycle order",
+        "Checks source of truth and state reset"
+      ]
+    },
+    {
+      "id": "afterrender-ref",
+      "prompt": "RenderFragment 里的 @ref 在 OnAfterRender 中有时是 null，帮我定位纯 Blazor 生命周期问题。",
+      "should_trigger": true,
+      "expected_output": "Traces render timing and reference assignment without misrouting to JS interop.",
+      "assertions": [
+        "Checks first/subsequent render timing",
+        "Verifies conditional fragment reachability"
+      ]
+    },
+    {
+      "id": "render-tree-sequence",
+      "prompt": "手写 BuildRenderTree 在条件分支切换后报 IndexOutOfRange，请检查 sequence 语义。",
+      "should_trigger": true,
+      "expected_output": "Reviews stable render sequence structure and adds focused branch-switch regressions.",
+      "assertions": [
+        "Checks sequence stability",
+        "Tests branch transitions"
+      ]
+    },
+    {
+      "id": "parameter-source",
+      "prompt": "父组件刷新后子组件的临时选择总被 OnParametersSet 覆盖，JS 没有参与。",
+      "should_trigger": true,
+      "expected_output": "Separates parameter ownership from local state and verifies rerender behavior.",
+      "assertions": [
+        "Identifies authoritative state owner",
+        "Covers repeated parameter updates"
+      ]
+    },
+    {
+      "id": "mouseenter-js",
+      "prompt": "@onmouseenter 运行时不触发，需要设计 JS 注册和清理。",
+      "should_trigger": false,
+      "expected_output": "Routes DOM event registration to Blazor interop pitfalls.",
+      "assertions": [
+        "Does not treat as pure lifecycle",
+        "Routes to ada-blazor-interop-pitfalls"
+      ]
+    },
+    {
+      "id": "full-rcl-audit",
+      "prompt": "端到端审计这个 RCL 的组件、CSS、互操作、包和浏览器 Demo。",
+      "should_trigger": false,
+      "expected_output": "Routes broad authored-source/runtime auditing to ada-blazor-ui-audit.",
+      "assertions": [
+        "Does not narrow prematurely",
+        "Routes to ada-blazor-ui-audit"
+      ]
+    },
+    {
+      "id": "stateful-store",
+      "prompt": "审计纯 C# Store 的导入原子性、事件和 Undo/Redo。",
+      "should_trigger": false,
+      "expected_output": "Routes mutable service auditing to ada-stateful-service-audit.",
+      "assertions": [
+        "Does not invoke Blazor lifecycle guidance",
+        "Routes by state ownership"
+      ]
+    },
+    {
+      "id": "css-only",
+      "prompt": "把按钮颜色和圆角调整为设计稿的样式。",
+      "should_trigger": false,
+      "expected_output": "Treats this as a focused styling task.",
+      "assertions": [
+        "Does not activate lifecycle diagnosis",
+        "Keeps scope to CSS"
+      ]
+    }
+  ]
+}

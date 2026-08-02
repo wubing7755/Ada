@@ -1,0 +1,89 @@
+{
+  "skill_name": "ada-library-public-api-review",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "审查这个 NuGet 包的 public API 是否真的能被外部程序集使用，测试项目有 InternalsVisibleTo。",
+      "should_trigger": true,
+      "expected_output": "Reviews the external consumer boundary and uses an unprivileged probe when needed.",
+      "assertions": [
+        "Reads normative API contract",
+        "Does not trust friend tests",
+        "Reports exact consumer behavior"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "这个 public abstract 基类应该封闭继承，请验证构造器修饰符和 API baseline。",
+      "should_trigger": true,
+      "expected_output": "Checks hierarchy intent, accessibility semantics, same-assembly subtypes, and baseline.",
+      "assertions": [
+        "Distinguishes access modifiers",
+        "Includes generated/public surface",
+        "Requires contract evidence"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "验证只读快照是否仍暴露调用方可变集合，并检查序列化 round trip。",
+      "should_trigger": true,
+      "expected_output": "Audits collection ownership, element mutability, copy behavior, and public persistence shape.",
+      "assertions": [
+        "Checks defensive ownership",
+        "Does not equate read-only interface with immutability",
+        "Names consumer risk"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "打包后示例编译失败，但源码项目测试通过，请做消费者边界审查。",
+      "should_trigger": true,
+      "expected_output": "Uses a packed external-consumer probe and reconciles docs/baselines with shipped artifacts.",
+      "assertions": [
+        "Prefers package evidence",
+        "Cleans temporary probe",
+        "Labels evidence source"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "审查内部私有方法的圈复杂度。",
+      "should_trigger": false,
+      "expected_output": "Routes general internal quality analysis elsewhere.",
+      "assertions": [
+        "Does not activate without public boundary",
+        "Keeps compatibility scope"
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "这是单体应用，没有受支持的库 API，帮我找业务 Bug。",
+      "should_trigger": false,
+      "expected_output": "Uses debugging or project audit rather than API review.",
+      "assertions": [
+        "Does not invent a public contract",
+        "Routes appropriately"
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "直接决定这个库以后是否允许第三方继承。",
+      "should_trigger": false,
+      "expected_output": "Stops for product/architecture intent instead of silently choosing compatibility policy.",
+      "assertions": [
+        "Identifies missing contract decision",
+        "Does not decide extension policy"
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "只更新一个内部测试夹具，不影响任何 public symbol。",
+      "should_trigger": false,
+      "expected_output": "Uses focused test/change review, not a public API audit.",
+      "assertions": [
+        "Does not over-trigger on library keyword",
+        "Checks actual surface impact"
+      ]
+    }
+  ]
+}

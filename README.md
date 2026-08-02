@@ -1,10 +1,10 @@
 # Ada
 
-当前版本：`0.2.2`
+当前版本：`0.3.0`
 
 Ada 是一个可分发的 Hermes profile：一个偏软件工程、重正确性与可验证性的 agent。
 
-## 技能体系 (44 skills)
+## 技能体系 (50 skills)
 
 所有 Ada 专属技能均以 `ada-` 为前缀。以下分类列出：
 
@@ -24,6 +24,9 @@ Ada 是一个可分发的 Hermes profile：一个偏软件工程、重正确性�
 - `ada-doc-traceability-audit` — 文档追溯审计
 - `ada-code-dedup-audit` — 代码去重审计
 - `ada-code-efficiency-review` — 代码效率审查
+- `ada-library-public-api-review` — 从外部消费者视角审查库的公共 API 与兼容边界
+- `ada-stateful-service-audit` — 审计状态服务的事务、不变量、持久化、并发与历史语义
+- `ada-ui-interaction-protocol-contracts` — 设计和验证跨 UI/Host 边界的交互协议与索引域
 
 ### 代码质量
 - `ada-code-quality-pipeline` — 代码质量全流水线
@@ -37,6 +40,7 @@ Ada 是一个可分发的 Hermes profile：一个偏软件工程、重正确性�
 - `ada-blazor-component-library` — Blazor 组件库模式
 - `ada-blazor-interaction-pitfalls` — Blazor 交互陷阱
 - `ada-blazor-interop-pitfalls` — Blazor JS 互操作陷阱
+- `ada-blazor-ui-audit` — 端到端审计 Razor、状态、CSS、互操作、包与浏览器可达性
 - `ada-dotnet-engineering-refactoring` — .NET 工程级重构
 - `ada-dotnet-verification` — .NET 构建/测试验证
 
@@ -47,6 +51,7 @@ Ada 是一个可分发的 Hermes profile：一个偏软件工程、重正确性�
 
 ### 工作流
 - `ada-agent-assisted-development` — Agent 辅助开发工作流
+- `ada-continuous-phased-delivery` — 在授权边界内连续执行已批准的多阶段计划
 - `ada-requesting-code-review` — 提交前审查
 - `ada-systematic-debugging` — 四阶段根因调试
 - `ada-test-driven-development` — TDD RED-GREEN-REFACTOR
@@ -65,6 +70,7 @@ Ada 是一个可分发的 Hermes profile：一个偏软件工程、重正确性�
 - `ada-skill-optimization` — Skill 审计与优化
 
 ### 文档与图表
+- `ada-business-document-authoring` — 将证据转化为面向决策者的业务文档并验证最终交付物
 - `ada-document-artifacts` — DOCX/PDF/XLSX/SVG 文档与图表处理
 
 ### 研究与规划

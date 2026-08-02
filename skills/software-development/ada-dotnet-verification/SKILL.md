@@ -1,13 +1,13 @@
 ---
 name: ada-dotnet-verification
-description: "Use after editing .NET/C#/Blazor projects or when dotnet build/test/format gates matter. Covers focused tests, formatting checks, Windows MSB3021/MSB3027 DLL locks, testhost/IDE output locks, and isolated artifact verification."
-version: 1.0.0
+description: "Use after editing .NET/C#/Blazor projects or when dotnet build/test/format/pack gates matter. Covers build-graph completeness, focused-to-full evidence, stale packages and generated assets, Windows MSB3021/MSB3027 locks, and isolated artifact verification."
+version: 1.1.0
 author: Hermes Agent
 license: MIT
-platforms: [windows]
+platforms: [windows, linux, macos]
 metadata:
   hermes:
-    tags: [dotnet, testing, verification, refactoring, windows]
+    tags: [dotnet, testing, verification, packaging, refactoring, windows]
     related_skills: [ada-test-driven-development]
 ---
 
@@ -87,6 +87,29 @@ Do **not** use for: running the full CI pipeline, performance benchmarking, or s
    - For handoff/review evidence, create a temp script that prints the exact commands it runs.
    - Delete the script after it runs.
    - Call it **ad-hoc** or **focused** verification unless it truly runs the full suite.
+
+## Build Graph and Artifact Freshness
+
+Before trusting a green command, reconstruct the repository's build graph from
+solution/project files, CI, package configuration, frontend manifests, and
+consumer samples. A solution may omit independent package consumers, browser
+fixtures, generated JS/CSS, pack checks, or custom test projects.
+
+For each gate record both command coverage and artifact provenance:
+
+- build the project that owns the changed source before dependents;
+- after TS/JS/CSS changes, run the declared bundle command before packing;
+- after package changes, pack, clear only the consumer's approved local package
+  cache, restore the consumer, and verify its resolved version/artifacts;
+- distinguish source-project tests from packed-package consumer tests;
+- verify the running process/browser loaded the new assembly and static asset,
+  rather than relying on restart assumptions or HTTP cache;
+- inspect current SDK/template/tool help before applying version-specific rules
+  such as `.sln` versus `.slnx` or a test framework API migration.
+
+Never delete global NuGet caches or user-wide tooling as a routine fix. Prefer
+repository-local or isolated temporary artifacts and report exactly what was
+cleared.
 
 ## Windows bin/Debug lock pitfall
 
