@@ -163,10 +163,22 @@ class DistributionValidatorTests(unittest.TestCase):
         (root / ".gitignore").write_text("cache/\n", encoding="utf-8")
         (root / "cache").mkdir()
         (root / "cache" / "private.bin").write_bytes(b"private")
+        (root / "workspace").mkdir()
+        (root / "workspace" / "private.md").write_text("private", encoding="utf-8")
 
         result = VALIDATOR.validate(root)
 
-        self.assertEqual([], result.errors)
+        self.assertTrue(any("workspace" in error for error in result.errors))
+        self.assertFalse(any("cache" in error for error in result.errors))
+
+    def test_suffixed_runtime_cache_fails(self) -> None:
+        root = self.make_distribution()
+        (root / "runtime_cache").mkdir()
+        (root / "runtime_cache" / "private.bin").write_bytes(b"private")
+
+        result = VALIDATOR.validate(root)
+
+        self.assertTrue(any("runtime_cache" in error for error in result.errors))
 
     def test_duplicate_eval_id_fails(self) -> None:
         root = self.make_distribution()
