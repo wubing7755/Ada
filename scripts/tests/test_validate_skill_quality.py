@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -200,6 +201,22 @@ class DistributionValidatorTests(unittest.TestCase):
         result = VALIDATOR.validate(root)
 
         self.assertTrue(any("runtime_cache" in error for error in result.errors))
+
+    def test_nested_ignored_distribution_uses_non_git_fallback(self) -> None:
+        source = self.make_distribution()
+        outer_temp = tempfile.TemporaryDirectory()
+        self.addCleanup(outer_temp.cleanup)
+        outer = Path(outer_temp.name)
+        root = outer / "dist"
+        shutil.copytree(source, root)
+        subprocess.run(["git", "init", "-q"], cwd=outer, check=True)
+        (outer / ".gitignore").write_text("dist/\n", encoding="utf-8")
+        (root / "workspace").mkdir()
+        (root / "workspace" / "private.md").write_text("private", encoding="utf-8")
+
+        result = VALIDATOR.validate(root)
+
+        self.assertTrue(any("workspace" in error for error in result.errors))
 
     def test_duplicate_eval_id_fails(self) -> None:
         root = self.make_distribution()

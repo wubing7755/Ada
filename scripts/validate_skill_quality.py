@@ -281,21 +281,32 @@ def repository_candidate_paths(root: Path) -> list[Path]:
     """Return tracked and non-ignored untracked paths, with a non-Git fallback."""
 
     try:
-        process = subprocess.run(
-            [
-                "git",
-                "-C",
-                str(root),
-                "ls-files",
-                "-z",
-                "--cached",
-                "--others",
-                "--exclude-standard",
-            ],
+        top_level = subprocess.run(
+            ["git", "-C", str(root), "rev-parse", "--show-toplevel"],
             capture_output=True,
             check=False,
         )
-    except OSError:
+        is_repository_root = (
+            top_level.returncode == 0
+            and Path(top_level.stdout.decode("utf-8").strip()).resolve() == root.resolve()
+        )
+        process = None
+        if is_repository_root:
+            process = subprocess.run(
+                [
+                    "git",
+                    "-C",
+                    str(root),
+                    "ls-files",
+                    "-z",
+                    "--cached",
+                    "--others",
+                    "--exclude-standard",
+                ],
+                capture_output=True,
+                check=False,
+            )
+    except (OSError, UnicodeDecodeError):
         process = None
     if process is not None and process.returncode == 0:
         return [
