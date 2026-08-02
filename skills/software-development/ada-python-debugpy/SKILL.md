@@ -120,29 +120,28 @@ python -m pdb path/to/script.py arg1 arg2
 
 ## Recipe 3: Debug a pytest test
 
-The hermes test runner and pytest both support this:
+Run pytest through the target project's active Python environment:
 
 ```bash
 # Drop to pdb on failure (or on any raised exception):
-scripts/run_tests.sh tests/path/to/test_file.py::test_name --pdb
+python -m pytest tests/path/to/test_file.py::test_name --pdb
 
 # Drop to pdb at the START of the test:
-scripts/run_tests.sh tests/path/to/test_file.py::test_name --trace
+python -m pytest tests/path/to/test_file.py::test_name --trace
 
 # Show locals in tracebacks without pdb:
-scripts/run_tests.sh tests/path/to/test_file.py --showlocals --tb=long
+python -m pytest tests/path/to/test_file.py --showlocals --tb=long
 ```
 
-Note: `scripts/run_tests.sh` uses xdist (`-n 4`) by default, and pdb does NOT work under xdist. Add `-p no:xdist` or run a single test with `-n 0`:
+Note: pdb does not work under xdist. If the project enables xdist by default,
+disable it for the debug run with `-n 0` or the project's equivalent:
 
 ```bash
-scripts/run_tests.sh tests/foo_test.py::test_bar --pdb -p no:xdist
-# or
-source .venv/bin/activate
-python -m pytest tests/foo_test.py::test_bar --pdb
+python -m pytest tests/foo_test.py::test_bar --pdb -n 0
 ```
 
-This bypasses the hermetic-env guarantees — fine for debugging, but re-run under the wrapper to confirm before pushing.
+Re-run the same test through the project's normal verification command before
+claiming the fix is complete.
 
 ## Recipe 4: Post-mortem on any exception
 
@@ -351,9 +350,13 @@ Long-lived. Use `remote-pdb` at a handler, or `debugpy` with `--wait-for-client`
 
 7. **asyncio.** `pdb` works in coroutines but `await` inside pdb requires Python 3.13+ or `await` from `interact` mode on older versions. For 3.11/3.12, use `asyncio.run_coroutine_threadsafe` tricks or `!stmt`-based awaits via `asyncio.ensure_future`.
 
-8. **`scripts/run_tests.sh` strips credentials and sets `HOME=<tmpdir>`.** If your bug depends on user config or real API keys, it won't reproduce under the wrapper. Debug with raw `pytest` first to repro, then re-confirm under the wrapper.
+8. **Project test wrappers may sanitize credentials or replace `HOME`.** If a
+   bug depends on user configuration, inspect the wrapper and reproduce with
+   the smallest safe environment difference; never expose real secrets merely
+   to make debugging easier.
 
-9. **Forking / multiprocessing.** pdb does not follow forks. Each child needs its own `breakpoint()` or `set_trace()`. For Hermes subagents, debug one process at a time.
+9. **Forking / multiprocessing.** pdb does not follow forks. Each child needs
+   its own `breakpoint()` or `set_trace()`. Debug one process at a time.
 
 ## Verification Checklist
 
@@ -380,10 +383,9 @@ breakpoint()
 
 **"This test passes in isolation but fails in the suite."**
 ```bash
-scripts/run_tests.sh tests/the_test.py --pdb -p no:xdist
+python -m pytest tests/the_test.py --pdb -n 0
 # But if it only fails WITH other tests:
-source .venv/bin/activate
-python -m pytest tests/ -x --pdb -p no:xdist
+python -m pytest tests/ -x --pdb -n 0
 # Now it pdb-traps at the exact failing test after state accumulated.
 ```
 
@@ -394,7 +396,7 @@ import remote_pdb; remote_pdb.set_trace(host="127.0.0.1", port=4444)
 ```
 Trigger the handler. `nc 127.0.0.1 4444`, then `w` to see the suspended frame, `!import asyncio; asyncio.all_tasks()` to see what else is pending.
 
-**"Post-mortem on a crash in an Ink child process / subprocess."**
+**"Post-mortem on a crash in a child process."**
 ```bash
 PYTHONFAULTHANDLER=1 python -m pdb -c continue path/to/entrypoint.py
 # On crash, pdb lands at the frame of the exception with full locals
