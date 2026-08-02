@@ -117,6 +117,38 @@ Minimum useful eval set:
 
 Prioritize near-miss prompts. A negative prompt that shares keywords with the skill is more useful than an obviously unrelated one.
 
+The validator reports the 4/4 trigger boundary as an advisory warning so legacy
+skills can be improved incrementally instead of receiving mechanically padded
+cases. A new or materially revised high-value skill must meet the boundary before
+merge; existing warnings are explicit quality debt, not a passing-quality claim.
+
+## Automated Distribution Gate
+
+Run both commands before each commit and again before opening a pull request:
+
+```bash
+python -m unittest scripts/tests/test_validate_skill_quality.py -v
+python scripts/validate_skill_quality.py
+```
+
+The validator enforces:
+
+- exact agreement between `distribution.yaml`, the physical Skill directories,
+  and the README catalog/count;
+- manifest and README version agreement;
+- Agent Skills-compatible names, required frontmatter, and the 500-line main-file
+  progressive-disclosure limit;
+- existing local `references/`, `assets/`, and `evals/` links;
+- valid references to other distributed `ada-*` Skills;
+- parseable evals with unique IDs, trigger booleans, expected output, and
+  non-empty assertions;
+- exclusion of common private runtime-state paths such as credentials, memories,
+  sessions, logs, cache, and state databases.
+
+The automated gate is necessary but not sufficient. It cannot prove that a Skill
+is useful, correctly scoped, legally distributable, or free from stale project
+assumptions; those remain qualitative review responsibilities.
+
 ## Review Checklist
 
 - [ ] `name` matches the directory.
