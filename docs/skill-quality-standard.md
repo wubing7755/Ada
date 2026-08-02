@@ -158,8 +158,9 @@ The validator enforces:
   trigger booleans, and non-empty assertions;
 - exclusion of common private runtime-state paths such as credentials, memories,
   sessions, workspaces, plans, `local/`, logs, caches, and state databases. In a
-  Git checkout this scans tracked and non-ignored untracked files, so ignored
-  developer caches do not create false positives.
+  Git top-level checkout this scans tracked and non-ignored untracked files, so
+  ignored developer caches do not create false positives. A nested or non-Git
+  validation root falls back to a conservative full-tree scan.
 
 The automated gate is necessary but not sufficient. It cannot prove that a Skill
 is useful, correctly scoped, legally distributable, or free from stale project
