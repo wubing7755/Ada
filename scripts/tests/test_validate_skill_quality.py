@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -63,6 +64,18 @@ class DistributionValidatorTests(unittest.TestCase):
 
         self.assertTrue(any("invalid YAML" in error for error in result.errors))
 
+    def test_duplicate_manifest_yaml_key_fails(self) -> None:
+        root = self.make_distribution()
+        manifest = root / "distribution.yaml"
+        manifest.write_text(
+            manifest.read_text(encoding="utf-8") + "name: duplicate\n",
+            encoding="utf-8",
+        )
+
+        result = VALIDATOR.validate(root)
+
+        self.assertTrue(any("duplicate YAML key" in error for error in result.errors))
+
     def test_invalid_frontmatter_yaml_fails(self) -> None:
         root = self.make_distribution()
         skill = root / "skills" / "software-development" / "ada-example" / "SKILL.md"
@@ -71,6 +84,16 @@ class DistributionValidatorTests(unittest.TestCase):
         result = VALIDATOR.validate(root)
 
         self.assertTrue(any("invalid YAML frontmatter" in error for error in result.errors))
+
+    def test_duplicate_frontmatter_yaml_key_fails(self) -> None:
+        root = self.make_distribution()
+        skill = root / "skills" / "software-development" / "ada-example" / "SKILL.md"
+        text = skill.read_text(encoding="utf-8")
+        skill.write_text(text.replace("name: ada-example\n", "name: ada-example\nname: duplicate\n"), encoding="utf-8")
+
+        result = VALIDATOR.validate(root)
+
+        self.assertTrue(any("duplicate YAML key" in error for error in result.errors))
 
     def test_frontmatter_fence_must_start_at_first_character(self) -> None:
         root = self.make_distribution()
@@ -124,6 +147,26 @@ class DistributionValidatorTests(unittest.TestCase):
         result = VALIDATOR.validate(root)
 
         self.assertTrue(any("private runtime state" in error for error in result.errors))
+
+    def test_workspace_runtime_state_fails(self) -> None:
+        root = self.make_distribution()
+        (root / "workspace").mkdir()
+        (root / "workspace" / "private.md").write_text("private", encoding="utf-8")
+
+        result = VALIDATOR.validate(root)
+
+        self.assertTrue(any("private runtime state" in error for error in result.errors))
+
+    def test_gitignored_runtime_cache_does_not_false_positive(self) -> None:
+        root = self.make_distribution()
+        subprocess.run(["git", "init", "-q"], cwd=root, check=True)
+        (root / ".gitignore").write_text("cache/\n", encoding="utf-8")
+        (root / "cache").mkdir()
+        (root / "cache" / "private.bin").write_bytes(b"private")
+
+        result = VALIDATOR.validate(root)
+
+        self.assertEqual([], result.errors)
 
     def test_duplicate_eval_id_fails(self) -> None:
         root = self.make_distribution()
@@ -202,6 +245,18 @@ class DistributionValidatorTests(unittest.TestCase):
         (skill_dir / "scripts").mkdir()
         skill = skill_dir / "SKILL.md"
         skill.write_text(skill.read_text(encoding="utf-8") + "Run [checker](scripts/missing.py).\n", encoding="utf-8")
+
+        result = VALIDATOR.validate(root)
+
+        self.assertTrue(any("missing local resource link" in error for error in result.errors))
+
+    def test_missing_markdown_template_link_fails_without_resource_directory(self) -> None:
+        root = self.make_distribution()
+        skill = root / "skills" / "software-development" / "ada-example" / "SKILL.md"
+        skill.write_text(
+            skill.read_text(encoding="utf-8") + "Use [template](templates/missing.md).\n",
+            encoding="utf-8",
+        )
 
         result = VALIDATOR.validate(root)
 

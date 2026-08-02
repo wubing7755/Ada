@@ -147,16 +147,19 @@ The validator enforces:
 - exact agreement between `distribution.yaml`, the physical Skill directories,
   and the README catalog/count;
 - manifest and README version agreement;
-- parseable YAML manifest/frontmatter, an exact opening fence, a non-empty body,
+- parseable YAML manifest/frontmatter with duplicate-key rejection, an exact opening fence, a non-empty body,
   Agent Skills-compatible names, and the 500-line main-file progressive-disclosure
   limit;
-- existing local `references/`, `assets/`, and `evals/` links, plus local
-  `scripts/` and `templates/` links when those resource directories exist;
+- existing local `references/`, `assets/`, and `evals/` links; Markdown links to
+  `scripts/` and `templates/` are always local, while backticked paths are local
+  when those resource directories exist beside the Skill;
 - valid references to other distributed `ada-*` Skills;
 - parseable object-shaped evals with unique IDs, typed prompts/expected output,
   trigger booleans, and non-empty assertions;
 - exclusion of common private runtime-state paths such as credentials, memories,
-  sessions, logs, cache, and state databases.
+  sessions, workspaces, plans, `local/`, logs, caches, and state databases. In a
+  Git checkout this scans tracked and non-ignored untracked files, so ignored
+  developer caches do not create false positives.
 
 The automated gate is necessary but not sufficient. It cannot prove that a Skill
 is useful, correctly scoped, legally distributable, or free from stale project

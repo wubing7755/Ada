@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import json
 import re
+import subprocess
 import sys
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -27,18 +28,66 @@ README_PATH = ROOT / "README.md"
 NAME_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 LOCAL_SKILL_REF_RE = re.compile(r"(?<![a-z0-9-])(ada-[a-z0-9]+(?:-[a-z0-9]+)*)(?![a-z0-9-])")
 RESOURCE_LINK_RES = (
-    re.compile(r"`((?:references|assets|evals|scripts|templates)/[^`]+)`"),
-    re.compile(r"\]\(((?:references|assets|evals|scripts|templates)/[^)]+)\)"),
+    (re.compile(r"`((?:references|assets|evals|scripts|templates)/[^`]+)`"), False),
+    (re.compile(r"\]\(((?:references|assets|evals|scripts|templates)/[^)]+)\)"), True),
 )
 PRIVATE_NAMES = {
+    ".hermes",
     ".env",
     "auth.json",
+    "credentials.json",
+    "home",
+    "local",
     "memories",
+    "plans",
     "sessions",
+    "secrets",
     "state.db",
     "logs",
     "cache",
+    "workspace",
 }
+
+
+if yaml is not None:
+    class UniqueKeyLoader(yaml.SafeLoader):
+        """Safe YAML loader that rejects duplicate mapping keys."""
+
+
+    def construct_unique_mapping(
+        loader: UniqueKeyLoader,
+        node: yaml.nodes.MappingNode,
+        deep: bool = False,
+    ) -> dict[object, object]:
+        mapping: dict[object, object] = {}
+        for key_node, value_node in node.value:
+            key = loader.construct_object(key_node, deep=deep)
+            try:
+                duplicate = key in mapping
+            except TypeError as exc:
+                raise yaml.constructor.ConstructorError(
+                    "while constructing a mapping",
+                    node.start_mark,
+                    "found an unhashable YAML key",
+                    key_node.start_mark,
+                ) from exc
+            if duplicate:
+                raise yaml.constructor.ConstructorError(
+                    "while constructing a mapping",
+                    node.start_mark,
+                    f"duplicate YAML key: {key!r}",
+                    key_node.start_mark,
+                )
+            mapping[key] = loader.construct_object(value_node, deep=deep)
+        return mapping
+
+
+    UniqueKeyLoader.add_constructor(
+        yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG,
+        construct_unique_mapping,
+    )
+else:  # pragma: no cover - validation fails closed before using the loader
+    UniqueKeyLoader = None
 
 
 @dataclass
@@ -77,7 +126,7 @@ def parse_frontmatter(path: Path) -> tuple[dict[str, object], list[str]]:
         errors.append("PyYAML is required (install in the validation environment)")
         return {}, errors
     try:
-        fields = yaml.safe_load("\n".join(lines[1:end]))
+        fields = yaml.load("\n".join(lines[1:end]), Loader=UniqueKeyLoader)
     except yaml.YAMLError as exc:
         errors.append(f"invalid YAML frontmatter: {exc}")
         return {}, errors
@@ -91,7 +140,7 @@ def check_resource_links(path: Path, result: ValidationResult, root: Path) -> No
     text = path.read_text(encoding="utf-8")
     skill_dir = path.parent
     seen: set[str] = set()
-    for pattern in RESOURCE_LINK_RES:
+    for pattern, explicit_markdown_link in RESOURCE_LINK_RES:
         for rel in pattern.findall(text):
             if rel in seen or any(marker in rel for marker in ("*", "<", ">")):
                 continue
@@ -101,7 +150,11 @@ def check_resource_links(path: Path, result: ValidationResult, root: Path) -> No
             # Backticked scripts/templates commonly name files in the target
             # project. Treat them as Skill-owned only when that resource
             # directory actually exists beside SKILL.md.
-            if resource_root in {"scripts", "templates"} and not (skill_dir / resource_root).exists():
+            if (
+                resource_root in {"scripts", "templates"}
+                and not explicit_markdown_link
+                and not (skill_dir / resource_root).exists()
+            ):
                 continue
             target = (skill_dir / rel_path).resolve()
             try:
@@ -213,12 +266,45 @@ def check_skill(path: Path, all_names: set[str], result: ValidationResult, root:
         result.error(rel, f"references unknown local Ada skill: {reference}")
 
 
+def repository_candidate_paths(root: Path) -> list[Path]:
+    """Return tracked and non-ignored untracked paths, with a non-Git fallback."""
+
+    try:
+        process = subprocess.run(
+            [
+                "git",
+                "-C",
+                str(root),
+                "ls-files",
+                "-z",
+                "--cached",
+                "--others",
+                "--exclude-standard",
+            ],
+            capture_output=True,
+            check=False,
+        )
+    except OSError:
+        process = None
+    if process is not None and process.returncode == 0:
+        return [
+            root / entry.decode("utf-8", errors="surrogateescape")
+            for entry in process.stdout.split(b"\0")
+            if entry
+        ]
+    return [path for path in root.rglob("*") if ".git" not in path.parts]
+
+
 def check_private_state(root: Path, result: ValidationResult) -> None:
-    for path in root.rglob("*"):
-        if ".git" in path.parts or ".hermes" in path.parts:
-            continue
+    for path in repository_candidate_paths(root):
         lowered = {part.lower() for part in path.relative_to(root).parts}
-        if lowered & PRIVATE_NAMES or any(part.startswith("state.db") for part in lowered):
+        is_private = any(
+            part in PRIVATE_NAMES
+            or part.startswith("state.db")
+            or part.endswith("_cache")
+            for part in lowered
+        )
+        if is_private:
             result.error(relative(path, root), "private runtime state must not be distributed")
 
 
@@ -242,7 +328,7 @@ def validate(root: Path = ROOT) -> ValidationResult:
         result.error("distribution.yaml", "PyYAML is required (install in the validation environment)")
         return result
     try:
-        manifest = yaml.safe_load(manifest_text)
+        manifest = yaml.load(manifest_text, Loader=UniqueKeyLoader)
     except yaml.YAMLError as exc:
         result.error("distribution.yaml", f"invalid YAML: {exc}")
         return result
