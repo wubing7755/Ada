@@ -1,0 +1,89 @@
+{
+  "skill_name": "ada-business-document-authoring",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "把这份技术审计整理成给管理层决策的三页 Word 简报，保留证据和风险。",
+      "should_trigger": true,
+      "expected_output": "Creates an audience-shaped, evidence-traceable brief and verifies the rendered Word artifact.",
+      "assertions": [
+        "Identifies audience and decision",
+        "Separates facts from recommendations",
+        "Requires rendered-artifact inspection"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "基于这些访谈和指标写一份客户提案，输出 PDF，并标注无法验证的假设。",
+      "should_trigger": true,
+      "expected_output": "Produces a client proposal with sourced claims, explicit assumptions, and delivery QA.",
+      "assertions": [
+        "Builds an evidence map",
+        "Labels uncertainty",
+        "Checks final PDF rendering"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "将项目复盘改写为非技术干系人能读懂的状态报告，给出下一步选择。",
+      "should_trigger": true,
+      "expected_output": "Reframes engineering evidence into impact, options, recommendation, and next actions.",
+      "assertions": [
+        "Leads with conclusions",
+        "Translates detail into impact",
+        "Preserves trade-offs"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "制作一份董事会决策备忘录，需要图表、数据口径和来源说明。",
+      "should_trigger": true,
+      "expected_output": "Authors a decision memo with appropriate visuals, data definitions, and source traceability.",
+      "assertions": [
+        "Defines numeric context",
+        "Uses visuals only when useful",
+        "Checks citations and layout"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "把这个 Markdown 原样转换成 DOCX，不需要改内容。",
+      "should_trigger": false,
+      "expected_output": "Routes mechanical conversion to the document artifact/tooling workflow.",
+      "assertions": [
+        "Does not activate business-authoring workflow",
+        "Routes to ada-document-artifacts"
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "审查这份 SRS 的需求编号和验收标准。",
+      "should_trigger": false,
+      "expected_output": "Routes normative requirements review to the SRS workflow.",
+      "assertions": [
+        "Does not rewrite as business prose",
+        "Routes to an SRS Skill"
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "请逐文件审计这个代码库并列出所有缺陷。",
+      "should_trigger": false,
+      "expected_output": "Routes the request to a project/code audit rather than document authoring.",
+      "assertions": [
+        "Does not activate on audit alone",
+        "Preserves audit evidence needs"
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "合并两个 PDF 并给每页加页码。",
+      "should_trigger": false,
+      "expected_output": "Routes PDF mechanics to the matching document tool.",
+      "assertions": [
+        "Does not add narrative work",
+        "Routes format mechanics correctly"
+      ]
+    }
+  ]
+}

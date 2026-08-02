@@ -4,30 +4,81 @@
     {
       "id": "full-srs-quality-review",
       "prompt": "审查 docs/SRS.md，找死需求、术语混乱、范围泄露、AC 缺失和过时交叉引用，先不要直接改。",
-      "expected_output": "The agent loads SRS review, maps structure, runs relevant passes, and reports findings without editing.",
       "should_trigger": true,
+      "expected_output": "Produces location/risk/recommendation findings without silently revising.",
       "assertions": [
-        "Separates findings from revisions.",
-        "Includes location/risk/recommendation for findings."
+        "Separates findings from revisions",
+        "Covers semantic and structural passes"
       ]
     },
     {
       "id": "post-edit-consistency",
       "prompt": "刚批量重编号了一批 REQ，帮我做 SRS 的后置一致性检查，看看索引、统计和引用有没有坏。",
-      "expected_output": "The agent loads SRS review and runs post-edit consistency sync checks.",
       "should_trigger": true,
+      "expected_output": "Runs mechanical consistency and semantic spot checks after bulk edits.",
       "assertions": [
-        "Runs or describes Pass J-style consistency checks.",
-        "Checks indexes, statistics, and cross-references."
+        "Checks indexes, statistics, and cross-references",
+        "Does not equate mechanics with correctness"
+      ]
+    },
+    {
+      "id": "contradiction-review",
+      "prompt": "审查 SRS 里范围章节与验收标准的矛盾，列出需要产品决策的选项。",
+      "should_trigger": true,
+      "expected_output": "Surfaces contradiction evidence and decision alternatives.",
+      "assertions": [
+        "Does not choose silently",
+        "Traces terminology and scope cascade"
+      ]
+    },
+    {
+      "id": "checker-red-green",
+      "prompt": "验证 SRS 检查脚本是否可信：先让临时坏样例失败，再跑真实文档。",
+      "should_trigger": true,
+      "expected_output": "Uses a negative-control fixture before accepting green mechanical evidence.",
+      "assertions": [
+        "Requires deliberate failing fixture",
+        "Keeps semantic review separate"
       ]
     },
     {
       "id": "source-code-quality",
       "prompt": "帮我审查 src 目录代码质量，重点看复杂度和重复代码。",
-      "expected_output": "The agent should use code quality analysis, not SRS review.",
       "should_trigger": false,
+      "expected_output": "Routes source code quality to code analysis.",
       "assertions": [
-        "Does not treat source code audit as SRS review."
+        "Does not treat source audit as SRS review",
+        "Routes to code quality Skill"
+      ]
+    },
+    {
+      "id": "write-new-srs",
+      "prompt": "根据这份技术方案从零编写一份新的 SRS。",
+      "should_trigger": false,
+      "expected_output": "Routes authoring to SRS writing/derivation.",
+      "assertions": [
+        "Does not activate review-only workflow",
+        "Routes to SRS authoring"
+      ]
+    },
+    {
+      "id": "implementation-truth",
+      "prompt": "核实 SRS 中的已实现状态是否与源码和测试一致。",
+      "should_trigger": false,
+      "expected_output": "Routes document-to-implementation claims to ada-doc-implementation-audit.",
+      "assertions": [
+        "Does not infer implementation from prose",
+        "Routes to evidence mapping"
+      ]
+    },
+    {
+      "id": "apply-findings",
+      "prompt": "这些 SRS 审查结论已经批准，请批量修订文档并同步索引。",
+      "should_trigger": false,
+      "expected_output": "Routes approved edits to ada-srs-revision.",
+      "assertions": [
+        "Does not remain read-only",
+        "Routes to revision workflow"
       ]
     }
   ]

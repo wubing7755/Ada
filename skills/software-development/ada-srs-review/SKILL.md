@@ -1,7 +1,7 @@
 ---
 name: ada-srs-review
 description: "Use when reviewing an SRS for quality: dead requirements, stale cross-references, concept confusion, scope leaks, implementation details, missing ACs, or terminology drift. For source code quality, use ada-code-quality-analysis; for large edits after findings, use ada-srs-revision."
-version: 1.1.0
+version: 1.2.0
 platforms: [linux, macos, windows]
 author: Hermes Agent
 license: MIT
@@ -106,6 +106,23 @@ The review follows a 4-step process with 12 structured audit passes (Pass A–K 
 - **Requirements matrix vs traceability matrix**: Without design docs or test suites, a traceability matrix is empty scaffolding. Replace it with a "需求矩阵" — a flat table of every requirement by section (ID, priority, actor, title). Extract programmatically with `grep + python3`.
 - **Contradiction resolution needs user decision**: When §1.3 and a requirement AC disagree, present both as 方案 A/B with industry reference + recommendation. Don't pick silently. After user picks, trace the cascade for companion gaps.
 - **Batch-insert-then-sync for multi-REQ additions**: Insert ALL REQ bodies first, then update indices/stats/changelog/appendix in ONE pass. Avoids N×7 edits per REQ.
+
+## Mechanical Validation Gate
+
+After semantic review or revision, verify the document mechanically:
+
+- requirement IDs are unique and match the declared format;
+- every referenced ID resolves, excluding explicitly historical/deleted entries;
+- index/table IDs equal authoritative requirement headers;
+- priority, actor, title, and status statistics are regenerated from headers;
+- acceptance criteria are present and structurally complete where required;
+- Markdown fences, headings, links, and tables parse consistently;
+- change log and deferred/superseded entries name the current requirement identity;
+- any executable checker fails on a deliberately broken temporary fixture before
+  its green result is treated as evidence.
+
+Mechanical consistency cannot decide requirement correctness. Contradictions,
+scope, terminology, and missing behavior still require the semantic passes.
 
 ## Verification Checklist
 

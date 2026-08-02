@@ -1,0 +1,89 @@
+{
+  "skill_name": "ada-ui-interaction-protocol-contracts",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "设计拖拽协议：Toolbar 展示顺序和模型顺序可不同，JS 要把 intent 传给 C# Host。",
+      "should_trigger": true,
+      "expected_output": "Defines identities, compatibility matrix, named index domains, mapping, and boundary validation.",
+      "assertions": [
+        "Names both order domains",
+        "Carries stable target identity",
+        "Tests producer and consumer"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "同组前向拖拽总是偏一位，请检查 DOM insertionIndex 和操作的 post-removal index。",
+      "should_trigger": true,
+      "expected_output": "Traces numeric semantics through source removal and destination domain with identity-based mapping.",
+      "assertions": [
+        "Names index domain",
+        "Covers forward/backward/cross cases",
+        "Avoids raw-number reuse"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "前端已经不生成旧 target kind，但伪造消息仍能让 Host 接受。",
+      "should_trigger": true,
+      "expected_output": "Requires consumer-side rejection of obsolete, forged, stale, and mismatched intents.",
+      "assertions": [
+        "Does not trust UI unreachability",
+        "Preserves valid cross-container rows",
+        "Adds hostile-message tests"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "需要证明这个 drop intent 不仅 Host 可注入，而且真实 DOM 能产生并在当前 bundle 提交。",
+      "should_trigger": true,
+      "expected_output": "Separates mapped, reachable, implemented, and runtime-verified evidence.",
+      "assertions": [
+        "Drives real producer path",
+        "Checks built artifact",
+        "Does not overclaim verification"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "只调整拖拽预览的颜色，不改变 intent 或命中规则。",
+      "should_trigger": false,
+      "expected_output": "Treats this as styling rather than protocol design.",
+      "assertions": [
+        "Does not activate on cosmetic-only work",
+        "Keeps semantic boundary"
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "Blazor 组件折叠后 class 丢失，没有 JS 消息。",
+      "should_trigger": false,
+      "expected_output": "Routes pure RenderTree/lifecycle corruption to the Blazor rendering Skill.",
+      "assertions": [
+        "Does not invent protocol involvement",
+        "Routes to ada-blazor-interaction-pitfalls"
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "重新排序一个内存 List，调用方直接传对象引用。",
+      "should_trigger": false,
+      "expected_output": "Uses ordinary domain/TDD work when no cross-layer protocol exists.",
+      "assertions": [
+        "Does not require protocol envelope",
+        "Keeps index analysis proportional"
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "产品还没决定 Header 能否拖到 Toolbar，但请你直接选一种语义。",
+      "should_trigger": false,
+      "expected_output": "Stops for the missing product matrix decision.",
+      "assertions": [
+        "Does not silently choose semantics",
+        "Identifies exact undecided matrix row"
+      ]
+    }
+  ]
+}

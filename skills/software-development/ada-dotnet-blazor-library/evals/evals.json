@@ -1,0 +1,85 @@
+{
+  "skill_name": "ada-dotnet-blazor-library",
+  "evals": [
+    {
+      "id": "scaffold-rcl",
+      "prompt": "用当前 .NET SDK 建一个可打 NuGet 包的 Blazor RCL、独立 Demo 和测试，不要假设旧模板。",
+      "should_trigger": true,
+      "expected_output": "Inspects current SDK templates and creates a package/consumer topology.",
+      "assertions": [
+        "Checks dotnet new help",
+        "Separates RCL, demo, tests, and package"
+      ]
+    },
+    {
+      "id": "razor-namespace",
+      "prompt": "新建 Razor code-behind 后 partial class 合并失败，目录命名空间看起来不一致。",
+      "should_trigger": true,
+      "expected_output": "Diagnoses generated Razor namespace and aligns _Imports/code-behind deliberately.",
+      "assertions": [
+        "Traces generated namespace",
+        "Avoids hiding root cause inline"
+      ]
+    },
+    {
+      "id": "package-consumer",
+      "prompt": "组件库源码测试通过，但独立 Demo 通过 NuGet 看不到组件和静态资源。",
+      "should_trigger": true,
+      "expected_output": "Verifies package assets, public namespace, consumer restore, and RCL static web assets.",
+      "assertions": [
+        "Uses independent package consumer",
+        "Checks packed artifact contents"
+      ]
+    },
+    {
+      "id": "solution-format",
+      "prompt": "脚手架在新 SDK 生成 .slnx，但仓库工具要求 .sln，怎样建立兼容结构？",
+      "should_trigger": true,
+      "expected_output": "Inspects active template options and follows repository compatibility requirements.",
+      "assertions": [
+        "Uses current SDK help",
+        "Does not hardcode one solution format"
+      ]
+    },
+    {
+      "id": "verify-edit",
+      "prompt": "我只改了现有 .razor 文件，运行 focused test、full test、format 和 pack 验证。",
+      "should_trigger": false,
+      "expected_output": "Routes verification-only work to ada-dotnet-verification.",
+      "assertions": [
+        "Does not scaffold a new topology",
+        "Routes to verification Skill"
+      ]
+    },
+    {
+      "id": "public-api-only",
+      "prompt": "审查这个现有类库的公共 API 兼容性和外部消费者可达性。",
+      "should_trigger": false,
+      "expected_output": "Routes consumer-boundary review to ada-library-public-api-review.",
+      "assertions": [
+        "Does not redesign project structure",
+        "Routes to public API review"
+      ]
+    },
+    {
+      "id": "full-ui-audit",
+      "prompt": "端到端审计现有 RCL 的状态、DOM、CSS、JS 和浏览器 Demo。",
+      "should_trigger": false,
+      "expected_output": "Routes broad runtime auditing to ada-blazor-ui-audit.",
+      "assertions": [
+        "Does not treat as scaffolding",
+        "Routes to UI audit"
+      ]
+    },
+    {
+      "id": "aspnet-service",
+      "prompt": "创建一个没有 Razor 组件的 ASP.NET Core 后台服务。",
+      "should_trigger": false,
+      "expected_output": "Does not activate Blazor library scaffolding.",
+      "assertions": [
+        "Recognizes non-Blazor scope",
+        "Uses appropriate .NET service workflow"
+      ]
+    }
+  ]
+}

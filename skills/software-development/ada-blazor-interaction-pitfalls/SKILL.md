@@ -8,7 +8,7 @@ platforms: [windows, linux, macos]
 metadata:
   hermes:
     tags: [blazor, wasm, lifecycle, rendering, pitfalls]
-    related_skills: [ada-blazor-component-library, ada-blazor-interop-pitfalls]
+    related_skills: [ada-blazor-component-library, ada-blazor-interop-pitfalls, ada-blazor-ui-audit]
     trigger_keywords: ['Blazor WASM', 'ShouldRender', 'OnParametersSet', 'StateHasChanged', 'IndexOutOfRange', 'BuildRenderTree', 'OnAfterRender', 'OnAfterRenderAsync', '@ref', 'RenderFragment']
 ---
 

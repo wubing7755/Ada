@@ -4,30 +4,81 @@
     {
       "id": "after-razor-edit",
       "prompt": "我改了一个 .razor 组件和对应测试，帮我验证这次 .NET 改动能不能过。",
-      "expected_output": "The agent loads .NET verification and runs focused tests plus build/format/diff gates when feasible.",
       "should_trigger": true,
+      "expected_output": "Runs focused-to-full .NET evidence and reports exact commands.",
       "assertions": [
-        "Identifies .NET project/test files.",
-        "Separates focused and full-suite evidence."
+        "Identifies .NET project/test files",
+        "Separates focused and full-suite evidence"
       ]
     },
     {
       "id": "windows-dll-lock",
       "prompt": "dotnet test 报 MSB3027，testhost.exe 好像锁了 bin/Debug 的 DLL，怎么继续验证？",
-      "expected_output": "The agent loads .NET verification and uses the Windows isolated artifacts lock workaround without killing ambiguous user processes.",
       "should_trigger": true,
+      "expected_output": "Diagnoses output lock and verifies with isolated artifacts before process cleanup.",
       "assertions": [
-        "Recognizes output-tree lock.",
-        "Suggests isolated artifacts verification."
+        "Recognizes output-tree lock",
+        "Suggests isolated artifacts verification"
+      ]
+    },
+    {
+      "id": "package-staleness",
+      "prompt": "TypeScript 和 NuGet 包都改了，源码测试绿，但独立样例似乎还在加载旧 JS。",
+      "should_trigger": true,
+      "expected_output": "Reconstructs build graph and verifies bundle, package, restore, and loaded asset provenance.",
+      "assertions": [
+        "Checks generated asset freshness",
+        "Uses packed-package consumer evidence"
+      ]
+    },
+    {
+      "id": "independent-consumer",
+      "prompt": "打包后验证独立 sample 真正解析到新版本，并运行 build/test/format。",
+      "should_trigger": true,
+      "expected_output": "Validates package provenance and the consumer outside the main solution.",
+      "assertions": [
+        "Checks resolved package version",
+        "Distinguishes source and package tests"
       ]
     },
     {
       "id": "python-test-run",
       "prompt": "跑一下这个 Python 项目的 pytest，看看刚才的 fixture 改动有没有问题。",
-      "expected_output": "The agent should not load .NET verification for a Python test task.",
       "should_trigger": false,
+      "expected_output": "Uses the Python verification workflow rather than .NET gates.",
       "assertions": [
-        "Does not invoke dotnet gates."
+        "Does not invoke dotnet gates",
+        "Routes by project toolchain"
+      ]
+    },
+    {
+      "id": "architecture-plan",
+      "prompt": "为这个 .NET 系统设计新的模块架构，先不要修改代码。",
+      "should_trigger": false,
+      "expected_output": "Routes architecture planning away from verification.",
+      "assertions": [
+        "Does not claim build evidence",
+        "Keeps design and verification separate"
+      ]
+    },
+    {
+      "id": "doc-only",
+      "prompt": "只修改 README 的一个错别字并检查 Markdown。",
+      "should_trigger": false,
+      "expected_output": "Uses documentation checks without full .NET gates.",
+      "assertions": [
+        "Does not over-trigger dotnet build",
+        "Matches changed surface"
+      ]
+    },
+    {
+      "id": "unreproduced-bug",
+      "prompt": "一个 .NET 逻辑 bug 还没定位，先系统调试根因。",
+      "should_trigger": false,
+      "expected_output": "Routes root-cause investigation before post-edit verification.",
+      "assertions": [
+        "Does not treat verification as debugging",
+        "Routes to systematic debugging"
       ]
     }
   ]

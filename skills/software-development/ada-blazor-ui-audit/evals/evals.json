@@ -1,0 +1,89 @@
+{
+  "skill_name": "ada-blazor-ui-audit",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "只读审计这个 Blazor RCL：组件、CSS、TypeScript、状态通知、Demo 和打包资产都要核对。",
+      "should_trigger": true,
+      "expected_output": "Performs an end-to-end authored-source and runtime-chain audit with file:line findings.",
+      "assertions": [
+        "Freezes authored scope",
+        "Traces render/state/interop chains",
+        "Checks package and demo topology"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "bUnit 全绿但浏览器拖拽目标不可用，请审查 DOM 可达性和 Host 操作链。",
+      "should_trigger": true,
+      "expected_output": "Audits hit testing, producer/consumer reachability, operation commit, and evidence tiers.",
+      "assertions": [
+        "Does not trust DOM presence",
+        "Separates mapped/reachable/verified",
+        "Requires real operation evidence"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "端到端审计这个手写 BuildRenderTree 工作区：折叠、Undo/Redo 后的序列、状态通知、DOM/CSS 和浏览器行为都要核对。",
+      "should_trigger": true,
+      "expected_output": "Audits render sequence stability as one part of the complete state, markup, CSS, and browser interaction chain.",
+      "assertions": [
+        "Checks sequence semantics",
+        "Covers state, markup, and CSS continuity",
+        "Requires focused tests and browser evidence"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Demo 似乎还在跑旧 DLL 和 JS，请审计包引用、bundle 和浏览器缓存证据。",
+      "should_trigger": true,
+      "expected_output": "Traces source-to-bundle-to-package-to-browser artifact identity.",
+      "assertions": [
+        "Identifies consumer topology",
+        "Requires current artifact markers",
+        "Labels runtime evidence"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "已经确认是 DotNetObjectReference 没有 Dispose，只修这个点。",
+      "should_trigger": false,
+      "expected_output": "Routes the isolated interop-lifetime bug to the narrower Blazor interop Skill.",
+      "assertions": [
+        "Does not run a whole UI audit",
+        "Routes to ada-blazor-interop-pitfalls"
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "StateHasChanged 后 OnParametersSet 没调用，帮我定位。",
+      "should_trigger": false,
+      "expected_output": "Routes the isolated lifecycle issue to the Blazor interaction pitfall Skill.",
+      "assertions": [
+        "Does not broaden scope",
+        "Routes pure lifecycle correctly"
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "审查一个纯 C# 状态服务的事务和 Undo/Redo。",
+      "should_trigger": false,
+      "expected_output": "Routes mutable service behavior to the stateful-service audit.",
+      "assertions": [
+        "Does not require Blazor UI",
+        "Routes to ada-stateful-service-audit"
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "给现有按钮换成蓝色并调整圆角。",
+      "should_trigger": false,
+      "expected_output": "Treats this as focused styling implementation, not a source audit.",
+      "assertions": [
+        "Does not activate on visual edit alone",
+        "Keeps audit scope appropriate"
+      ]
+    }
+  ]
+}

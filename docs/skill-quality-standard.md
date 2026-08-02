@@ -117,6 +117,51 @@ Minimum useful eval set:
 
 Prioritize near-miss prompts. A negative prompt that shares keywords with the skill is more useful than an obviously unrelated one.
 
+The validator reports the 4/4 trigger boundary as an advisory warning so legacy
+skills can be improved incrementally instead of receiving mechanically padded
+cases. A new or materially revised high-value skill must meet the boundary before
+merge; existing warnings are explicit quality debt, not a passing-quality claim.
+
+## Automated Distribution Gate
+
+Run all commands before each commit and again before opening a pull request:
+
+```bash
+python -m unittest scripts/tests/test_validate_skill_quality.py -v
+python scripts/validate_skill_quality.py
+python scripts/smoke_profile_distribution.py
+```
+
+The validator uses PyYAML, which is already a Hermes runtime dependency. If it
+is run from an unrelated Python environment, install PyYAML there first; the
+gate deliberately fails closed rather than approximating YAML with regular
+expressions.
+
+The smoke test redirects `HERMES_HOME` to a temporary directory, installs a
+temporary copy of the repository, updates distribution-owned content, and
+verifies that memory, session, and `local/` markers survive. It never installs
+the test Profile into the user's real Hermes home.
+
+The validator enforces:
+
+- exact agreement between `distribution.yaml`, the physical Skill directories,
+  and the README catalog/count;
+- manifest and README version agreement;
+- parseable YAML manifest/frontmatter, an exact opening fence, a non-empty body,
+  Agent Skills-compatible names, and the 500-line main-file progressive-disclosure
+  limit;
+- existing local `references/`, `assets/`, and `evals/` links, plus local
+  `scripts/` and `templates/` links when those resource directories exist;
+- valid references to other distributed `ada-*` Skills;
+- parseable object-shaped evals with unique IDs, typed prompts/expected output,
+  trigger booleans, and non-empty assertions;
+- exclusion of common private runtime-state paths such as credentials, memories,
+  sessions, logs, cache, and state databases.
+
+The automated gate is necessary but not sufficient. It cannot prove that a Skill
+is useful, correctly scoped, legally distributable, or free from stale project
+assumptions; those remain qualitative review responsibilities.
+
 ## Review Checklist
 
 - [ ] `name` matches the directory.

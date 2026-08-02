@@ -8,7 +8,7 @@ platforms: [windows, linux, macos]
 metadata:
   hermes:
     tags: [blazor, interop, js, events, pitfalls, wasm]
-    related_skills: [ada-blazor-component-library, ada-dotnet-blazor-library, ada-blazor-interaction-pitfalls]
+    related_skills: [ada-blazor-component-library, ada-dotnet-blazor-library, ada-blazor-interaction-pitfalls, ada-blazor-ui-audit, ada-ui-interaction-protocol-contracts]
 ---
 
 # Blazor JS Interop Pitfalls

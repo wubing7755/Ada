@@ -4,30 +4,81 @@
     {
       "id": "mouseenter-not-firing",
       "prompt": "Blazor 组件里 @onmouseenter 编译没报错，但运行时 hover 处理器完全不触发。",
-      "expected_output": "The agent loads Blazor interop pitfalls, identifies non-bubbling event behavior, and recommends JS interop registration.",
       "should_trigger": true,
+      "expected_output": "Explains the runtime boundary and selects a symmetric JS registration pattern.",
       "assertions": [
-        "Explains why the directive silently fails.",
-        "Routes to JS interop fix pattern."
+        "Explains why the directive silently fails",
+        "Routes to JS interop fix pattern"
       ]
     },
     {
       "id": "dotnetobjectreference-disposed",
       "prompt": "拖拽过程中浏览器 console 报 DotNetObjectReference disposed，而且内存一直涨。",
-      "expected_output": "The agent loads Blazor interop pitfalls and checks callback lifetime/disposal and JS map ownership.",
       "should_trigger": true,
+      "expected_output": "Traces callback ownership across Razor/C# and JS and verifies cleanup.",
       "assertions": [
-        "Inspects both Razor/C# and JS/TS sides.",
-        "Mentions callback lifetime or map cleanup."
+        "Inspects both Razor/C# and JS/TS sides",
+        "Checks callback lifetime and map cleanup"
+      ]
+    },
+    {
+      "id": "rerender-target-loss",
+      "prompt": "第一次 render 后拖拽正常，列表重绘后新的 DOM 节点不再响应 JS 事件。",
+      "should_trigger": true,
+      "expected_output": "Diagnoses stale DOM registration and designs idempotent re-registration.",
+      "assertions": [
+        "Checks rerendered node identity",
+        "Requires symmetric cleanup"
+      ]
+    },
+    {
+      "id": "duplicate-registration",
+      "prompt": "OnAfterRenderAsync 多次调用 JS 注册，事件现在触发三次并持续增长。",
+      "should_trigger": true,
+      "expected_output": "Finds duplicate registration and verifies idempotent attach/detach behavior.",
+      "assertions": [
+        "Counts registration lifecycle",
+        "Verifies disposal and repeated renders"
       ]
     },
     {
       "id": "statehaschanged-index-error",
       "prompt": "StateHasChanged 后 BuildRenderTree 里 IndexOutOfRange，但没有任何 JS 代码参与。",
-      "expected_output": "The agent should prefer Blazor lifecycle/rendering pitfalls instead of JS interop.",
       "should_trigger": false,
+      "expected_output": "Routes the pure rendering failure to Blazor interaction pitfalls.",
       "assertions": [
-        "Routes to ada-blazor-interaction-pitfalls."
+        "Does not force JS interop",
+        "Routes to ada-blazor-interaction-pitfalls"
+      ]
+    },
+    {
+      "id": "full-rcl-audit",
+      "prompt": "只读审计整个 RCL 的状态、CSS、互操作、打包和真实浏览器路径。",
+      "should_trigger": false,
+      "expected_output": "Routes the broad cross-layer request to ada-blazor-ui-audit.",
+      "assertions": [
+        "Does not reduce to one pitfall",
+        "Routes to ada-blazor-ui-audit"
+      ]
+    },
+    {
+      "id": "protocol-design",
+      "prompt": "设计跨 DOM 和 Host 的拖拽消息协议，包含稳定 ID 和索引域。",
+      "should_trigger": false,
+      "expected_output": "Routes protocol design to ada-ui-interaction-protocol-contracts.",
+      "assertions": [
+        "Does not focus on lifecycle cleanup",
+        "Routes to protocol-contract Skill"
+      ]
+    },
+    {
+      "id": "pure-store",
+      "prompt": "纯 C# Store 的 Undo/Redo 和持久化回滚不一致，JS 没参与。",
+      "should_trigger": false,
+      "expected_output": "Routes service-state auditing away from Blazor interop.",
+      "assertions": [
+        "Does not invoke JS lifecycle",
+        "Routes to stateful service audit"
       ]
     }
   ]
