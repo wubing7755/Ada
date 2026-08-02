@@ -1,0 +1,80 @@
+name: Ada Profile Quality
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ada-profile-quality-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate-profile:
+    name: validate-profile
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.11'
+
+      - name: Install validator dependency
+        run: python -m pip install --disable-pip-version-check 'PyYAML==6.0.3'
+
+      - name: Run validator unit tests
+        run: python -m unittest scripts/tests/test_validate_skill_quality.py -v
+
+      - name: Validate Profile distribution
+        run: python scripts/validate_skill_quality.py
+
+      - name: Compile Python scripts
+        run: python -m compileall -q scripts
+
+      - name: Check changed-file whitespace
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          BEFORE_SHA: ${{ github.event.before }}
+        run: |
+          if [[ "$EVENT_NAME" == "pull_request" ]]; then
+            git diff --check "$BASE_SHA...$HEAD_SHA"
+          elif [[ "$EVENT_NAME" == "push" && -n "$BEFORE_SHA" && ! "$BEFORE_SHA" =~ ^0+$ ]]; then
+            git diff --check "$BEFORE_SHA" "$GITHUB_SHA"
+          else
+            git diff --check
+          fi
+
+      - name: Install pinned Hermes CLI
+        env:
+          HERMES_COMMIT: cc4cab2f592e60a197e796506de9168f74baf3ea
+          HERMES_HOME: ${{ runner.temp }}/hermes-bootstrap
+        run: |
+          curl -fsSL \
+            "https://raw.githubusercontent.com/NousResearch/hermes-agent/$HERMES_COMMIT/scripts/install.sh" \
+            | bash -s -- \
+                --commit "$HERMES_COMMIT" \
+                --skip-setup \
+                --skip-browser \
+                --no-skills \
+                --non-interactive
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+          "$HOME/.local/bin/hermes" --version
+
+      - name: Run isolated install-update smoke test
+        run: python scripts/smoke_profile_distribution.py
