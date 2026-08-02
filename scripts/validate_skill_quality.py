@@ -144,7 +144,6 @@ def check_resource_links(path: Path, result: ValidationResult, root: Path) -> No
         for rel in pattern.findall(text):
             if rel in seen or any(marker in rel for marker in ("*", "<", ">")):
                 continue
-            seen.add(rel)
             rel_path = rel.split("#", 1)[0]
             resource_root = rel_path.replace("\\", "/").split("/", 1)[0]
             # Backticked scripts/templates commonly name files in the target
@@ -156,6 +155,7 @@ def check_resource_links(path: Path, result: ValidationResult, root: Path) -> No
                 and not (skill_dir / resource_root).exists()
             ):
                 continue
+            seen.add(rel)
             target = (skill_dir / rel_path).resolve()
             try:
                 target.relative_to(skill_dir.resolve())

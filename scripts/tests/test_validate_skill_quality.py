@@ -254,7 +254,9 @@ class DistributionValidatorTests(unittest.TestCase):
         root = self.make_distribution()
         skill = root / "skills" / "software-development" / "ada-example" / "SKILL.md"
         skill.write_text(
-            skill.read_text(encoding="utf-8") + "Use [template](templates/missing.md).\n",
+            skill.read_text(encoding="utf-8")
+            + "The target project uses `templates/missing.md`.\n"
+            + "Use [template](templates/missing.md).\n",
             encoding="utf-8",
         )
 
