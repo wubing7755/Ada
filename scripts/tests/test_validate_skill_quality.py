@@ -95,6 +95,27 @@ class DistributionValidatorTests(unittest.TestCase):
 
         self.assertTrue(any("duplicate YAML key" in error for error in result.errors))
 
+    def test_valid_frontmatter_yaml_merge_key_passes(self) -> None:
+        root = self.make_distribution()
+        skill = root / "skills" / "software-development" / "ada-example" / "SKILL.md"
+        text = skill.read_text(encoding="utf-8")
+        skill.write_text(
+            text.replace(
+                "version: 1.0.0\n",
+                "version: 1.0.0\n"
+                "metadata: &defaults\n"
+                "  category: engineering\n"
+                "routing:\n"
+                "  <<: *defaults\n"
+                "  category: review\n",
+            ),
+            encoding="utf-8",
+        )
+
+        result = VALIDATOR.validate(root)
+
+        self.assertEqual([], result.errors)
+
     def test_frontmatter_fence_must_start_at_first_character(self) -> None:
         root = self.make_distribution()
         skill = root / "skills" / "software-development" / "ada-example" / "SKILL.md"

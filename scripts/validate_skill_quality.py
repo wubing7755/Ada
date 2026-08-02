@@ -59,11 +59,13 @@ if yaml is not None:
         node: yaml.nodes.MappingNode,
         deep: bool = False,
     ) -> dict[object, object]:
-        mapping: dict[object, object] = {}
-        for key_node, value_node in node.value:
+        explicit_keys: set[object] = set()
+        for key_node, _ in node.value:
+            if key_node.tag == "tag:yaml.org,2002:merge":
+                continue
             key = loader.construct_object(key_node, deep=deep)
             try:
-                duplicate = key in mapping
+                duplicate = key in explicit_keys
             except TypeError as exc:
                 raise yaml.constructor.ConstructorError(
                     "while constructing a mapping",
@@ -78,6 +80,15 @@ if yaml is not None:
                     f"duplicate YAML key: {key!r}",
                     key_node.start_mark,
                 )
+            explicit_keys.add(key)
+
+        # Preserve SafeLoader's standard merge-key semantics. Merged defaults
+        # may overlap and explicit keys may intentionally override them; only
+        # duplicate keys written directly in the same mapping are rejected.
+        loader.flatten_mapping(node)
+        mapping: dict[object, object] = {}
+        for key_node, value_node in node.value:
+            key = loader.construct_object(key_node, deep=deep)
             mapping[key] = loader.construct_object(value_node, deep=deep)
         return mapping
 
