@@ -130,6 +130,8 @@ Run all commands before each commit and again before opening a pull request:
 python -m unittest scripts/tests/test_validate_skill_quality.py -v
 python scripts/validate_skill_quality.py
 python scripts/smoke_profile_distribution.py
+python -m compileall -q scripts
+git diff --check
 ```
 
 The validator uses PyYAML, which is already a Hermes runtime dependency. If it
@@ -141,6 +143,12 @@ The smoke test redirects `HERMES_HOME` to a temporary directory, installs a
 temporary copy of the repository, updates distribution-owned content, and
 verifies that memory, session, and `local/` markers survive. It never installs
 the test Profile into the user's real Hermes home.
+
+The `Ada Profile Quality` GitHub Actions workflow runs the same gates for every
+pull request targeting `main` and every push to `main`. Its stable check name is
+`validate-profile`. The workflow uses read-only repository permissions, pinned
+official Actions revisions, and the pinned Hermes `v2026.7.30` release for the
+isolated install/update smoke test.
 
 The validator enforces:
 
