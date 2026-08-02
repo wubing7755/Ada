@@ -24,8 +24,39 @@ except ModuleNotFoundError:  # pragma: no cover - exercised only outside Hermes/
 ROOT = Path(__file__).resolve().parents[1]
 SKILLS_ROOT = ROOT / "skills"
 MANIFEST_PATH = ROOT / "distribution.yaml"
-README_PATH = ROOT / "README.md"
 NAME_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
+
+
+@dataclass(frozen=True)
+class ReadmeSpec:
+    """Language-specific stable labels used to validate one README file."""
+
+    rel: str
+    version_pattern: re.Pattern[str]
+    count_pattern: re.Pattern[str]
+    switch_target: str
+    status_marker: str
+
+
+# The README language pair is validated independently per language. Stable
+# labels are declared here; changing a label in a README requires updating the
+# matching spec (and its tests) so the two files cannot silently diverge.
+README_SPECS = (
+    ReadmeSpec(
+        rel="README.md",
+        version_pattern=re.compile(r"Current version:\s*`([^`]+)`"),
+        count_pattern=re.compile(r"Skill Catalog\s*\((\d+)\s+skills\)"),
+        switch_target="README.zh-CN.md",
+        status_marker="Canonical",
+    ),
+    ReadmeSpec(
+        rel="README.zh-CN.md",
+        version_pattern=re.compile(r"当前版本：\s*`([^`]+)`"),
+        count_pattern=re.compile(r"技能体系\s*\((\d+)\s+skills\)"),
+        switch_target="README.md",
+        status_marker="Synchronized",
+    ),
+)
 LOCAL_SKILL_REF_RE = re.compile(r"(?<![a-z0-9-])(ada-[a-z0-9]+(?:-[a-z0-9]+)*)(?![a-z0-9-])")
 RESOURCE_LINK_RES = (
     (re.compile(r"`((?:references|assets|evals|scripts|templates)/[^`]+)`"), False),
@@ -118,6 +149,65 @@ def relative(path: Path, root: Path) -> Path:
         return path.relative_to(root)
     except ValueError:
         return path
+
+
+def readme_preamble(text: str) -> str:
+    """Return the language-bar region: everything before the first heading."""
+    lines = text.splitlines()
+    for index, line in enumerate(lines):
+        if re.match(r"^#{1,6}\s", line):
+            return "\n".join(lines[:index])
+    return text
+
+
+def check_readme(
+    root: Path,
+    spec: ReadmeSpec,
+    manifest_version: str,
+    skill_names: set[str],
+    skill_count: int,
+    result: ValidationResult,
+) -> None:
+    """Independently validate one language's README against its stable labels."""
+    path = root / spec.rel
+    if not path.exists():
+        result.error(spec.rel, "missing distribution README")
+        return
+    try:
+        text = path.read_text(encoding="utf-8")
+    except UnicodeDecodeError as exc:
+        result.error(spec.rel, f"README is not valid UTF-8: {exc}")
+        return
+
+    version_match = spec.version_pattern.search(text)
+    if not version_match or version_match.group(1) != manifest_version:
+        result.error(
+            spec.rel,
+            f"version does not match distribution.yaml ({manifest_version!r})",
+        )
+
+    count_match = spec.count_pattern.search(text)
+    if not count_match or int(count_match.group(1)) != skill_count:
+        result.error(spec.rel, f"skill count must equal actual catalog size {skill_count}")
+
+    readme_names = set(re.findall(r"`(ada-[a-z0-9]+(?:-[a-z0-9]+)*)`", text))
+    for missing in sorted(skill_names - readme_names):
+        result.error(spec.rel, f"catalog omits distributed skill: {missing}")
+    for unknown in sorted(readme_names - skill_names):
+        result.error(spec.rel, f"catalog references unknown Ada skill: {unknown}")
+
+    preamble = readme_preamble(text)
+    switch_link = re.compile(r"\]\(\s*<?\s*" + re.escape(spec.switch_target) + r"\s*>?\s*\)")
+    if not switch_link.search(preamble):
+        result.error(
+            spec.rel,
+            f"language switch link to {spec.switch_target} is missing before the first heading",
+        )
+    if spec.status_marker not in preamble:
+        result.error(
+            spec.rel,
+            f"status marker {spec.status_marker!r} is missing from the language bar",
+        )
 
 
 def parse_frontmatter(path: Path) -> tuple[dict[str, object], list[str]]:
@@ -334,15 +424,11 @@ def validate(root: Path = ROOT) -> ValidationResult:
     result = ValidationResult()
     skills_root = root / "skills"
     manifest_path = root / "distribution.yaml"
-    readme_path = root / "README.md"
     skill_paths = sorted(skills_root.glob("**/SKILL.md"))
     skill_names = {path.parent.name for path in skill_paths}
 
     if not manifest_path.exists():
         result.error("distribution.yaml", "missing Profile distribution manifest")
-        return result
-    if not readme_path.exists():
-        result.error("README.md", "missing distribution README")
         return result
 
     manifest_text = manifest_path.read_text(encoding="utf-8")
@@ -370,24 +456,13 @@ def validate(root: Path = ROOT) -> ValidationResult:
     for undeclared in sorted(actual_paths - declared_paths):
         result.error(undeclared, "skill is not declared in distribution.yaml")
 
-    readme_text = readme_path.read_text(encoding="utf-8")
-    readme_names = set(re.findall(r"`(ada-[a-z0-9]+(?:-[a-z0-9]+)*)`", readme_text))
-    for missing in sorted(skill_names - readme_names):
-        result.error("README.md", f"catalog omits distributed skill: {missing}")
-    for unknown in sorted(readme_names - skill_names):
-        result.error("README.md", f"catalog references unknown Ada skill: {unknown}")
-
-    readme_count = re.search(r"技能体系\s*\((\d+)\s+skills\)", readme_text)
-    if not readme_count or int(readme_count.group(1)) != len(skill_paths):
-        result.error("README.md", f"skill count must equal actual catalog size {len(skill_paths)}")
     description_count = re.search(r"Includes\s+(\d+)\s+Agent Skills", manifest_text)
     if not description_count or int(description_count.group(1)) != len(skill_paths):
         result.error("distribution.yaml", f"description skill count must equal {len(skill_paths)}")
 
     manifest_version = str(manifest.get("version", ""))
-    readme_version = re.search(r"当前版本：`([^`]+)`", readme_text)
-    if not readme_version or readme_version.group(1) != manifest_version:
-        result.error("README.md", "version does not match distribution.yaml")
+    for spec in README_SPECS:
+        check_readme(root, spec, manifest_version, skill_names, len(skill_paths), result)
 
     for path in skill_paths:
         check_skill(path, skill_names, result, root)

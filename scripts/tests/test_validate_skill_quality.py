@@ -20,6 +20,33 @@ sys.modules[SPEC.name] = VALIDATOR
 SPEC.loader.exec_module(VALIDATOR)
 
 
+EN_README = """English | [简体中文](README.zh-CN.md)
+
+> **Status:** Canonical
+
+# Example
+
+Current version: `1.0.0`
+
+## Skill Catalog (1 skills)
+
+- `ada-example`
+"""
+
+ZH_README = """[English](README.md) | 简体中文
+
+> **状态：** Synchronized（与英文主版本同步维护；如有冲突，以英文版为准）
+
+# 示例
+
+当前版本：`1.0.0`
+
+## 技能体系 (1 skills)
+
+- `ada-example`
+"""
+
+
 class DistributionValidatorTests(unittest.TestCase):
     def make_distribution(self) -> Path:
         temp = tempfile.TemporaryDirectory()
@@ -44,12 +71,8 @@ class DistributionValidatorTests(unittest.TestCase):
             "  - software-development/ada-example\n",
             encoding="utf-8",
         )
-        (root / "README.md").write_text(
-            "当前版本：`1.0.0`\n\n"
-            "## 技能体系 (1 skills)\n\n"
-            "- `ada-example`\n",
-            encoding="utf-8",
-        )
+        (root / "README.md").write_text(EN_README, encoding="utf-8")
+        (root / "README.zh-CN.md").write_text(ZH_README, encoding="utf-8")
         return root
 
     def test_valid_distribution_passes(self) -> None:
@@ -313,6 +336,184 @@ class DistributionValidatorTests(unittest.TestCase):
         result = VALIDATOR.validate(root)
 
         self.assertTrue(any("missing local resource link" in error for error in result.errors))
+
+    def test_missing_english_readme_fails(self) -> None:
+        root = self.make_distribution()
+        (root / "README.md").unlink()
+
+        result = VALIDATOR.validate(root)
+
+        self.assertTrue(any("README.md" in error and "missing" in error for error in result.errors))
+
+    def test_missing_chinese_readme_fails(self) -> None:
+        root = self.make_distribution()
+        (root / "README.zh-CN.md").unlink()
+
+        result = VALIDATOR.validate(root)
+
+        self.assertTrue(any("README.zh-CN.md" in error and "missing" in error for error in result.errors))
+
+    def test_english_version_mismatch_fails(self) -> None:
+        root = self.make_distribution()
+        readme = root / "README.md"
+        readme.write_text(readme.read_text(encoding="utf-8").replace("`1.0.0`", "`9.9.9`", 1), encoding="utf-8")
+
+        result = VALIDATOR.validate(root)
+
+        self.assertTrue(any("README.md" in error and "version" in error for error in result.errors))
+
+    def test_chinese_version_mismatch_fails(self) -> None:
+        root = self.make_distribution()
+        readme = root / "README.zh-CN.md"
+        readme.write_text(readme.read_text(encoding="utf-8").replace("`1.0.0`", "`9.9.9`", 1), encoding="utf-8")
+
+        result = VALIDATOR.validate(root)
+
+        self.assertTrue(any("README.zh-CN.md" in error and "version" in error for error in result.errors))
+
+    def test_english_skill_count_mismatch_fails(self) -> None:
+        root = self.make_distribution()
+        readme = root / "README.md"
+        readme.write_text(
+            readme.read_text(encoding="utf-8").replace("Skill Catalog (1 skills)", "Skill Catalog (2 skills)"),
+            encoding="utf-8",
+        )
+
+        result = VALIDATOR.validate(root)
+
+        self.assertTrue(any("README.md" in error and "skill count" in error for error in result.errors))
+
+    def test_chinese_skill_count_mismatch_fails(self) -> None:
+        root = self.make_distribution()
+        readme = root / "README.zh-CN.md"
+        readme.write_text(
+            readme.read_text(encoding="utf-8").replace("技能体系 (1 skills)", "技能体系 (2 skills)"),
+            encoding="utf-8",
+        )
+
+        result = VALIDATOR.validate(root)
+
+        self.assertTrue(any("README.zh-CN.md" in error and "skill count" in error for error in result.errors))
+
+    def test_english_catalog_omits_skill_fails(self) -> None:
+        root = self.make_distribution()
+        readme = root / "README.md"
+        readme.write_text(readme.read_text(encoding="utf-8").replace("- `ada-example`", ""), encoding="utf-8")
+
+        result = VALIDATOR.validate(root)
+
+        self.assertTrue(any("README.md" in error and "omits" in error for error in result.errors))
+
+    def test_chinese_catalog_omits_skill_fails(self) -> None:
+        root = self.make_distribution()
+        readme = root / "README.zh-CN.md"
+        readme.write_text(readme.read_text(encoding="utf-8").replace("- `ada-example`", ""), encoding="utf-8")
+
+        result = VALIDATOR.validate(root)
+
+        self.assertTrue(any("README.zh-CN.md" in error and "omits" in error for error in result.errors))
+
+    def test_english_unknown_skill_reference_fails(self) -> None:
+        root = self.make_distribution()
+        readme = root / "README.md"
+        readme.write_text(readme.read_text(encoding="utf-8") + "\n`ada-ghost`\n", encoding="utf-8")
+
+        result = VALIDATOR.validate(root)
+
+        self.assertTrue(any("README.md" in error and "unknown" in error for error in result.errors))
+
+    def test_chinese_unknown_skill_reference_fails(self) -> None:
+        root = self.make_distribution()
+        readme = root / "README.zh-CN.md"
+        readme.write_text(readme.read_text(encoding="utf-8") + "\n`ada-ghost`\n", encoding="utf-8")
+
+        result = VALIDATOR.validate(root)
+
+        self.assertTrue(any("README.zh-CN.md" in error and "unknown" in error for error in result.errors))
+
+    def test_english_switch_link_missing_fails(self) -> None:
+        root = self.make_distribution()
+        readme = root / "README.md"
+        readme.write_text(
+            readme.read_text(encoding="utf-8").replace("English | [简体中文](README.zh-CN.md)", "English"),
+            encoding="utf-8",
+        )
+
+        result = VALIDATOR.validate(root)
+
+        self.assertTrue(any("README.md" in error and "language switch" in error for error in result.errors))
+
+    def test_chinese_switch_link_missing_fails(self) -> None:
+        root = self.make_distribution()
+        readme = root / "README.zh-CN.md"
+        readme.write_text(
+            readme.read_text(encoding="utf-8").replace("[English](README.md) | 简体中文", "简体中文"),
+            encoding="utf-8",
+        )
+
+        result = VALIDATOR.validate(root)
+
+        self.assertTrue(any("README.zh-CN.md" in error and "language switch" in error for error in result.errors))
+
+    def test_english_switch_link_wrong_target_fails(self) -> None:
+        root = self.make_distribution()
+        readme = root / "README.md"
+        readme.write_text(
+            readme.read_text(encoding="utf-8").replace("README.zh-CN.md", "README.de.md"),
+            encoding="utf-8",
+        )
+
+        result = VALIDATOR.validate(root)
+
+        self.assertTrue(any("README.md" in error and "language switch" in error for error in result.errors))
+
+    def test_chinese_switch_link_wrong_target_fails(self) -> None:
+        root = self.make_distribution()
+        readme = root / "README.zh-CN.md"
+        readme.write_text(
+            readme.read_text(encoding="utf-8").replace("README.md)", "README.de.md)"),
+            encoding="utf-8",
+        )
+
+        result = VALIDATOR.validate(root)
+
+        self.assertTrue(any("README.zh-CN.md" in error and "language switch" in error for error in result.errors))
+
+    def test_english_status_marker_missing_fails(self) -> None:
+        root = self.make_distribution()
+        readme = root / "README.md"
+        readme.write_text(
+            readme.read_text(encoding="utf-8").replace("> **Status:** Canonical", "> **Status:** In Review"),
+            encoding="utf-8",
+        )
+
+        result = VALIDATOR.validate(root)
+
+        self.assertTrue(any("README.md" in error and "status" in error for error in result.errors))
+
+    def test_chinese_status_marker_missing_fails(self) -> None:
+        root = self.make_distribution()
+        readme = root / "README.zh-CN.md"
+        readme.write_text(
+            readme.read_text(encoding="utf-8").replace("Synchronized", "Outdated"),
+            encoding="utf-8",
+        )
+
+        result = VALIDATOR.validate(root)
+
+        self.assertTrue(any("README.zh-CN.md" in error and "status" in error for error in result.errors))
+
+    def test_status_role_inversion_fails(self) -> None:
+        root = self.make_distribution()
+        english = root / "README.md"
+        chinese = root / "README.zh-CN.md"
+        english.write_text(english.read_text(encoding="utf-8").replace("Canonical", "Synchronized"), encoding="utf-8")
+        chinese.write_text(chinese.read_text(encoding="utf-8").replace("Synchronized", "Canonical"), encoding="utf-8")
+
+        result = VALIDATOR.validate(root)
+
+        self.assertTrue(any("README.md" in error and "status" in error for error in result.errors))
+        self.assertTrue(any("README.zh-CN.md" in error and "status" in error for error in result.errors))
 
 
 if __name__ == "__main__":
