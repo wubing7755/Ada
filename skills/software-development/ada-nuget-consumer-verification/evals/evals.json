@@ -1,0 +1,95 @@
+{
+  "skill_name": "ada-nuget-consumer-verification",
+  "evals": [
+    {
+      "id": "consumer-fails-cs1061",
+      "prompt": "消费者示例测试 CS1061 找不到新 API，restore 之后还是旧库。",
+      "should_trigger": true,
+      "expected_output": "Runs the dev loop: pack with the consumer's pinned version, clear only the consumer's local package cache, restore with its NuGet.Config, verify .nupkg.metadata source is the local feed.",
+      "assertions": [
+        "Packs with the consumer's pinned version",
+        "Clears only the consumer's local cache"
+      ]
+    },
+    {
+      "id": "consumer-resolves-released",
+      "prompt": "消费者从 nuget.org 解析了已发布包而不是本地 feed 的新包。",
+      "should_trigger": true,
+      "expected_output": "Checks feed order in the consumer's NuGet.Config (local feed first) and verifies the resolved source via .nupkg.metadata.",
+      "assertions": [
+        "Verifies local feed listed first",
+        "Confirms resolved source in .nupkg.metadata"
+      ]
+    },
+    {
+      "id": "hintpath-stale",
+      "prompt": "聚焦测试跑的是旧代码，HintPath 引用的 App.dll 没重建。",
+      "should_trigger": true,
+      "expected_output": "Identifies the HintPath-referenced DLL staleness trap and rebuilds the app project / runs the solution before focused tests.",
+      "assertions": [
+        "Recognizes HintPath does not rebuild the app",
+        "Rebuilds the app before focused tests"
+      ]
+    },
+    {
+      "id": "rs0016-new-api",
+      "prompt": "新增公共 API 触发 RS0016 PublicAPI analyzer 错误。",
+      "should_trigger": true,
+      "expected_output": "Updates PublicAPI.Unshipped.txt with the analyzer's exact expected entry format (baseline maintenance, not test weakening).",
+      "assertions": [
+        "Updates the PublicAPI baseline",
+        "Preserves analyzer-exact entry format"
+      ]
+    },
+    {
+      "id": "consumer-gap-review",
+      "prompt": "评估这个库的消费者体验，从它的 samples 示例找缺口。",
+      "should_trigger": true,
+      "expected_output": "Runs the Consumer-Sample Gap Review mode: reads the sample as a consumer, checks friction patterns against library source and docs, reports severity-ranked file:line findings.",
+      "assertions": [
+        "Hunts friction patterns with evidence",
+        "Splits findings into framework-fix vs sample-fix"
+      ]
+    },
+    {
+      "id": "build-gates",
+      "prompt": "编辑了 .NET 工程，需要跑构建测试格式门禁。",
+      "should_trigger": false,
+      "expected_output": "Routes build-gate verification to ada-dotnet-verification.",
+      "assertions": [
+        "Does not activate consumer verification",
+        "Routes to verification skill"
+      ]
+    },
+    {
+      "id": "nuget-packaging",
+      "prompt": "发布新版本的 NuGet 包并写 package README。",
+      "should_trigger": false,
+      "expected_output": "Routes packaging/release work to ada-dotnet-nuget-packaging.",
+      "assertions": [
+        "Does not activate consumer verification",
+        "Routes to packaging skill"
+      ]
+    },
+    {
+      "id": "library-public-api",
+      "prompt": "审查库的公共 API 设计。",
+      "should_trigger": false,
+      "expected_output": "Routes public-API review to ada-library-public-api-review.",
+      "assertions": [
+        "Does not activate consumer verification",
+        "Routes to public API review"
+      ]
+    },
+    {
+      "id": "code-quality",
+      "prompt": "做一次代码质量分析。",
+      "should_trigger": false,
+      "expected_output": "Routes quality analysis to ada-code-quality-analysis.",
+      "assertions": [
+        "Does not activate consumer verification",
+        "Routes to code-quality analysis"
+      ]
+    }
+  ]
+}

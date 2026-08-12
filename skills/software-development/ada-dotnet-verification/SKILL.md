@@ -152,6 +152,17 @@ See `references/isolated-artifacts-verifier.md` for a reusable session-derived v
 - **Running `dotnet test` without `--no-build` after a separate build.** This triggers an unnecessary rebuild. Use `dotnet build -v q && dotnet test --no-build -v q` for the project gate.
 - **Inflating ad-hoc verification into a full quality gate.** If a reviewer/user challenges ad-hoc evidence, rerun with an OS-safe temp script — do not defend prior output.
 
+## Cross-SDK `obj` contamination
+
+When the same working tree is restored or published by different major SDKs, generated NuGet imports under `obj/` can retain SDK-specific package references. A later build with the target SDK may then fail while loading tasks from another runtime (for example, SDK 6 loading `Microsoft.NET.ILLink.Tasks` built for .NET 7). `dotnet restore --force` is not sufficient evidence that the generated imports are clean.
+
+Before changing project properties or package versions:
+
+1. Reproduce the exact CI command, including whether `publish` performs its own restore or uses `--no-restore`.
+2. Verify in a clean source copy with `bin/` and `obj/` excluded, or move only the ignored `obj/` directory to a reversible temp backup and let the target SDK recreate it.
+3. Inspect `obj/project.assets.json` for unexpected SDK-pack or linker versions.
+4. Treat success in the clean target-SDK environment as proof of cache contamination; do not disable trimming, change dependencies, or alter framework settings to work around a stale `obj` tree.
+
 ## Verification Checklist
 
 - [ ] Focused RED test confirms the new test fails for the expected missing behavior before implementation

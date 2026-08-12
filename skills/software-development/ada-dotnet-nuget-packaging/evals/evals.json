@@ -1,0 +1,95 @@
+{
+  "skill_name": "ada-dotnet-nuget-packaging",
+  "evals": [
+    {
+      "id": "publish-package",
+      "prompt": "如何发布这个 .NET 库为 NuGet 包，外部消费者怎么安装？",
+      "should_trigger": true,
+      "expected_output": "Applies the release workflow: version bump across all four touchpoints, clean restore, pack with -p:Version, inspect the nupkg, consumer verification.",
+      "assertions": [
+        "Bumps version in all four touchpoints",
+        "Verifies nupkg contents before publishing"
+      ]
+    },
+    {
+      "id": "single-package-embed",
+      "prompt": "想发布一个包但把领域 DLL 嵌进去，不声明依赖。",
+      "should_trigger": true,
+      "expected_output": "Uses PrivateAssets=all + None Pack to embed the domain DLL into the RCL nupkg, with a clean restore before pack.",
+      "assertions": [
+        "Embeds the domain assembly in the nupkg",
+        "Verifies nuspec has no dependency on it"
+      ]
+    },
+    {
+      "id": "package-readme",
+      "prompt": "写 nuget.org 页面自动渲染的 package README，包含安装片段和快速开始。",
+      "should_trigger": true,
+      "expected_output": "Writes a consumer-focused package-readme.md with one-line positioning, install snippet, real demo Quick Start (public types only), capabilities, absolute doc links; one-line paragraphs, no trailing blank.",
+      "assertions": [
+        "Quick Start uses only public published types",
+        "Enforces one-line paragraphs and no trailing blank line"
+      ]
+    },
+    {
+      "id": "cpm-version-mismatch",
+      "prompt": "CI pack 任务 NU1102 找不到包，构建和格式化却通过。",
+      "should_trigger": true,
+      "expected_output": "Diagnoses the missed version touchpoint (CI pack step) and greps the whole repo for the old version before the release PR.",
+      "assertions": [
+        "Finds the stale CI pack version",
+        "Greps all four touchpoints for the old version"
+      ]
+    },
+    {
+      "id": "gh-packages-registry",
+      "prompt": "把包发布到 GitHub Packages NuGet registry。",
+      "should_trigger": true,
+      "expected_output": "Uses classic PAT write:packages only, adds the source at user-level config, pushes with --api-key, notes first publish is private.",
+      "assertions": [
+        "Writes the source to the user-level config",
+        "Hands token commands to the user, never types the token"
+      ]
+    },
+    {
+      "id": "consumer-verify",
+      "prompt": "验证消费者示例解析的是刚打的本地包。",
+      "should_trigger": false,
+      "expected_output": "Routes consumer verification to ada-nuget-consumer-verification.",
+      "assertions": [
+        "Does not activate packaging",
+        "Routes to consumer verification"
+      ]
+    },
+    {
+      "id": "library-building",
+      "prompt": "构建 RCL 组件库本身的结构。",
+      "should_trigger": false,
+      "expected_output": "Routes RCL structure work to ada-dotnet-blazor-library.",
+      "assertions": [
+        "Does not activate packaging",
+        "Routes to library-structure skill"
+      ]
+    },
+    {
+      "id": "build-gates",
+      "prompt": "编辑了 .NET 工程，需要跑构建测试格式门禁。",
+      "should_trigger": false,
+      "expected_output": "Routes build-gate verification to ada-dotnet-verification.",
+      "assertions": [
+        "Does not activate packaging",
+        "Routes to verification skill"
+      ]
+    },
+    {
+      "id": "pre-commit-review",
+      "prompt": "提交前做一次代码评审。",
+      "should_trigger": false,
+      "expected_output": "Routes pre-commit review to ada-requesting-code-review.",
+      "assertions": [
+        "Does not activate packaging",
+        "Routes to code review"
+      ]
+    }
+  ]
+}
