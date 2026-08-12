@@ -123,6 +123,24 @@ for (var i = 0; i < count; i++)
 
 Blazor reuses component instances. Use string-identity comparison (`_lastHeaderPanelId`) instead of boolean flags, or add `@key` in the parent template.
 
+## Pitfall 6: `SetKey` Sibling Swap Drops Attributes in Real-Browser DOM Application
+
+**Symptom**: two `SetKey`-ed sibling elements (e.g. toolbar entries with `SetKey(item.Id)`) exchange positions after a reorder; the moved element's attributes (including `data-*` drag metadata and `onclick`) vanish in the real browser — it becomes a "naked element" with content (icon/title) but no attributes. Dragging/clicking behavior breaks (no drag source, click no-op), while the other sibling works.
+
+**Root cause**: when keyed siblings swap positions, Blazor performs DOM-node move + attribute patch. The attribute patch fails in the **real browser DOM application layer**; the moved element's attribute frames are lost as a block (element frame + content survive, attributes gone).
+
+**Why bUnit cannot catch it**: bUnit's AngleSharp DOM application differs from the real browser. `RenderComponent` from an empty tree renders the final state without the incremental diff; even an incremental sequence (render → operation → render) passes because AngleSharp applies the diff correctly.
+
+**Fix pattern**: for elements without internal state (bare buttons, simple entries), remove the unnecessary `SetKey` — with no key, swaps are handled by position-matched attribute value updates (attribute values differ, so they update correctly). This is a correct simplification, not a hack. For stateful elements, evaluate alternatives (e.g. keep the key and decouple attribute sequence from position via a region wrapper) — unverified alternatives require real-browser confirmation.
+
+**Check siblings**: every `SetKey(item.Id)` in a reorderable sibling list is a candidate (toolbar entries, document tab strips). Test the reorder path in the real browser and inspect the moved element's attributes.
+
+## Verification Limitations (Browser DOM Application Layer)
+
+- **bUnit/AngleSharp cannot reproduce real-browser DOM application failures** (e.g. Pitfall 6). Green bUnit render assertions prove the render-tree output is correct, not that the browser applies incremental diffs correctly. Final judgment for these bugs must come from a real browser.
+- **bUnit incremental sequence**: to even approximate a re-render path, use render → operation → render (not render-from-final-state), but do not treat a green result as proof against real-browser-only failures.
+- **Synthetic PointerEvent in headless/CDP eval cannot simulate real drags**: in some headless environments `composedPath()` returns empty for synthetic `PointerEvent` (click works, pointerdown does not), so the interaction controller never receives the event. Do not rely on synthetic pointer sequences to reproduce drag bugs; use real-browser manual verification (or trusted CDP input) instead.
+
 ## Common Pitfalls
 
 - **`@ref` in `foreach` loop only captures the last element**: Use a pre-allocated `ElementReference[]` array with an index counter, not a `Dictionary` (which Razor cannot bind to).
