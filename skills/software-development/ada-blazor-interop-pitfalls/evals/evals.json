@@ -80,6 +80,36 @@
         "Does not invoke JS lifecycle",
         "Routes to stateful service audit"
       ]
+    },
+    {
+      "id": "module-export-missing",
+      "prompt": "C# InvokeVoidAsync 调 JS 函数，真实浏览器报 Could not find 'fnName' undefined，bUnit 全绿。",
+      "should_trigger": true,
+      "expected_output": "Checks the shipped bundle entry surface re-exports the function; adds Node regression test against the entry surface.",
+      "assertions": [
+        "Verifies the served bundle contains the symbol",
+        "Tests the entry surface, not the implementation module"
+      ]
+    },
+    {
+      "id": "render-timing-bounce",
+      "prompt": "拖拽分割条释放时预览弹回旧位置一帧，再跳到最终位置。",
+      "should_trigger": true,
+      "expected_output": "Applies the preview-vs-commit pattern: keep the preview until the commit's re-render applies, with a bounded fallback.",
+      "assertions": [
+        "Keeps preview until render-batch apply",
+        "Handles rejected commits with bounded fallback"
+      ]
+    },
+    {
+      "id": "first-render-noop",
+      "prompt": "OnAfterRenderAsync 首渲染调 JS 没效果，无报错。",
+      "should_trigger": false,
+      "expected_output": "Routes first-render interop timing to ada-blazor-wasm-runtime-pitfalls.",
+      "assertions": [
+        "Does not treat as export/timing-preview issue",
+        "Routes to runtime pitfalls"
+      ]
     }
   ]
 }

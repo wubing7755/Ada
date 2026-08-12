@@ -1,0 +1,60 @@
+# 已验证的 Blazor WASM -> GitHub Pages 工作流（net6.0）
+# 用法：把 <AppName> 替换为实际项目名；按仓库结构调整 tools/ContentConverter、content/
+# 关键点：converter 必须先于 publish 运行（生成的 wwwroot/data 进产物）；
+#         404.html 与 .nojekyll 必须在 artifact 根（publish/wwwroot）内。
+
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 6.0.x
+
+      - name: Convert content (XML -> JSON)
+        run: dotnet run --project tools/ContentConverter -- content src/<AppName>/wwwroot/data
+
+      - name: Publish
+        run: dotnet publish src/<AppName> -c Release -o publish
+
+      - name: Add SPA 404 fallback
+        run: cp publish/wwwroot/index.html publish/wwwroot/404.html
+
+      - name: Add .nojekyll
+        run: touch publish/wwwroot/.nojekyll
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: publish/wwwroot
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

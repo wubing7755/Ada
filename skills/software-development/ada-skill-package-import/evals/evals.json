@@ -1,0 +1,85 @@
+{
+  "skill_name": "ada-skill-package-import",
+  "evals": [
+    {
+      "id": "install-skill-pack",
+      "prompt": "加载这个 skill 包 / install this skill package。",
+      "should_trigger": true,
+      "expected_output": "Treats the install as a filesystem copy into the profile skills dir with loader discovery rules respected, not a per-skill create loop.",
+      "assertions": [
+        "Copies into the profile skills directory",
+        "Respects the loader's discovery layout"
+      ]
+    },
+    {
+      "id": "untrusted-pack",
+      "prompt": "这个社区安全 skill 集合要装进来。",
+      "should_trigger": true,
+      "expected_output": "Treats third-party packs, especially security ones, as untrusted data: inspects embedded instruction chains for red flags before running anything.",
+      "assertions": [
+        "Inspects embedded instructions for red flags",
+        "Never blindly executes downloaded scripts"
+      ]
+    },
+    {
+      "id": "tree-layout",
+      "prompt": "skill 包装完不被发现，怎么按 loader 规则布局？",
+      "should_trigger": true,
+      "expected_output": "Explains the discovery rules determining how the tree must be laid out and verifies the installed tree matches.",
+      "assertions": [
+        "Checks the tree against discovery rules",
+        "Verifies the skill is discoverable"
+      ]
+    },
+    {
+      "id": "prune-imported",
+      "prompt": "怎么删掉装进来的这个包？",
+      "should_trigger": true,
+      "expected_output": "Removes the copied tree and any references, treating it as filesystem cleanup in the profile.",
+      "assertions": [
+        "Removes the package directory",
+        "Cleans up stale references"
+      ]
+    },
+    {
+      "id": "author-skill",
+      "prompt": "写一个新的 SKILL.md。",
+      "should_trigger": false,
+      "expected_output": "Routes skill authoring to ada-hermes-agent-skill-authoring.",
+      "assertions": [
+        "Does not activate import flow",
+        "Routes to authoring skill"
+      ]
+    },
+    {
+      "id": "optimize-skill",
+      "prompt": "优化这个技能的触发词和描述。",
+      "should_trigger": false,
+      "expected_output": "Routes optimization to ada-skill-optimization.",
+      "assertions": [
+        "Does not activate import flow",
+        "Routes to optimization skill"
+      ]
+    },
+    {
+      "id": "hermes-ops",
+      "prompt": "查看 Hermes 配置文件。",
+      "should_trigger": false,
+      "expected_output": "Routes operations to ada-hermes-operations.",
+      "assertions": [
+        "Does not activate import flow",
+        "Routes to operations skill"
+      ]
+    },
+    {
+      "id": "security-review",
+      "prompt": "对代码做安全审查。",
+      "should_trigger": false,
+      "expected_output": "Routes code security review to ada-dotnet-api-security.",
+      "assertions": [
+        "Does not activate import flow",
+        "Routes to security review"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,85 @@
+{
+  "skill_name": "ada-srs-to-detailed-design",
+  "evals": [
+    {
+      "id": "generate-sdd-entries",
+      "prompt": "从分层 SRS（用户/研发/实现需求）生成《软件详细设计》的设计条目，只有实现需求派生条目。",
+      "should_trigger": true,
+      "expected_output": "Applies the derivation rules: read all three layers, derive entries only from implementation requirements, organize by module.",
+      "assertions": [
+        "Sources entries only from implementation requirements",
+        "Organizes by module with SD numbering"
+      ]
+    },
+    {
+      "id": "req-analysis-gate",
+      "prompt": "先输出需求解析清单（14 字段逐条），用户确认映射后再生成设计条目。",
+      "should_trigger": true,
+      "expected_output": "Runs the requirement-analysis gate: 14-field listing, pending-confirmation list, mapping table before writing entries.",
+      "assertions": [
+        "Produces the analysis list before entries",
+        "Waits for user confirmation of the mapping"
+      ]
+    },
+    {
+      "id": "design-description-how",
+      "prompt": "设计描述老是复述需求，要按 HOW 而非 WHAT 重写，并且条目自包含。",
+      "should_trigger": true,
+      "expected_output": "Applies the HOW-not-WHAT writing method with self-containment and reference-boundary rules.",
+      "assertions": [
+        "Checks descriptions answer how, not what",
+        "Enforces self-contained entries without sibling-flow references"
+      ]
+    },
+    {
+      "id": "sdd-format-check",
+      "prompt": "详细设计条目要过格式审查：四字段、编号连续、需求来源合规。",
+      "should_trigger": true,
+      "expected_output": "Runs the format-validation scripts and fixes numbering/source violations before delivery.",
+      "assertions": [
+        "Runs validate_sdd.py format checks",
+        "Fixes numbering and source-requirement violations"
+      ]
+    },
+    {
+      "id": "audit-design-quality",
+      "prompt": "审计详细设计 SD-* 条目的可验证性、边界覆盖与术语一致性。",
+      "should_trigger": false,
+      "expected_output": "Routes design-quality auditing to ada-detailed-design-audit.",
+      "assertions": [
+        "Does not regenerate entries",
+        "Routes to the audit skill"
+      ]
+    },
+    {
+      "id": "write-srs",
+      "prompt": "编写 SRS 需求条目（用户/研发/实现三层）。",
+      "should_trigger": false,
+      "expected_output": "Routes SRS authoring to ada-srs-writing.",
+      "assertions": [
+        "Does not activate SDD generation",
+        "Routes to SRS authoring"
+      ]
+    },
+    {
+      "id": "tp-to-srs",
+      "prompt": "从测试点/验收数据推导 SRS 需求。",
+      "should_trigger": false,
+      "expected_output": "Routes test-point derivation to ada-tp-to-srs-derivation.",
+      "assertions": [
+        "Does not treat as SDD generation",
+        "Routes to the reverse derivation skill"
+      ]
+    },
+    {
+      "id": "traceability-audit",
+      "prompt": "审计需求到设计的可追踪性矩阵。",
+      "should_trigger": false,
+      "expected_output": "Routes traceability-matrix auditing to ada-traceability-audit.",
+      "assertions": [
+        "Does not activate SDD generation",
+        "Routes to traceability audit"
+      ]
+    }
+  ]
+}

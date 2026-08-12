@@ -1,0 +1,85 @@
+{
+  "skill_name": "ada-windows-file-editing",
+  "evals": [
+    {
+      "id": "crlf-patch",
+      "prompt": "patch 这个 CRLF 文件的代码，diff 显示整段删除添加。",
+      "should_trigger": true,
+      "expected_output": "Fixes mixed line endings caused by patch tool inserts, normalizing back to CRLF, and re-verifies the diff.",
+      "assertions": [
+        "Normalizes line endings to CRLF",
+        "Re-checks the diff after normalization"
+      ]
+    },
+    {
+      "id": "msys-path",
+      "prompt": "dotnet 命令把 /tmp 路径当成了 C:\\tmp。",
+      "should_trigger": true,
+      "expected_output": "Explains MSYS path translation for native Windows processes and uses explicit Windows-style scratch paths.",
+      "assertions": [
+        "Uses Windows-style paths for native tools",
+        "Reads tool stdout for actual output paths"
+      ]
+    },
+    {
+      "id": "case-conflict",
+      "prompt": "媒体目录列表出现 .cs 源码文件，怀疑文件被复制。",
+      "should_trigger": true,
+      "expected_output": "Recognizes the Windows case-insensitive runtime-vs-source directory collision and the static-file exposure risk before anything else.",
+      "assertions": [
+        "Suspends case-insensitive directory collision",
+        "Checks git check-ignore and tracked coverage"
+      ]
+    },
+    {
+      "id": "piped-exit-code",
+      "prompt": "dotnet test | tail 之后 git commit 提交了坏代码。",
+      "should_trigger": true,
+      "expected_output": "Explains the piped-command exit-code mask and gates commits on the real exit code (PIPESTATUS / unpiped run).",
+      "assertions": [
+        "Checks the real exit code before commit",
+        "Uses TRX counts for localized output"
+      ]
+    },
+    {
+      "id": "build-gates",
+      "prompt": "编辑了 .NET 工程，跑构建门禁。",
+      "should_trigger": false,
+      "expected_output": "Routes build-gate verification to ada-dotnet-verification.",
+      "assertions": [
+        "Does not activate Windows editing pitfalls",
+        "Routes to verification skill"
+      ]
+    },
+    {
+      "id": "powershell",
+      "prompt": "从 bash 里调用 PowerShell 命令。",
+      "should_trigger": false,
+      "expected_output": "Routes PowerShell-from-bash to ada-powershell-from-bash.",
+      "assertions": [
+        "Does not activate file-editing pitfalls",
+        "Routes to powershell skill"
+      ]
+    },
+    {
+      "id": "browser-verify",
+      "prompt": "用浏览器验证 WASM 站点部署。",
+      "should_trigger": false,
+      "expected_output": "Routes browser verification to ada-blazor-wasm-github-pages.",
+      "assertions": [
+        "Does not activate file-editing pitfalls",
+        "Routes to browser verification"
+      ]
+    },
+    {
+      "id": "hermes-ops",
+      "prompt": "查看 Hermes 配置。",
+      "should_trigger": false,
+      "expected_output": "Routes operations to ada-hermes-operations.",
+      "assertions": [
+        "Does not activate file-editing pitfalls",
+        "Routes to operations skill"
+      ]
+    }
+  ]
+}

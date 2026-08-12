@@ -1,0 +1,95 @@
+{
+  "skill_name": "ada-dotnet-api-security",
+  "evals": [
+    {
+      "id": "security-review-request",
+      "prompt": "安全审查登录/注册/评论/上传这些功能，防止外部恶意攻击。",
+      "should_trigger": true,
+      "expected_output": "Scopes and threat-models the four surfaces, verifies current code with grep/read, produces a severity-ranked report with trigger/fix/verification.",
+      "assertions": [
+        "Threat-models trust boundaries and assets",
+        "Reports only real findings with evidence"
+      ]
+    },
+    {
+      "id": "sanitizer-bypass",
+      "prompt": "正则消毒器被 javascript 编码绕过，图片丢了/脚本能注入。",
+      "should_trigger": true,
+      "expected_output": "Applies parser-level whitelist (HtmlSanitizer/Ganss.Xss), adds regression tests per bypass class, configures allowed tags/attrs/schemes.",
+      "assertions": [
+        "Uses a parser-level whitelist",
+        "Adds regression tests per bypass class"
+      ]
+    },
+    {
+      "id": "upload-hardening",
+      "prompt": "上传图片要防 polyglot 文件执行，含 SVG 拒收。",
+      "should_trigger": true,
+      "expected_output": "Applies layered upload validation: extension allowlist (no svg), magic bytes, real decode, dimension cap, re-encode, sanitized filename, nosniff.",
+      "assertions": [
+        "Validates by extension then magic bytes then decode",
+        "Re-encodes to strip trailing non-image bytes"
+      ]
+    },
+    {
+      "id": "jwt-hardening",
+      "prompt": "JWT 要加吊销机制和生产环境防开发密钥。",
+      "should_trigger": true,
+      "expected_output": "Adds jti revocation, ValidAlgorithms whitelist, short expiry, and fail-fast on dev keys with fixture-safe test setup.",
+      "assertions": [
+        "Adds jti claim and revocation path",
+        "Throws at startup on dev key outside Development"
+      ]
+    },
+    {
+      "id": "rate-limit-bruteforce",
+      "prompt": "登录接口没有限流，暴力破解风险。",
+      "should_trigger": true,
+      "expected_output": "Uses net8 built-in RateLimiter with per-IP partitions, lazy IOptions reads, 429 + Retry-After, XFF spoofing awareness.",
+      "assertions": [
+        "Partitions by client IP",
+        "Reads limits lazily via IOptions"
+      ]
+    },
+    {
+      "id": "code-quality",
+      "prompt": "做一次常规代码质量分析。",
+      "should_trigger": false,
+      "expected_output": "Routes general quality analysis to ada-code-quality-analysis.",
+      "assertions": [
+        "Does not activate security review",
+        "Routes to code-quality skill"
+      ]
+    },
+    {
+      "id": "pr-review",
+      "prompt": "评审一个功能 PR。",
+      "should_trigger": false,
+      "expected_output": "Routes feature PR review to ada-requesting-code-review / ada-pr-review.",
+      "assertions": [
+        "Does not activate security review",
+        "Routes to PR review"
+      ]
+    },
+    {
+      "id": "pre-commit-scan",
+      "prompt": "提交前扫描一遍。",
+      "should_trigger": false,
+      "expected_output": "Routes pre-commit scans to ada-requesting-code-review.",
+      "assertions": [
+        "Does not activate security review",
+        "Routes to pre-commit review"
+      ]
+    },
+    {
+      "id": "audit-stateful",
+      "prompt": "审计有状态服务的状态一致性。",
+      "should_trigger": false,
+      "expected_output": "Routes stateful-service auditing to ada-stateful-service-audit.",
+      "assertions": [
+        "Does not activate security review",
+        "Routes to stateful audit"
+      ]
+    }
+  ]
+}

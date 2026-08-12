@@ -8,9 +8,9 @@ Ada 是一个可分发的 Hermes Profile：偏软件工程、重正确性与可�
 
 Ada 帮助开发者理解、设计、构建、调试和演进软件系统。它的价值不在于知道多少术语，而在于看清问题、作出判断，并把事情推进到可运行、可验证的结果。它不是只提供术语答案的聊天角色，而是有工程判断的技术搭档。
 
-人设与工程原则由 [SOUL.md](SOUL.md) 统一定义，50 个分发技能位于 [skills/](skills/)。
+人设与工程原则由 [SOUL.md](SOUL.md) 统一定义，77 个分发技能位于 [skills/](skills/)。
 
-当前版本：`0.3.0`，要求 Hermes `>=0.19.0`。
+当前版本：`0.4.0`，要求 Hermes `>=0.19.0`。
 
 ## 适合谁
 
@@ -81,11 +81,11 @@ hermes profile show ada    # 查看已安装 Profile 的详情
 
 ## 技能加载说明
 
-Ada 的 50 个技能遵循 Agent Skills 的 progressive disclosure：discovery 阶段只加载技能名称和 `description`；任务匹配后加载对应 `SKILL.md` 获得执行协议；需要时才读取 `references/`、`scripts/`、`assets/` 和 `evals/`。
+Ada 的 77 个技能遵循 Agent Skills 的 progressive disclosure：discovery 阶段只加载技能名称和 `description`；任务匹配后加载对应 `SKILL.md` 获得执行协议；需要时才读取 `references/`、`scripts/`、`assets/` 和 `evals/`。
 
-因此用户通常只需描述目标，不需要记住或手工调用 50 个技能名称；Agent 会根据任务自动加载匹配的技能。
+因此用户通常只需描述目标，不需要记住或手工调用 77 个技能名称；Agent 会根据任务自动加载匹配的技能。
 
-## 技能体系 (50 skills)
+## 技能体系 (77 skills)
 
 所有 Ada 专属技能均以 `ada-` 为前缀。分类与顺序均以 `distribution.yaml` 为准。
 
@@ -103,6 +103,10 @@ Ada 的 50 个技能遵循 Agent Skills 的 progressive disclosure：discovery �
 | `ada-skill-optimization` | 审计与优化 Hermes 生成技能：frontmatter、去重、curator |
 | `ada-systematic-debugging` | 四阶段根因调试：先理解 bug 再修复 |
 | `ada-test-driven-development` | 强制 RED-GREEN-REFACTOR 的测试驱动开发 |
+| `ada-agent-delivery-audit` | 审核长任务/委托 Agent 的多 Phase 交付：取证、不可逆闸门、门禁重跑 |
+| `ada-git-pr-delivery` | 脏工作树 → 干净 PR：指针修复、提交约定、PR 模板 |
+| `ada-git-destructive-operations` | 安全处理重置与删除本地提交：clarify 澄清意图 |
+| `ada-git-history-preserving-moves` | git mv 重命名保留 `git log --follow` 历史（含同路径替换） |
 
 ### SRS 全生命周期
 
@@ -114,6 +118,11 @@ Ada 的 50 个技能遵循 Agent Skills 的 progressive disclosure：discovery �
 | `ada-srs-revision` | 大规模修订 SRS：术语替换、重编号、引用修复 |
 | `ada-srs-writing` | SRS 编写：结构模式、质量规则、需求条目格式 |
 | `ada-tp-to-srs-derivation` | 从技术方案（TP）派生 SRS |
+| `ada-srs-to-detailed-design` | 从分层 SRS 生成详细设计条目；仅实现需求派生条目 |
+| `ada-detailed-design-audit` | 审计详细设计质量：可验证性、边界、术语、HOW 深度 |
+| `ada-contract-consistency-review` | 冻结契约一致性审查：SRS/HLD/ADR/计划一致，PASS/FAIL 结论 |
+| `ada-adr-authoring` | 双语 ADR 编写：强制结构、源码核实的 API 形态、维护者决策工作流 |
+| `ada-project-background-authoring` | SRS 前置项目背景编写：13 节结构、逐轮确认、已确认事项汇总 |
 | `ada-doc-comparison-analysis` | 对比文档版本、合并 SRS 草稿 |
 | `ada-docs-revision` | 大规模修订通用技术文档：术语替换、结构重构 |
 
@@ -150,9 +159,29 @@ Ada 的 50 个技能遵循 Agent Skills 的 progressive disclosure：discovery �
 | `ada-blazor-interaction-pitfalls` | Blazor 生命周期与渲染行为陷阱 |
 | `ada-blazor-interop-pitfalls` | Blazor JS 互操作与 DOM 事件陷阱 |
 | `ada-blazor-ui-audit` | 端到端审计组件库：渲染、状态、CSS、互操作、资产 |
+| `ada-blazor-wasm-api-integration` | Blazor WASM ↔ 后端 API 集成陷阱：认证头、URL 解析、模式配置、会话缓存 |
+| `ada-blazor-debug-verification` | .NET 6 Blazor 调试与验证手册：运行期/DI 陷阱、bUnit 竞态、消费样例循环 |
+| `ada-blazor-bunit-testing` | bUnit 1.x 组件测试编写事实：渲染、等待、事件、InputFile |
+| `ada-blazor-wasm-runtime-pitfalls` | Blazor WASM 运行时陷阱：首渲染互操作、fragment、查询导航、故障隔离、原生链接 |
 | `ada-dotnet-blazor-library` | .NET Blazor 组件库工程：RCL、Demo、公共 API、发布 |
+| `ada-dotnet-nuget-packaging` | NuGet 打包与发布：单包内嵌、CPM、package README、发布工作流 |
+| `ada-nuget-consumer-verification` | 验证 NuGet 消费者示例解析本地库源码；消费者示例缺口审查 |
 | `ada-dotnet-engineering-refactoring` | .NET 工程级重构：领域原语、值类型迁移、公共 API |
 | `ada-dotnet-verification` | .NET 构建/测试/格式化/打包验证 |
+| `ada-dotnet-api-security` | .NET Web API 安全审查与加固：JWT、限流、消毒器、上传、供应链 CI 门禁 |
+
+### GitHub Pages 与静态站点
+
+| 技能 | 作用 |
+|---|---|
+| `ada-blazor-wasm-github-pages` | Blazor WASM 静态站点部署到 GitHub Pages：内容管线、Actions 工作流、SPA 兜底、已验证陷阱 |
+| `ada-github-pages-static-site` | GitHub Pages 静态站点架构约束：无服务端限制、内容发布路径、生成产物验证 |
+
+### UI/UX 与 Web 设计
+
+| 技能 | 作用 |
+|---|---|
+| `ada-web-ui-design-review` | Web UI/UX 设计审查与改版：证据驱动审计、视口矩阵、WCAG 对比度、四段式审查方案 |
 
 ### 重构
 
@@ -167,6 +196,9 @@ Ada 的 50 个技能遵循 Agent Skills 的 progressive disclosure：discovery �
 | 技能 | 作用 |
 |---|---|
 | `ada-cmake-cpack-packaging` | CMake/CPack 跨平台打包与安装器 |
+| `ada-commit-impact-analysis` | 读提交/分支/PR 并以证据追踪真实集成影响 |
+| `ada-windows-file-editing` | Windows/MSYS 文件编辑：CRLF、MSYS 路径、大小写目录冲突、管道退出码 |
+| `ada-skill-package-import` | 将外部 skill 包导入 Hermes profile，按不可信数据处理 |
 | `ada-node-inspect-debugger` | Node.js `--inspect` + CDP 调试 |
 | `ada-powershell-from-bash` | git-bash 中正确运行 PowerShell |
 | `ada-python-debugpy` | Python debugpy/DAP 交互式调试 |
@@ -175,7 +207,13 @@ Ada 的 50 个技能遵循 Agent Skills 的 progressive disclosure：discovery �
 
 | 技能 | 作用 |
 |---|---|
-| `ada-business-document-authoring` | 证据 → 面向决策者的业务文档（DOCX/PDF） |
+| `ada-business-document-authoring` | 证据 → 面向决策者的业务文档（DOCX/PDF）
+| `ada-docx-merge` | Word .docx 章节级合并保格式：XML 手术、样式重映射、SEQ 重编号、引用同步 |
+| `ada-markdown-html-rendering` | Markdown->HTML 渲染管线陷阱：消毒丢子树、列表编号、页内锚点 |
+| `ada-data-migration-delivery-audit` | DB 取证式验证数据迁移重构确实交付 |
+| `ada-bilingual-doc-audit` | 双语文档对一致性审计：分块配对、翻译对等、假翻译检测 |
+| `ada-multilingual-documentation-migration` | 文档迁移为双语布局：manifest 状态、blob 完整性、分阶段工作流 |
+ |
 | `ada-document-artifacts` | DOCX/PDF/XLSX/SVG 文档与图表处理 |
 
 ### 研究与规划
@@ -217,7 +255,7 @@ Ada/
 ├── docs/                       # 质量标准（skill-quality-standard.md）
 ├── scripts/                    # 验证器、隔离 smoke 测试与单元测试
 ├── .github/workflows/          # GitHub Actions 质量门禁
-└── skills/software-development/  # 50 个 ada-* 技能
+└── skills/software-development/  # 77 个 ada-* 技能
 ```
 
 ## 质量验证
@@ -227,7 +265,7 @@ Ada/
 - validator 单元测试；`distribution.yaml`、实际技能目录与 README 技能目录/数量一致性；README 与 manifest 版本一致性；
 - YAML/frontmatter、资源链接、Skill 间引用和 eval 结构检查；私有运行时状态泄漏检查（memories、sessions、凭据、`local/` 等）；
 - Python `compileall` 与变更范围 `git diff --check`；
-- 使用临时 `HERMES_HOME` 的隔离 install/update smoke，确认 50 个 Skills 和用户状态在更新后保留。
+- 使用临时 `HERMES_HOME` 的隔离 install/update smoke，确认 55 个 Skills 和用户状态在更新后保留。
 
 本地可以运行同一组门禁：
 
@@ -261,7 +299,7 @@ hermes profile update ada    # 从记录的来源重新拉取并应用更新
 
 | 版本 | 说明 |
 |---|---|
-| `0.3.0`（当前，未打 tag） | 增加 GitHub Actions 质量门禁；吸收本地 Ada 工程技能并统一为 50 技能目录 |
+| `0.4.0`（当前，未打 tag） | 吸收本地/桌面 Ada profile 沉淀的 27 个自学习技能，统一为 77 技能目录；新增 SRS→设计、NuGet、安全、Git/PR 交付、双语文档、UI 审查簇 |
 | `v0.2.0`（tag） | manifest 为 0.2.2：技能触发优化、自包含技能、吸收 hermes-use 新增 3 个技能 |
 | `v0.1.0`（tag） | 初始 profile distribution |
 

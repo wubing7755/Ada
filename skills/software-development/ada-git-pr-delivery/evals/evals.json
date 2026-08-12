@@ -1,0 +1,85 @@
+{
+  "skill_name": "ada-git-pr-delivery",
+  "evals": [
+    {
+      "id": "dirty-worktree-to-pr",
+      "prompt": "切到 main 拉最新，把未提交修改带到新分支并提交 PR。",
+      "should_trigger": true,
+      "expected_output": "Fetches, moves the stale main pointer with git branch -f from the current branch, confirms the change count survived, creates the work branch, excludes tooling dirs, commits, re-runs gates, opens the PR, verifies it.",
+      "assertions": [
+        "Fixes the stale main pointer before checkout",
+        "Verifies PR state with gh pr view"
+      ]
+    },
+    {
+      "id": "commit-local-changes",
+      "prompt": "提交本地修改。",
+      "should_trigger": true,
+      "expected_output": "Presents the staged change list and waits for explicit user approval before git commit (local commits require review).",
+      "assertions": [
+        "Stages and shows the change list",
+        "Waits for approval before committing"
+      ]
+    },
+    {
+      "id": "pr-base-topology",
+      "prompt": "这个仓库 master/main/dev 并存，PR 的 base 该选哪个？",
+      "should_trigger": true,
+      "expected_output": "Maps branch topology with merge-base and ..dev logs instead of trusting origin/HEAD; picks the base whose log contains only intended commits.",
+      "assertions": [
+        "Uses merge-base evidence for base choice",
+        "Explains why origin/HEAD is untrusted"
+      ]
+    },
+    {
+      "id": "pr-body-template",
+      "prompt": "按仓库模板写 PR 正文并创建 PR。",
+      "should_trigger": true,
+      "expected_output": "Writes Summary/Validation/Impact/AI Assistance sections per the repo template, adapts to actual commands, creates via gh with a temp body file.",
+      "assertions": [
+        "Follows the repo PR template",
+        "Validation checklist matches what was actually run"
+      ]
+    },
+    {
+      "id": "destructive-reset",
+      "prompt": "删除本地提交，重置到 origin。",
+      "should_trigger": false,
+      "expected_output": "Routes destructive git operations to ada-git-destructive-operations.",
+      "assertions": [
+        "Does not activate PR delivery",
+        "Routes to destructive operations"
+      ]
+    },
+    {
+      "id": "history-preserving-move",
+      "prompt": "git mv 重命名并保留历史。",
+      "should_trigger": false,
+      "expected_output": "Routes renames to ada-git-history-preserving-moves.",
+      "assertions": [
+        "Does not activate PR delivery",
+        "Routes to history-preserving moves"
+      ]
+    },
+    {
+      "id": "pr-review",
+      "prompt": "深入 review 当前 PR。",
+      "should_trigger": false,
+      "expected_output": "Routes deep PR review to ada-requesting-code-review senior-maintainer mode.",
+      "assertions": [
+        "Does not activate PR delivery",
+        "Routes to PR review"
+      ]
+    },
+    {
+      "id": "phased-delivery",
+      "prompt": "按批次执行计划并逐批审阅。",
+      "should_trigger": false,
+      "expected_output": "Routes batch execution to ada-continuous-phased-delivery.",
+      "assertions": [
+        "Does not activate PR delivery",
+        "Routes to phased delivery"
+      ]
+    }
+  ]
+}

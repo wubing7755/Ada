@@ -8,9 +8,9 @@ Ada is a distributable Hermes Profile: a software-engineering-focused agent that
 
 Ada helps developers understand, design, build, debug, and evolve software systems. Its value is not in knowing many terms, but in seeing the problem clearly, making sound judgments, and driving work to runnable, verifiable results. It is not a chat persona that only serves up terminology; it is a technical partner with engineering judgment.
 
-Persona and engineering principles are defined once in [SOUL.md](SOUL.md); the 50 distributed skills live under [skills/](skills/).
+Persona and engineering principles are defined once in [SOUL.md](SOUL.md); the 77 distributed skills live under [skills/](skills/).
 
-Current version: `0.3.0`, requires Hermes `>=0.19.0`.
+Current version: `0.4.0`, requires Hermes `>=0.19.0`.
 
 ## Who Ada Is For
 
@@ -81,11 +81,11 @@ hermes profile show ada    # details of the installed profile
 
 ## How Skills Are Loaded
 
-Ada's 50 skills follow Agent Skills progressive disclosure: discovery loads only skill names and `description`; once a task matches, the corresponding `SKILL.md` is loaded for the execution protocol; `references/`, `scripts/`, `assets/`, and `evals/` are read only when needed.
+Ada's 77 skills follow Agent Skills progressive disclosure: discovery loads only skill names and `description`; once a task matches, the corresponding `SKILL.md` is loaded for the execution protocol; `references/`, `scripts/`, `assets/`, and `evals/` are read only when needed.
 
-In practice, you usually describe the goal and let the agent load the matching skill — there is no need to memorize or invoke the 50 skill names by hand.
+In practice, you usually describe the goal and let the agent load the matching skill — there is no need to memorize or invoke the 55 skill names by hand.
 
-## Skill Catalog (50 skills)
+## Skill Catalog (77 skills)
 
 All Ada-owned skills use the `ada-` prefix. Categories and order follow `distribution.yaml`.
 
@@ -103,6 +103,10 @@ All Ada-owned skills use the `ada-` prefix. Categories and order follow `distrib
 | `ada-skill-optimization` | Audits and optimizes Hermes-generated skills: frontmatter, dedup, curator |
 | `ada-systematic-debugging` | Four-phase root-cause debugging: understand the bug before fixing it |
 | `ada-test-driven-development` | Test-driven development enforcing RED-GREEN-REFACTOR |
+| `ada-agent-delivery-audit` | Audits long/delegated agent multi-phase deliveries: forensics, irreversible gates, gate re-runs |
+| `ada-git-pr-delivery` | Turns a dirty worktree into a clean PR: pointer fix, commit conventions, PR template |
+| `ada-git-destructive-operations` | Safe handling of resets and local-commit deletion with clarify-based intent |
+| `ada-git-history-preserving-moves` | git mv renames that survive `git log --follow`, including same-path replacements |
 
 ### SRS Lifecycle
 
@@ -114,6 +118,11 @@ All Ada-owned skills use the `ada-` prefix. Categories and order follow `distrib
 | `ada-srs-revision` | Large-scale SRS revision: terminology replacement, renumbering, reference repair |
 | `ada-srs-writing` | SRS authoring: structural patterns, quality rules, requirement entry format |
 | `ada-tp-to-srs-derivation` | Derives an SRS from a technical proposal (TP) |
+| `ada-srs-to-detailed-design` | Generates detailed-design entries from layered SRS; only implementation requirements derive entries |
+| `ada-detailed-design-audit` | Audits detailed-design quality: verifiability, boundaries, terminology, HOW depth |
+| `ada-contract-consistency-review` | Frozen-contract consistency review: SRS/HLD/ADR/plan agreement with PASS/FAIL verdict |
+| `ada-adr-authoring` | ADR authoring for bilingual docs: mandatory structure, source-verified API shapes, maintainer decision workflow |
+| `ada-project-background-authoring` | Pre-SRS project-background authoring: 13-section structure, elicitation rounds, confirmed-items summary |
 | `ada-doc-comparison-analysis` | Compares document versions and merges SRS drafts |
 | `ada-docs-revision` | Large-scale revision of general technical documents: terminology, structure |
 
@@ -150,9 +159,29 @@ All Ada-owned skills use the `ada-` prefix. Categories and order follow `distrib
 | `ada-blazor-interaction-pitfalls` | Blazor lifecycle and rendering behavior pitfalls |
 | `ada-blazor-interop-pitfalls` | Blazor JS interop and DOM event pitfalls |
 | `ada-blazor-ui-audit` | End-to-end component library audit: rendering, state, CSS, interop, assets |
+| `ada-blazor-wasm-api-integration` | Blazor WASM ↔ backend API integration pitfalls: auth headers, URL resolution, mode config, session caches |
+| `ada-blazor-debug-verification` | .NET 6 Blazor debug & verification playbook: runtime/DI traps, bUnit races, consumer-sample loop |
+| `ada-blazor-bunit-testing` | bUnit 1.x test authoring facts for Blazor components: render, wait, events, InputFile |
+| `ada-blazor-wasm-runtime-pitfalls` | Blazor WASM runtime pitfalls: first-render interop, fragments, query navigation, fault isolation, native linking |
 | `ada-dotnet-blazor-library` | .NET Blazor component library engineering: RCL, demo, public API, publishing |
+| `ada-dotnet-nuget-packaging` | NuGet packaging and release: single-package embedding, CPM, package README, release workflow |
+| `ada-nuget-consumer-verification` | Verifies NuGet consumer samples against local library source; consumer-sample gap review |
 | `ada-dotnet-engineering-refactoring` | .NET engineering-level refactoring: domain primitives, value type migration, public API |
 | `ada-dotnet-verification` | .NET build/test/format/package verification |
+| `ada-dotnet-api-security` | .NET web API security review and hardening: JWT, rate limits, sanitizer, uploads, supply-chain CI gates |
+
+### GitHub Pages and Static Sites
+
+| Skill | Purpose |
+|---|---|
+| `ada-blazor-wasm-github-pages` | Blazor WASM static-site deployment to GitHub Pages: content pipeline, Actions workflow, SPA fallback, verified pitfalls |
+| `ada-github-pages-static-site` | Static-site architecture constraints on GitHub Pages: no-server limits, content publishing paths, generated-artifact verification |
+
+### UI/UX and Web Design
+
+| Skill | Purpose |
+|---|---|
+| `ada-web-ui-design-review` | Web UI/UX design review and redesign: evidence-based audit, viewport matrix, WCAG contrast, four-part review plan |
 
 ### Refactoring
 
@@ -167,6 +196,9 @@ All Ada-owned skills use the `ada-` prefix. Categories and order follow `distrib
 | Skill | Purpose |
 |---|---|
 | `ada-cmake-cpack-packaging` | CMake/CPack cross-platform packaging and installers |
+| `ada-commit-impact-analysis` | Reads a commit/branch/PR and traces its real integration impact with evidence |
+| `ada-windows-file-editing` | Windows/MSYS file editing: CRLF, MSYS paths, case-insensitive dir conflicts, piped exit codes |
+| `ada-skill-package-import` | Imports external skill packages into a Hermes profile as untrusted data |
 | `ada-node-inspect-debugger` | Node.js `--inspect` + CDP debugging |
 | `ada-powershell-from-bash` | Running PowerShell correctly from git-bash |
 | `ada-python-debugpy` | Python debugpy/DAP interactive debugging |
@@ -175,7 +207,13 @@ All Ada-owned skills use the `ada-` prefix. Categories and order follow `distrib
 
 | Skill | Purpose |
 |---|---|
-| `ada-business-document-authoring` | Evidence-to-decision business documents (DOCX/PDF) |
+| `ada-business-document-authoring` | Evidence-to-decision business documents (DOCX/PDF)
+| `ada-docx-merge` | Merges Word .docx chapters with format fidelity: XML surgery, style remap, SEQ renumber, reference sync |
+| `ada-markdown-html-rendering` | Markdown -> HTML render pipeline pitfalls: sanitizer subtree loss, list numbering, in-page anchors |
+| `ada-data-migration-delivery-audit` | DB-forensics verification that a data-migration refactor actually delivered |
+| `ada-bilingual-doc-audit` | Bilingual documentation-pair consistency audit: block pairing, translation parity, fake-translation detection |
+| `ada-multilingual-documentation-migration` | Migrates docs to bilingual layout with manifest states, blob integrity, phase-gated workflow |
+ |
 | `ada-document-artifacts` | DOCX/PDF/XLSX/SVG document and diagram processing |
 
 ### Research and Planning
@@ -227,7 +265,7 @@ The repository gates every pull request targeting `main` through the `Ada Profil
 - validator unit tests; consistency between `distribution.yaml`, the actual skill directory, and the README skill catalog/count; README vs. manifest version consistency;
 - YAML/frontmatter, resource links, inter-skill references, and eval structure checks; private runtime state leak checks (memories, sessions, credentials, `local/`, etc.);
 - Python `compileall` and changed-file `git diff --check`;
-- an isolated install/update smoke test with a temporary `HERMES_HOME`, confirming all 50 skills and user state survive an update.
+- an isolated install/update smoke test with a temporary `HERMES_HOME`, confirming all 77 skills and user state survive an update.
 
 The same gates can be run locally:
 
@@ -261,7 +299,7 @@ hermes profile update ada    # re-pull from the recorded source and apply update
 
 | Version | Notes |
 |---|---|
-| `0.3.0` (current, untagged) | Adds GitHub Actions quality gates; consolidates local Ada engineering skills into a unified 50-skill catalog |
+| `0.4.0` (current, untagged) | Absorbs 27 accumulated self-learned skills from local/desktop Ada profiles into a unified 77-skill catalog; adds SRS-to-design, NuGet, security, Git/PR delivery, bilingual docs, UI review clusters |
 | `v0.2.0` (tagged) | Manifest 0.2.2: skill-trigger refinements, self-contained skills, three new skills absorbed from hermes-use |
 | `v0.1.0` (tagged) | Initial profile distribution |
 

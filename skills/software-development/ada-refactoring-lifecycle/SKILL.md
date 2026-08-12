@@ -93,6 +93,70 @@ Do not use for one-line bug fixes, simple formatting, or isolated code review co
 - **Using the wrong approach for the stack.** .NET/C#/Blazor projects need domain-primitive and Blazor-component patterns specific to that stack. Using the generic language-agnostic approach misses stack-specific optimizations.
 - **Abandoning the plan mid-way without updating it.** If a phase reveals new information that changes later phases, update the plan document before continuing — don't just improvise.
 
+## Test Migration across a Removed API
+
+Migrate tests when a library's public API is removed or replaced (e.g. a
+legacy template API → DI/Route/Map). The failure mode this prevents: removing
+the API first, then discovering every test and the NuGet consumer sample
+break, then scrambling to migrate under a broken build.
+
+**Migrate-then-remove ordering (safe sequence)**:
+1. **Migrate consumers while the old API still exists.** Rewrite tests and the
+   NuGet consumer sample to the new mechanism; run the focused suite until
+   green. This separates migration errors from removal errors.
+2. **Add replacement coverage in a NEW test file** for behavior the old API
+   used to prove (lifecycle remount, single-update, dispose/no-stale callback,
+   error code + no exception details). Do not weaken existing tests to assert
+   less.
+3. **Remove the API and every consuming branch** — component parameters,
+   render-tree pass-through attributes (renumber the `sequence` values),
+   recovery-key tuple members, legacy branches with `TODO(phase-N)` markers.
+4. **Delete the `PublicAPI.Unshipped.txt` entries** for the removed members.
+5. **Verify the NuGet consumer**: pack new packages, delete only the
+   consumer's local package cache dirs, `dotnet restore <consumer>.sln
+   --configfile NuGet.Config`, then build/test/format the consumer against the
+   packed artifacts.
+6. **Full gate + stale-reference scan**: solution build/test, `dotnet format
+   --verify-no-changes`, `git diff --check`, and grep src+tests for the removed
+   identifier (zero matches).
+
+**bUnit TestContext pitfalls**:
+- **Service freeze after first render.** bUnit's `TestServiceProvider` throws
+  once any component rendered. Register ALL content kinds and services before
+  the first `RenderComponent` — including kinds used by a second host later in
+  the same test.
+- **Nullable `[Inject]` still requires registration.** `[Inject] private Foo?
+  Probe` throws `Cannot provide a value for property 'Probe'` when `Foo` is
+  not registered; nullability does not make injection optional. Register the
+  probe/tracker singleton in the test class constructor and resolve it via
+  `Services.GetRequiredService<T>()`.
+- **Per-test service instances.** Each xUnit test gets a fresh TestContext, so
+  constructor registrations are safe; register a state holder in the test body
+  when a test needs its own instance with a custom initial value.
+- When migrating a template wrapper to DI: if the wrapped component already
+  derives from a content component/`ComponentBase` with a `Content` parameter,
+  the DI path auto-injects `Content` — the wrapper is redundant and can be
+  deleted outright.
+
+**Scripted mechanical edits: the correct rule**. Deleting identical
+`.Add(component => component.X, Value));` lines across a file is the classic
+trap. The deleted line carries the chain's statement terminator.
+- **Correct rule**: when deleting the LAST `.Add(...));` line of a fluent
+  chain, append the statement terminator to the PREVIOUS line. A self-balanced
+  single-line `.Add(...)` always needs exactly `);` appended.
+- Do NOT append `));` blindly: count open parens (`.Add(component =>
+  component.ChildContent, Declaration("Before"))` is already self-balanced and
+  needs only `);`).
+- **Compile after EVERY script step.** A second "fix" script that recomputes
+  parens can corrupt more than it repairs. Recovery is `git checkout -- <file>`
+  and redo; keep edits small and verify each step. For a handful of call
+  sites, prefer the `patch` tool over scripts.
+
+**dotnet format aftermath**: script rewrites can leave mixed CRLF/LF —
+`dotnet format <sln> whitespace --no-restore` fixes ENDOFLINE diagnostics;
+strip trailing blank lines (`text.rstrip('\n') + '\n'`) for "new blank line at
+EOF" diffs; re-run the test suite after whitespace normalization.
+
 ## Verification Checklist
 
 - [ ] Plan document exists in `docs/refactoring/` with all required sections (quality standards, phase goals, change lists, verification criteria, dependency diagram)

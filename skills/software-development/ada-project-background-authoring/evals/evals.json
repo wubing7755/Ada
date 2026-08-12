@@ -1,0 +1,85 @@
+{
+  "skill_name": "ada-project-background-authoring",
+  "evals": [
+    {
+      "id": "write-background",
+      "prompt": "梳理项目背景文档，作为后续写 SRS 的输入材料。",
+      "should_trigger": true,
+      "expected_output": "Uses the 13-section standard structure, marks unknowns 待确认 and inferences 设计假设, outputs the full draft for review before writing files.",
+      "assertions": [
+        "Uses the 13-section structure",
+        "Outputs draft for approval before writing files"
+      ]
+    },
+    {
+      "id": "elicitation-rounds",
+      "prompt": "原始需求很乱，逐轮确认把待确认变成已确认，最后出已确认事项汇总表。",
+      "should_trigger": true,
+      "expected_output": "Runs the elicitation loop: pending list → user answers → fold into document → final summary table as SRS input.",
+      "assertions": [
+        "Confirms items round by round",
+        "Produces the confirmed-items summary table"
+      ]
+    },
+    {
+      "id": "static-site-background",
+      "prompt": "项目是 GitHub Pages 静态站，项目背景里要问清内容源进不进仓库。",
+      "should_trigger": true,
+      "expected_output": "Consults the static-site constraints (content-source options, no-server limits, credential red line) as background decisions.",
+      "assertions": [
+        "Asks about content-source placement",
+        "Surfaces no-server and no-credential constraints"
+      ]
+    },
+    {
+      "id": "no-fabrication",
+      "prompt": "整理项目背景时不要虚构个人信息和成果，动机描述要注明非已确认事实。",
+      "should_trigger": true,
+      "expected_output": "Keeps the no-fabrication discipline: unknowns marked pending, motives marked as not-confirmed facts.",
+      "assertions": [
+        "Marks inferences as design assumptions",
+        "Flags motivational descriptions as unconfirmed"
+      ]
+    },
+    {
+      "id": "write-srs",
+      "prompt": "编写 SRS 需求条目。",
+      "should_trigger": false,
+      "expected_output": "Routes SRS authoring to ada-srs-writing.",
+      "assertions": [
+        "Does not activate background authoring",
+        "Routes to SRS authoring"
+      ]
+    },
+    {
+      "id": "generate-sdd",
+      "prompt": "从 SRS 生成详细设计条目。",
+      "should_trigger": false,
+      "expected_output": "Routes SDD generation to ada-srs-to-detailed-design.",
+      "assertions": [
+        "Does not activate background authoring",
+        "Routes to SDD generation"
+      ]
+    },
+    {
+      "id": "audit-sd",
+      "prompt": "审计详细设计条目质量。",
+      "should_trigger": false,
+      "expected_output": "Routes design auditing to ada-detailed-design-audit.",
+      "assertions": [
+        "Does not activate background authoring",
+        "Routes to design audit"
+      ]
+    },
+    {
+      "id": "static-architecture",
+      "prompt": "讨论静态站架构约束与内容发布三路径。",
+      "should_trigger": false,
+      "expected_output": "Routes architecture-constraint discussion to ada-github-pages-static-site.",
+      "assertions": [
+        "Does not activate background authoring",
+        "Routes to static-site architecture skill"
+      ]
+    }
+  ]
+}

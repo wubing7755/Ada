@@ -1,0 +1,85 @@
+{
+  "skill_name": "ada-blazor-debug-verification",
+  "evals": [
+    {
+      "id": "optional-inject-crash",
+      "prompt": "组件声明了可空的 [Inject] 服务没注册，实例化时崩了，bUnit 和真实应用都崩。",
+      "should_trigger": true,
+      "expected_output": "Explains .NET 6 optional injection is impossible and prescribes IServiceProvider manual resolution with fallback.",
+      "assertions": [
+        "Checks ComponentFactory.CreateInitializer behavior",
+        "Prescribes IServiceProvider.GetService fallback"
+      ]
+    },
+    {
+      "id": "stale-handler-id",
+      "prompt": "bUnit 测试报 UnknownEventHandlerIdException，点击的 handlerId 已失效。",
+      "should_trigger": true,
+      "expected_output": "Diagnoses fire-and-forget re-render between query and dispatch; prescribes cut.Render() flush and re-query.",
+      "assertions": [
+        "Flushes pending render before next click",
+        "Re-queries elements after render"
+      ]
+    },
+    {
+      "id": "raw-string-cs8652",
+      "prompt": "net6.0 测试工程用原始字符串字面量报 CS8652。",
+      "should_trigger": true,
+      "expected_output": "Identifies C# 10 vs C# 11 toolchain limit and rewrites fixtures as escaped normal strings.",
+      "assertions": [
+        "Checks LangVersion under net6.0",
+        "Rewrites raw strings to escaped literals"
+      ]
+    },
+    {
+      "id": "wasm-debug-playbook",
+      "prompt": "调试 .NET 6 Blazor WASM 的运行期/DI/渲染行为，并端到端验证改动。",
+      "should_trigger": true,
+      "expected_output": "Applies the class-level debug/verify playbook: runtime facts, bUnit traps, consumer-sample verification ladder.",
+      "assertions": [
+        "Follows the verification ladder",
+        "Labels evidence by tier"
+      ]
+    },
+    {
+      "id": "build-gates",
+      "prompt": "编辑了 .NET 工程，需要跑构建、测试和格式门禁。",
+      "should_trigger": false,
+      "expected_output": "Routes build-gate verification to ada-dotnet-verification.",
+      "assertions": [
+        "Does not activate debug playbook",
+        "Routes to verification skill"
+      ]
+    },
+    {
+      "id": "js-interop-pitfalls",
+      "prompt": "JS interop 在真实浏览器失败，比如模块函数找不到或 attach 失败。",
+      "should_trigger": false,
+      "expected_output": "Routes JS interop diagnostics to ada-blazor-interop-pitfalls.",
+      "assertions": [
+        "Does not duplicate interop guidance",
+        "Routes to interop skill"
+      ]
+    },
+    {
+      "id": "lifecycle-render",
+      "prompt": "StateHasChanged 没更新 UI，生命周期或渲染行为问题。",
+      "should_trigger": false,
+      "expected_output": "Routes lifecycle/rendering issues to ada-blazor-interaction-pitfalls.",
+      "assertions": [
+        "Does not treat as debug-verification task",
+        "Routes to interaction pitfalls"
+      ]
+    },
+    {
+      "id": "write-bunit-tests",
+      "prompt": "给组件写 bUnit 测试，从零开始组织测试结构。",
+      "should_trigger": false,
+      "expected_output": "Routes test authoring to ada-blazor-bunit-testing.",
+      "assertions": [
+        "Does not activate debug playbook",
+        "Routes to testing skill"
+      ]
+    }
+  ]
+}

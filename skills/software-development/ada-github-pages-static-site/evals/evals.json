@@ -1,0 +1,85 @@
+{
+  "skill_name": "ada-github-pages-static-site",
+  "evals": [
+    {
+      "id": "upload-content-no-server",
+      "prompt": "静态站怎么支持用户在网页上上传内容？",
+      "should_trigger": true,
+      "expected_output": "Explains the no-server constraint and walks the three content-publishing paths with a recommendation.",
+      "assertions": [
+        "States GitHub Pages has no server-side runtime",
+        "Compares git workflow vs issues relay vs CMS"
+      ]
+    },
+    {
+      "id": "content-source-location",
+      "prompt": "内容源放仓库还是只存本地？CI 构建会有什么影响？",
+      "should_trigger": true,
+      "expected_output": "Distinguishes build-time conversion options A/B and asks what 'not published' means.",
+      "assertions": [
+        "Separates repo source vs artifact exclusion",
+        "Flags CI implications of local-only source"
+      ]
+    },
+    {
+      "id": "client-credentials-redline",
+      "prompt": "能不能在静态站网页里放 GitHub token 让访客提交 issue？",
+      "should_trigger": true,
+      "expected_output": "Rejects client-side credentials as a red line and proposes a user-login relay instead.",
+      "assertions": [
+        "Rejects tokens in client JS",
+        "Proposes redirect/login-based alternative"
+      ]
+    },
+    {
+      "id": "contact-form-static",
+      "prompt": "纯静态站的联系表单怎么做？没有服务端接收。",
+      "should_trigger": true,
+      "expected_output": "Presents third-party form service or mailto fallback, and warns against Issues API with credentials.",
+      "assertions": [
+        "Covers external form service option",
+        "Avoids credentialed API calls"
+      ]
+    },
+    {
+      "id": "wasm-deploy-workflow",
+      "prompt": "写 Blazor WASM 部署到 GitHub Pages 的 Actions 工作流，含内容转换和 404 兜底。",
+      "should_trigger": false,
+      "expected_output": "Routes concrete deployment mechanics to ada-blazor-wasm-github-pages.",
+      "assertions": [
+        "Does not duplicate deployment protocol",
+        "Routes to deployment skill"
+      ]
+    },
+    {
+      "id": "api-rate-limit",
+      "prompt": "ASP.NET Core 接口怎么配限流防暴力破解？",
+      "should_trigger": false,
+      "expected_output": "Treats this as API hardening, not static-site architecture.",
+      "assertions": [
+        "Does not activate static-site guidance",
+        "Keeps scope to backend security"
+      ]
+    },
+    {
+      "id": "project-background",
+      "prompt": "梳理项目背景文档，作为 SRS 前置输入。",
+      "should_trigger": false,
+      "expected_output": "Routes pre-SRS documentation work to ada-project-background-authoring.",
+      "assertions": [
+        "Does not treat as static-site task",
+        "Routes to requirements workflow"
+      ]
+    },
+    {
+      "id": "git-reset",
+      "prompt": "删除本地提交并重置到 origin/main。",
+      "should_trigger": false,
+      "expected_output": "Routes destructive git operations to the git safety skill.",
+      "assertions": [
+        "Does not activate architecture guidance",
+        "Routes to git operations skill"
+      ]
+    }
+  ]
+}

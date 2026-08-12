@@ -114,6 +114,26 @@ Publish the revised plan with explicit "original assumption → actual finding" 
 - Which phases' deliverable changed
 - Updated traceability states
 
+## Post-Plan Feasibility Review Mode（方案审查方向）
+
+The reverse direction: audit a plan that **already exists** (written by a delegate subagent or collaborator) for feasibility before approval. The reviewer is NOT the plan author — every claim in the plan is a hypothesis to verify against source code.
+
+**Core principle**: the plan's "现状" section is a claim, not a fact. Code is the source of truth — cite file:line or mark the claim unverified.
+
+Activation: "审查一份实施方案 / 评估可行性 / 独立审查 / review this plan for feasibility"; a delegate produced a plan and a second opinion is required; the plan carries a "方案作者已核实的关键事实" list; high-stakes plans touching build/deploy pipelines, DI wiring, security policies, or shared interfaces.
+
+Skip for: greenfield plans with no code dependencies, plans the reviewer wrote themselves in the same session.
+
+Workflow:
+1. **Extract the claimed facts** (usually an explicit "已核实的关键事实" list). Verify each with grep/read_file: ✅ verified (file:line) / ❌ contradicted / ⚠️ unverifiable. Batch independent reads.
+2. **Exhaustive caller hunt.** For every interface/config/DI registration the plan touches, grep ALL references including tests and docs — not just the files the plan names. Missed callers = missed blast radius.
+3. **Test-breakage assessment by construction pattern.** Read how tests actually instantiate the changed classes (ctor overloads, stub handlers, factory overrides) before concluding "tests unaffected".
+4. **CI/workflow ordering check.** When a command appears in multiple files (publish.sh vs ci.yml vs deploy.yml), diff the arg contracts. Verify build-before-`--no-build` ordering and artifact-generation-before-upload steps.
+5. **Consult repo-internal history docs.** docs/*.md, past plan/design docs, changelogs record hard-won pitfalls — cheap, high-value corroboration.
+6. **Feasibility of plan mechanics.** Exact-arity CLI dispatch, middleware ordering for new CORS/rate-limit policies, and rate-limit bucket math (a per-IP policy can 429 the integration suite sharing one test-server IP).
+
+Output: three-way verdict 可行 / 需修改后可行 / 不可行; verified_points table (fact → file:line → conclusion); issues with severity + evidence; risks; recommendations.
+
 ## Common Pitfalls
 
 - **Trusting traceability over code.** The matrix is documentation, not a compiler. Always verify "Not Implemented" claims with `grep` or `read_file` before planning work.

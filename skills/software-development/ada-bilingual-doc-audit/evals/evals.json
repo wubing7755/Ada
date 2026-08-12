@@ -1,0 +1,85 @@
+{
+  "skill_name": "ada-bilingual-doc-audit",
+  "evals": [
+    {
+      "id": "bilingual-pair-audit",
+      "prompt": "审计中英文档对的事实一致性，逐项核对。",
+      "should_trigger": true,
+      "expected_output": "Applies the bilingual documentation-pair audit method: block-level pairing, semantic not literal comparison, fact drift detection across the pair.",
+      "assertions": [
+        "Pairs documents block by block",
+        "Compares semantics, not translation word-for-word"
+      ]
+    },
+    {
+      "id": "srs-block-translation",
+      "prompt": "检查 SRS 中英文版本的条目翻译一致性（REQ-F 逐块）。",
+      "should_trigger": true,
+      "expected_output": "Runs the SRS block-translation verification with the part-seam convention and verify-srs-block-translation.py.",
+      "assertions": [
+        "Uses part-seam block boundaries",
+        "Verifies translation parity programmatically"
+      ]
+    },
+    {
+      "id": "fake-translation",
+      "prompt": "发现译文是假的（复制粘贴原语言没翻译）。",
+      "should_trigger": true,
+      "expected_output": "Applies table-row-parity and fake-translation detection: row counts, key-set parity, and semantic spot-checks.",
+      "assertions": [
+        "Checks row parity between languages",
+        "Detects identical-language fake translations"
+      ]
+    },
+    {
+      "id": "cross-doc-contract",
+      "prompt": "契约变更后中英文两份文档都要同步，审计漏改。",
+      "should_trigger": true,
+      "expected_output": "Runs the cross-document change audit: traces the change through every document pair that must state it.",
+      "assertions": [
+        "Traces changes across all affected doc pairs",
+        "Cites file:line evidence per finding"
+      ]
+    },
+    {
+      "id": "translate-docs",
+      "prompt": "把文档翻译成英文并保持 manifest 状态。",
+      "should_trigger": false,
+      "expected_output": "Routes translation/migration to ada-multilingual-documentation-migration.",
+      "assertions": [
+        "Does not activate audit",
+        "Routes to migration skill"
+      ]
+    },
+    {
+      "id": "doc-revision",
+      "prompt": "大规模修订文档术语。",
+      "should_trigger": false,
+      "expected_output": "Routes document revision to ada-docs-revision.",
+      "assertions": [
+        "Does not activate bilingual audit",
+        "Routes to revision skill"
+      ]
+    },
+    {
+      "id": "srs-writing",
+      "prompt": "写 SRS 需求。",
+      "should_trigger": false,
+      "expected_output": "Routes SRS authoring to ada-srs-writing.",
+      "assertions": [
+        "Does not activate bilingual audit",
+        "Routes to SRS authoring"
+      ]
+    },
+    {
+      "id": "ui-review",
+      "prompt": "审查网站 UI。",
+      "should_trigger": false,
+      "expected_output": "Routes UI review to ada-web-ui-design-review.",
+      "assertions": [
+        "Does not activate bilingual audit",
+        "Routes to UI review"
+      ]
+    }
+  ]
+}

@@ -104,6 +104,63 @@ If UI source is bundled, rebuild and inspect the generated asset. Distinguish:
 
 Stop when product semantics for a matrix row are undecided, no stable target identity exists, the index domain cannot be named, protocol compatibility needs an architecture decision, or runtime reachability cannot be observed enough to claim verification.
 
+## Drop-Zone Feedback Protocol（拖放目标区反馈）
+
+Shaping and verifying what the user sees while dragging — the highlight that
+tells them where a tab/panel will land. Most failures here are not detection
+failures: the logic already resolves the target kinds (center / inline-start /
+inline-end / block-start / block-end); the visual layer renders one
+indistinguishable block.
+
+**Diagnose before touching code** (trace in order):
+1. **Kinds** — does the protocol enum already carry the zones?
+2. **Detector** — does the JS geometry function return them from the rect
+   (e.g. 25% edge bands)?
+3. **CSS** — are there kind-specific rules? A single generic rule is the usual
+   root cause: every kind renders as a whole-element block.
+4. **Tests** — do tests assert the non-center kinds? A suite that only ever
+   sees `document-center` cannot catch the visual collapse.
+
+Fix is often CSS-only + tests. Do NOT rewrite a detector that is already
+correct.
+
+**Zone shape rules (CSS, no extra DOM)**: drive the shape from the element
+that already carries the preview attribute via a `::before` pseudo-element.
+Scope shape rules to the owning element kind (`[data-group-kind="document"]`),
+exclude that kind from the generic rule with `:not(...)`, and use a kind
+prefix (`^="document-"`) so the shape rules never apply to a different preview
+family. Bands/stripes use physical top/right/bottom/left + width/height; the
+center zone draws a 50%×50% rect. Host element needs `position: relative`;
+static test fixtures must add it explicitly. Keep zone geometry identical to
+the detection bands (25% band ⇔ 25% strip).
+
+**Boundary semantics**: `localX < 0.25*width` enables start, `localX >
+0.75*width` enables end; the dividing lines themselves resolve to center.
+Encode the exact boundary points in tests (99/100, 300/301 at width 400).
+
+**RTL rule**: if the detector computes from `rect.left/right` (physical), the
+CSS must use physical `left/right`. `inset-inline-start` / logical properties
+flip under RTL and paint the highlight on the wrong side. Rule: **the visual
+feedback must use the same coordinate space as the detection function.**
+
+**Verification**:
+- Unit-test the detector as a pure function: when the Node DOM fixture cannot
+  represent the real hierarchy, `export` the geometry function (keep it OUT of
+  the public API entry file) and unit-test the mapping directly with boundary
+  cases.
+- Real-browser verification (works without a vision model): drive the WHOLE
+  drag in one eval — `pointerdown` → `pointermove` past the drag threshold →
+  `pointermove` to each zone → assert `getComputedStyle(element,
+  '::before')` geometry (`position`, `top/left/width/height`, `zIndex`,
+  `pointerEvents`) and the resolved-kind data attribute. Controllers cancel
+  drags on window `blur`/`visibilitychange`, so script the drag synchronously
+  within ONE eval; the page console shares scope across evals (unique `var`
+  names per probe).
+
+Report: diagnosed layer (logic vs visual), the zone-shape CSS, boundary test
+evidence, real-browser geometry evidence, and which sibling preview kinds were
+verified unchanged.
+
 ## Output Contract
 
 Deliver the compatibility matrix, intent schema, index-domain mapping, validation rules, operation mapping, producer/consumer test evidence, artifact/runtime evidence tier, and unresolved product decisions. Findings and reviews use `file:line` evidence.

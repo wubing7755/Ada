@@ -80,6 +80,16 @@
         "Does not activate lifecycle diagnosis",
         "Keeps scope to CSS"
       ]
+    },
+    {
+      "id": "setkey-sibling-swap",
+      "prompt": "SetKey 兄弟元素交换位置后属性丢失，拖拽点击失效，只有真实浏览器复现。",
+      "should_trigger": true,
+      "expected_output": "Applies Pitfall 6: remove unnecessary SetKey for stateless siblings; verify reorder in a real browser.",
+      "assertions": [
+        "Checks SetKey-ed reorderable sibling lists",
+        "Uses real-browser verification, not bUnit"
+      ]
     }
   ]
 }

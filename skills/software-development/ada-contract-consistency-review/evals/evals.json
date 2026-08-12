@@ -1,0 +1,85 @@
+{
+  "skill_name": "ada-contract-consistency-review",
+  "evals": [
+    {
+      "id": "frozen-contract-pass-fail",
+      "prompt": "对 Phase-N 冻结契约做最终只读一致性审查，返回 PASS/FAIL。",
+      "should_trigger": true,
+      "expected_output": "Builds the checklist from frozen items, traces each through all normative documents with doc:line evidence, classifies omission vs contradiction.",
+      "assertions": [
+        "Traces every item across all documents",
+        "Distinguishes omission from direct contradiction"
+      ]
+    },
+    {
+      "id": "spec-compliance-impl",
+      "prompt": "对照 SRS AC / ADR / HLD 清单逐项验证实现与测试，输出 PASS/FAIL。",
+      "should_trigger": true,
+      "expected_output": "Runs spec-compliance mode: reads implementation fully, maps every AC to a test by name, runs focused suites, reports real pass counts.",
+      "assertions": [
+        "Maps ACs to tests by name",
+        "Runs focused test suites as execution evidence"
+      ]
+    },
+    {
+      "id": "api-manifest-freeze",
+      "prompt": "验证冻结的公共 API manifest（命名空间、可空性、枚举值）与 ADR 和计划一致。",
+      "should_trigger": true,
+      "expected_output": "Diffs the frozen manifest against the plan's API sketch and PublicAPI baseline char-for-char.",
+      "assertions": [
+        "Compares manifest symbols char-for-char",
+        "Checks additive enum values state = N"
+      ]
+    },
+    {
+      "id": "pre-release-freeze",
+      "prompt": "上线前的契约冻结验证，检查禁止的需求 ID 和删除的 API 名。",
+      "should_trigger": true,
+      "expected_output": "Greps negative claims over the whole docs tree and verifies forbidden IDs have zero hits.",
+      "assertions": [
+        "Greps the whole docs tree for forbidden IDs",
+        "Verifies removed API names appear only as removal statements"
+      ]
+    },
+    {
+      "id": "audit-sd-quality",
+      "prompt": "审计详细设计 SD-* 条目的可验证性与术语一致性。",
+      "should_trigger": false,
+      "expected_output": "Routes design-entry quality auditing to ada-detailed-design-audit.",
+      "assertions": [
+        "Does not activate contract review",
+        "Routes to design audit"
+      ]
+    },
+    {
+      "id": "docs-code-drift",
+      "prompt": "审计文档与源码实现的漂移。",
+      "should_trigger": false,
+      "expected_output": "Routes docs-vs-code auditing to ada-doc-implementation-audit.",
+      "assertions": [
+        "Does not activate frozen-contract review",
+        "Routes to implementation audit"
+      ]
+    },
+    {
+      "id": "compare-two-versions",
+      "prompt": "比较两份文档版本的差异。",
+      "should_trigger": false,
+      "expected_output": "Routes version comparison to ada-doc-comparison-analysis.",
+      "assertions": [
+        "Does not activate contract review",
+        "Routes to comparison skill"
+      ]
+    },
+    {
+      "id": "write-doc-artifact",
+      "prompt": "编写项目背景文档作为 SRS 前置输入。",
+      "should_trigger": false,
+      "expected_output": "Treats this as document authoring, not contract consistency review.",
+      "assertions": [
+        "Does not activate read-only contract review",
+        "Routes to authoring workflow"
+      ]
+    }
+  ]
+}

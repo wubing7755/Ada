@@ -102,6 +102,90 @@ See **[references/dotnet-refactoring-workflow.md](references/dotnet-refactoring-
 - **InternalsVisibleTo for testing internal classes:** Add `<InternalsVisibleTo Include="TestProjectName" />` to the source `.csproj`. Prefer this over making implementation classes `public` prematurely.
 - **Independent-review hardening checklist:** See [references/atlas-phase17-19-review-lessons.md](references/atlas-phase17-19-review-lessons.md) for reviewer-discovered pitfalls around client-visible `ErrorBoundary` details, behavioral lifecycle tests, render-identity hashes, DI boundaries, and Windows ad-hoc verification evidence.
 
+## God-Class Partial File Splitting
+
+When a single class exceeds ~1000 lines and has several independent change
+reasons, split it into a thin shell plus `ClassName.{Domain}.cs` **partial
+files by responsibility**. Pure file organization — members moved verbatim,
+**zero behavior or public API change**, tests stay green, risk ≈ 0. Phase 2
+(extracting real collaborator classes) is a separate, optional, riskier step;
+do not bundle them.
+
+**When to use**: class >1000 lines with multiple change domains; reviewers
+call it a "god class" but the public API is frozen; immediate readability
+without touching behavior; strong test coverage exists to prove the move was
+lossless. **Not for**: large single-responsibility classes (splitting just
+thins lines, not coupling).
+
+**File layout**: main file keeps base class + interfaces
+(`public sealed partial class BigClass : ComponentBase, IAsyncDisposable`);
+partial files declare `public sealed partial class BigClass` (no base, no
+interfaces) — `sealed` must match everywhere. Each partial file carries its
+own `using` block (copy the main file's full block; unused usings harmless).
+Nested private classes move with the member that precedes them.
+
+**Script-based splitting** (manual cut/paste of 50+ methods invites errors;
+keep the script in the repo so the split is reproducible). Member-name regex
+pitfalls that broke naive parsers:
+1. **Exclude initializers from method detection.** `Guid.NewGuid()` and
+   `= new()` must NOT count as method declarations:
+   `(?<![.=\w{])(?!new\b)([A-Za-z_]\w*)\s*(?:<[^()]*>)?\s*\(`.
+2. **Attribute-only lines (`[Inject]`) belong to the NEXT member.** Buffer
+   them and prepend to the following member.
+3. **Comment-only lines (`/// <inheritdoc />`) belong to the NEXT member.**
+   Otherwise CS1591 (missing XML doc) fires on public members.
+4. **Multi-line field declarations** must stay together; keep member-name
+   parsing single-line.
+5. **LF normalization on Windows.** Python's `write_text` silently converts
+   `\n` back to `\r\n` — use `open(path, "w", encoding="utf-8", newline="\n")`
+   and normalize input with `.replace("\r\n", "\n")` first.
+6. **Member order:** emit partial members in source order, never sorted.
+
+**Verification**: every moved method's definition line appears exactly once
+across shell + partials (POSIX `grep -E` does NOT support `(?:...)` — use a
+capturing group `(<[^()]*>)?`); `dotnet build` / `dotnet test` unchanged /
+`dotnet format --verify-no-changes`; render-sequence check if the class
+contains render methods; browser smoke for Blazor components. Merge-conflict
+note: two PRs adding the same tool script report an **add/add conflict** —
+resolve by taking the newer, more general version (`git checkout --theirs`).
+
+## Model Invariant Enforcement (.NET stateful models)
+
+When the same state rule is enforced on SOME mutation paths but diverges on a
+sibling path (e.g. one operation collapses an empty group but a sibling does
+not), promote the rule to a model invariant enforced at ONE construction
+boundary — do not patch the sibling path.
+
+**Core principle**: **Only auto-correct conditions that are ALWAYS true. Never
+normalize away a state that is a legal user action.** The classic failure:
+adding a defensive second rule to a normalizer ("non-empty → expanded") breaks
+a real feature — collapsing a NON-EMPTY group is a legal user action. The
+invariant must enforce ONLY the always-true direction; re-expansion on content
+entry stays a planner concern.
+
+**Design checklist**:
+1. Audit every mutation path that produces or consumes the state; present the
+   divergence table to the user — the divergent sibling path justifies the
+   invariant.
+2. Confirm decision points with the user before coding: should the operation
+   that *sets* the now-illegal state fail fast (typed error) or be silently
+   normalized? Does loading/materializing from a definition get normalized too?
+3. Put auto-correction at ONE construction boundary (the immutable
+   snapshot/model constructor), not in each planner. Make it idempotent:
+   return the original instance when nothing changed, so compliant commits pay
+   zero allocation.
+4. Pair normalization with fail-fast rejection where the state is
+   user-settable — otherwise the operation silently commits a state the
+   invariant immediately rewrites.
+5. Write a per-path test matrix that would have failed BEFORE the invariant
+   and passes after: every operation path, materialization, and persistence
+   round-trip.
+
+**Verification**: new invariant tests + existing suites green; existing tests
+that asserted PRE-invariant behavior may need fixture changes (make the
+fixture non-illegal and comment why); `dotnet format --verify-no-changes` and
+`git diff --check` clean.
+
 ## Verification Checklist
 
 - [ ] `dotnet build` succeeds across the entire solution (all `.csproj` files — src, tests, demo)

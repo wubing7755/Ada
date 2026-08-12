@@ -1,0 +1,85 @@
+{
+  "skill_name": "ada-docx-merge",
+  "evals": [
+    {
+      "id": "merge-chapters-format-base",
+      "prompt": "把文档 A 的第 X~Y 章插入/替换文档 B，格式以 B（模板）为准。",
+      "should_trigger": true,
+      "expected_output": "Uses the template as the ZIP base, performs body-element surgery on document.xml, and remaps styles by name.",
+      "assertions": [
+        "Copies the format-authority docx as base",
+        "Remaps pStyle/rStyle by style name, not styleId"
+      ]
+    },
+    {
+      "id": "style-mapping-broken",
+      "prompt": "合并后样式全乱，正文渲染成标题样式，图注变超链接样式。",
+      "should_trigger": true,
+      "expected_output": "Diagnoses styleId-name mismatch across documents and verifies the remap function is actually invoked.",
+      "assertions": [
+        "Builds styleId -> name -> base styleId mapping",
+        "Verifies pStyle distribution contains only base styleIds"
+      ]
+    },
+    {
+      "id": "seq-field-renumber",
+      "prompt": "合并后图/表编号跳号，要按文档顺序重算 SEQ 域静态结果。",
+      "should_trigger": true,
+      "expected_output": "Renumbers SEQ fields statefully, handling split instrText runs and labeling by 图/表 tag characters.",
+      "assertions": [
+        "Handles instrText split across multiple runs",
+        "Renumbers by document order and verifies continuity"
+      ]
+    },
+    {
+      "id": "sd-renumber-sync",
+      "prompt": "设计条目 SD 编号乱序重复，要重排并同步追踪矩阵和正文引用。",
+      "should_trigger": true,
+      "expected_output": "Builds a single-source mapping, renumbers by index, syncs the traceability matrix by design name, and resweeps independently.",
+      "assertions": [
+        "Uses index-based mapping not old-value dictionary",
+        "Resweeps output for unique contiguous numbering"
+      ]
+    },
+    {
+      "id": "create-simple-docx",
+      "prompt": "创建一份简单的 Word 文档。",
+      "should_trigger": false,
+      "expected_output": "Routes simple docx creation to the bundled docx skill.",
+      "assertions": [
+        "Does not activate XML surgery",
+        "Routes to the basic docx skill"
+      ]
+    },
+    {
+      "id": "markdown-revision",
+      "prompt": "修订 markdown 文档的术语与结构。",
+      "should_trigger": false,
+      "expected_output": "Routes markdown text revision to ada-docs-revision.",
+      "assertions": [
+        "Does not activate docx surgery",
+        "Routes to document revision"
+      ]
+    },
+    {
+      "id": "read-docx-text",
+      "prompt": "读取 docx 里的文字内容做摘要。",
+      "should_trigger": false,
+      "expected_output": "Routes document reading to the bundled docx skill.",
+      "assertions": [
+        "Does not activate XML surgery",
+        "Routes to the basic docx skill"
+      ]
+    },
+    {
+      "id": "write-srs",
+      "prompt": "编写 SRS 需求条目。",
+      "should_trigger": false,
+      "expected_output": "Treats this as requirements authoring, not document merging.",
+      "assertions": [
+        "Does not activate docx merge",
+        "Routes to SRS authoring"
+      ]
+    }
+  ]
+}

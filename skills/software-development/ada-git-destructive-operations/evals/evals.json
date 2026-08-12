@@ -1,0 +1,85 @@
+{
+  "skill_name": "ada-git-destructive-operations",
+  "evals": [
+    {
+      "id": "delete-local-commits",
+      "prompt": "删除本地提交，放弃这些提交。",
+      "should_trigger": true,
+      "expected_output": "Detects state first (status, branch -vv, rev-list counts), checks remote backup, clarifies intent with concrete options, executes reset only after confirmation.",
+      "assertions": [
+        "Checks remote backup before destructive action",
+        "Presents options via clarify, never bare yes/no"
+      ]
+    },
+    {
+      "id": "reset-to-origin",
+      "prompt": "重置到 origin/main。",
+      "should_trigger": true,
+      "expected_output": "States facts (commit count, pushed or not, worktree changes), warns about unmerged paths and staged changes, executes only after confirmation.",
+      "assertions": [
+        "Warns about staged/conflict destruction",
+        "Verifies clean status after reset"
+      ]
+    },
+    {
+      "id": "branch-cleanup-rebase",
+      "prompt": "PR 用 rebase merge 后本地分支清理不掉，--merged 不显示它。",
+      "should_trigger": true,
+      "expected_output": "Confirms the content landed on main by grep before force-deleting SHA-rewritten branches; keeps unmerged branches alone.",
+      "assertions": [
+        "Confirms content on main before -D",
+        "Uses -d for merged, -D only for rewritten"
+      ]
+    },
+    {
+      "id": "abort-merge",
+      "prompt": "有未合并的路径卡住分支，想放弃合并但保留提交。",
+      "should_trigger": true,
+      "expected_output": "Disambiguates the intent: abort merge + keep commits vs hard reset; executes the chosen option with recovery path stated.",
+      "assertions": [
+        "Distinguishes abort-merge from discard-commits",
+        "States recovery path per option"
+      ]
+    },
+    {
+      "id": "pr-delivery",
+      "prompt": "把未提交工作变成 PR。",
+      "should_trigger": false,
+      "expected_output": "Routes PR delivery to ada-git-pr-delivery.",
+      "assertions": [
+        "Does not activate destructive ops",
+        "Routes to PR delivery"
+      ]
+    },
+    {
+      "id": "history-moves",
+      "prompt": "git mv 保留历史。",
+      "should_trigger": false,
+      "expected_output": "Routes renames to ada-git-history-preserving-moves.",
+      "assertions": [
+        "Does not activate destructive ops",
+        "Routes to history-preserving moves"
+      ]
+    },
+    {
+      "id": "pr-review",
+      "prompt": "review 一个 PR。",
+      "should_trigger": false,
+      "expected_output": "Routes PR review to ada-requesting-code-review.",
+      "assertions": [
+        "Does not activate destructive ops",
+        "Routes to PR review"
+      ]
+    },
+    {
+      "id": "hermes-ops",
+      "prompt": "查看 Hermes 配置。",
+      "should_trigger": false,
+      "expected_output": "Routes operations to ada-hermes-operations.",
+      "assertions": [
+        "Does not activate destructive ops",
+        "Routes to operations"
+      ]
+    }
+  ]
+}

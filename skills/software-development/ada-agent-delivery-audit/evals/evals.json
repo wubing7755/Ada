@@ -1,0 +1,85 @@
+{
+  "skill_name": "ada-agent-delivery-audit",
+  "evals": [
+    {
+      "id": "audit-agent-delivery",
+      "prompt": "怎么审核这个 Agent 的产出？它声称完成了整个多 Phase 计划。",
+      "should_trigger": true,
+      "expected_output": "Applies the delivery audit: forensic snapshot, irreversible-gate check first, DB/data verification, gate re-runs, exact-command rehearsal, independent subagent, report.",
+      "assertions": [
+        "Starts with forensic snapshot",
+        "Checks irreversible gates first"
+      ]
+    },
+    {
+      "id": "migration-claim",
+      "prompt": "它说 migrated to DB，怎么验证？",
+      "should_trigger": true,
+      "expected_output": "Queries the DB directly (SELECT COUNT per table), compares against source data, checks timestamp signatures and relative connection-string trap.",
+      "assertions": [
+        "Verifies by direct DB query",
+        "Checks timestamp forensics"
+      ]
+    },
+    {
+      "id": "drift-check",
+      "prompt": "这个长任务是否跑偏了？",
+      "should_trigger": true,
+      "expected_output": "Maps commits to plan phases, flags scope creep and unrecorded 'implement-time' decisions, watches for commits after the last known one.",
+      "assertions": [
+        "Maps commits to plan phases",
+        "Flags scope creep with evidence"
+      ]
+    },
+    {
+      "id": "gate-rerun",
+      "prompt": "它报告 tests pass，我要自己验证。",
+      "should_trigger": true,
+      "expected_output": "Re-runs the full test suite and format itself, records own counts, compares with the agent's report, labels ad-hoc scripts honestly.",
+      "assertions": [
+        "Re-runs gates itself",
+        "Treats agent reports as claims"
+      ]
+    },
+    {
+      "id": "pr-review",
+      "prompt": "review 当前 PR。",
+      "should_trigger": false,
+      "expected_output": "Routes PR review to ada-requesting-code-review.",
+      "assertions": [
+        "Does not activate delivery audit",
+        "Routes to PR review"
+      ]
+    },
+    {
+      "id": "phased-delivery",
+      "prompt": "按批次执行计划。",
+      "should_trigger": false,
+      "expected_output": "Routes batch execution to ada-continuous-phased-delivery.",
+      "assertions": [
+        "Does not activate delivery audit",
+        "Routes to phased delivery"
+      ]
+    },
+    {
+      "id": "code-quality",
+      "prompt": "做代码质量分析。",
+      "should_trigger": false,
+      "expected_output": "Routes quality analysis to ada-code-quality-analysis.",
+      "assertions": [
+        "Does not activate delivery audit",
+        "Routes to code-quality skill"
+      ]
+    },
+    {
+      "id": "pre-commit",
+      "prompt": "提交前审查我自己的改动。",
+      "should_trigger": false,
+      "expected_output": "Routes self-change pre-commit review to ada-requesting-code-review.",
+      "assertions": [
+        "Does not activate delivery audit",
+        "Routes to pre-commit review"
+      ]
+    }
+  ]
+}

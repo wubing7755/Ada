@@ -1,0 +1,85 @@
+{
+  "skill_name": "ada-detailed-design-audit",
+  "evals": [
+    {
+      "id": "audit-sd-entries",
+      "prompt": "审计详细设计 SD-* 条目：可验证性、输入输出显式性、边界与异常覆盖、术语一致性、HOW 深度。",
+      "should_trigger": true,
+      "expected_output": "Runs the five-dimension audit and outputs a problem list with full before/after entry text for review.",
+      "assertions": [
+        "Covers the five audit dimensions",
+        "Waits for approval before editing documents"
+      ]
+    },
+    {
+      "id": "coverage-review-eight",
+      "prompt": "以软件设计评审人员身份做需求覆盖审查，八项检查，只读不改文件。",
+      "should_trigger": true,
+      "expected_output": "Produces the six-section coverage report with per-item evidence and the eight checks.",
+      "assertions": [
+        "Outputs the six-section report structure",
+        "Keeps read-only and evidence-backed"
+      ]
+    },
+    {
+      "id": "symmetry-audit",
+      "prompt": "检查同类设计条目（新增/删除/修改）的要素对称性。",
+      "should_trigger": true,
+      "expected_output": "Builds the behavior skeleton table and audits symmetric elements across same-type entries.",
+      "assertions": [
+        "Uses a behavior-type skeleton table",
+        "Flags missing or extra elements in symmetric entries"
+      ]
+    },
+    {
+      "id": "horizontal-consistency",
+      "prompt": "详细设计横向一致性审查：术语变体、机制引用名、枚举简称、规则悬挂。",
+      "should_trigger": true,
+      "expected_output": "Runs the horizontal-consistency ten-point review, read-only.",
+      "assertions": [
+        "Checks terminology variants across entries",
+        "Reports inconsistencies with evidence"
+      ]
+    },
+    {
+      "id": "generate-sdd",
+      "prompt": "从 SRS 生成详细设计条目。",
+      "should_trigger": false,
+      "expected_output": "Routes SDD generation to ada-srs-to-detailed-design.",
+      "assertions": [
+        "Does not audit existing entries",
+        "Routes to the generation skill"
+      ]
+    },
+    {
+      "id": "doc-impl-audit",
+      "prompt": "审计文档与实现代码的漂移。",
+      "should_trigger": false,
+      "expected_output": "Routes docs-vs-code auditing to ada-doc-implementation-audit.",
+      "assertions": [
+        "Does not activate design-quality audit",
+        "Routes to implementation audit"
+      ]
+    },
+    {
+      "id": "srs-quality",
+      "prompt": "审查 SRS 需求质量与可测试性。",
+      "should_trigger": false,
+      "expected_output": "Routes requirement-quality review to ada-srs-review.",
+      "assertions": [
+        "Does not activate SD audit",
+        "Routes to SRS review"
+      ]
+    },
+    {
+      "id": "bilingual-consistency",
+      "prompt": "检查中英文双语文档对的事实一致性。",
+      "should_trigger": false,
+      "expected_output": "Routes bilingual consistency to the bilingual documentation audit.",
+      "assertions": [
+        "Does not activate SD audit",
+        "Routes to bilingual doc audit"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,85 @@
+{
+  "skill_name": "ada-markdown-html-rendering",
+  "evals": [
+    {
+      "id": "images-stripped",
+      "prompt": "渲染后的文章图片全没了，HTML 里连 img 都没有，但源 Markdown 有 40 张图。",
+      "should_trigger": true,
+      "expected_output": "Diagnoses the disallowed-wrapper-subtree loss: sanitizer drops the whole subtree of non-whitelisted wrapper tags; adds wrappers to AllowedTags.",
+      "assertions": [
+        "Checks render-then-sanitize two-stage behavior",
+        "Adds wrapper tags to the sanitizer whitelist"
+      ]
+    },
+    {
+      "id": "ordered-list-all-ones",
+      "prompt": "渲染后有序列表每一项都显示 1.，源文档编号是 1 2 3。",
+      "should_trigger": true,
+      "expected_output": "Identifies blocks splitting ordered lists into separate ol elements; applies pre-process indent and post-process ol start restoration.",
+      "assertions": [
+        "Handles code/div blocks between list items",
+        "Restores source numbering with ol start / li value"
+      ]
+    },
+    {
+      "id": "segmented-numbering-lost",
+      "prompt": "分段编号 1. 2. 1. 2. 渲染成 1. 2. 3. 4.。",
+      "should_trigger": true,
+      "expected_output": "Explains Markdig merges adjacent items and renumbers; collects source numbers and restores them post-sanitization.",
+      "assertions": [
+        "Collects source list numbers while scanning",
+        "Post-processes sanitized HTML with start/value attributes"
+      ]
+    },
+    {
+      "id": "anchor-jumps-home",
+      "prompt": "正文页内锚点链接点击跳回首页，不滚动到标题。",
+      "should_trigger": true,
+      "expected_output": "Handles the three-layer cause: sanitizer strips id, Blazor intercepts hash clicks, replaceState resolves against base href; adds a capture-phase anchor handler loaded before blazor.webassembly.js.",
+      "assertions": [
+        "Keeps id in sanitizer AllowedAttributes",
+        "Loads anchor handler before Blazor interception"
+      ]
+    },
+    {
+      "id": "write-markdown",
+      "prompt": "写一份 markdown 文档。",
+      "should_trigger": false,
+      "expected_output": "Treats this as document authoring, not render-pipeline debugging.",
+      "assertions": [
+        "Does not activate render pitfalls",
+        "Routes to authoring"
+      ]
+    },
+    {
+      "id": "merge-docx",
+      "prompt": "合并两个 Word 文档并保持格式。",
+      "should_trigger": false,
+      "expected_output": "Routes document merging to ada-docx-merge.",
+      "assertions": [
+        "Does not activate markdown rendering",
+        "Routes to docx merge"
+      ]
+    },
+    {
+      "id": "build-gates",
+      "prompt": "编辑了 .NET 工程，需要跑构建测试格式门禁。",
+      "should_trigger": false,
+      "expected_output": "Routes build-gate verification to ada-dotnet-verification.",
+      "assertions": [
+        "Does not activate render pitfalls",
+        "Routes to verification skill"
+      ]
+    },
+    {
+      "id": "write-html-page",
+      "prompt": "手写一个 HTML 页面。",
+      "should_trigger": false,
+      "expected_output": "Treats this as direct HTML authoring, not a markdown render pipeline.",
+      "assertions": [
+        "Does not activate render pitfalls",
+        "Keeps scope to plain HTML"
+      ]
+    }
+  ]
+}
