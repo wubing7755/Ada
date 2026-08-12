@@ -8,7 +8,7 @@ Ada 是一个可分发的 Hermes Profile：偏软件工程、重正确性与可�
 
 Ada 帮助开发者理解、设计、构建、调试和演进软件系统。它的价值不在于知道多少术语，而在于看清问题、作出判断，并把事情推进到可运行、可验证的结果。它不是只提供术语答案的聊天角色，而是有工程判断的技术搭档。
 
-人设与工程原则由 [SOUL.md](SOUL.md) 统一定义，66 个分发技能位于 [skills/](skills/)。
+人设与工程原则由 [SOUL.md](SOUL.md) 统一定义，70 个分发技能位于 [skills/](skills/)。
 
 当前版本：`0.3.0`，要求 Hermes `>=0.19.0`。
 
@@ -81,11 +81,11 @@ hermes profile show ada    # 查看已安装 Profile 的详情
 
 ## 技能加载说明
 
-Ada 的 66 个技能遵循 Agent Skills 的 progressive disclosure：discovery 阶段只加载技能名称和 `description`；任务匹配后加载对应 `SKILL.md` 获得执行协议；需要时才读取 `references/`、`scripts/`、`assets/` 和 `evals/`。
+Ada 的 70 个技能遵循 Agent Skills 的 progressive disclosure：discovery 阶段只加载技能名称和 `description`；任务匹配后加载对应 `SKILL.md` 获得执行协议；需要时才读取 `references/`、`scripts/`、`assets/` 和 `evals/`。
 
-因此用户通常只需描述目标，不需要记住或手工调用 66 个技能名称；Agent 会根据任务自动加载匹配的技能。
+因此用户通常只需描述目标，不需要记住或手工调用 70 个技能名称；Agent 会根据任务自动加载匹配的技能。
 
-## 技能体系 (66 skills)
+## 技能体系 (70 skills)
 
 所有 Ada 专属技能均以 `ada-` 为前缀。分类与顺序均以 `distribution.yaml` 为准。
 
@@ -164,6 +164,7 @@ Ada 的 66 个技能遵循 Agent Skills 的 progressive disclosure：discovery �
 | `ada-nuget-consumer-verification` | 验证 NuGet 消费者示例解析本地库源码；消费者示例缺口审查 |
 | `ada-dotnet-engineering-refactoring` | .NET 工程级重构：领域原语、值类型迁移、公共 API |
 | `ada-dotnet-verification` | .NET 构建/测试/格式化/打包验证 |
+| `ada-dotnet-api-security` | .NET Web API 安全审查与加固：JWT、限流、消毒器、上传、供应链 CI 门禁 |
 
 ### GitHub Pages 与静态站点
 
@@ -185,6 +186,9 @@ Ada 的 66 个技能遵循 Agent Skills 的 progressive disclosure：discovery �
 | 技能 | 作用 |
 |---|---|
 | `ada-cmake-cpack-packaging` | CMake/CPack 跨平台打包与安装器 |
+| `ada-commit-impact-analysis` | 读提交/分支/PR 并以证据追踪真实集成影响 |
+| `ada-windows-file-editing` | Windows/MSYS 文件编辑：CRLF、MSYS 路径、大小写目录冲突、管道退出码 |
+| `ada-skill-package-import` | 将外部 skill 包导入 Hermes profile，按不可信数据处理 |
 | `ada-node-inspect-debugger` | Node.js `--inspect` + CDP 调试 |
 | `ada-powershell-from-bash` | git-bash 中正确运行 PowerShell |
 | `ada-python-debugpy` | Python debugpy/DAP 交互式调试 |
@@ -239,7 +243,7 @@ Ada/
 ├── docs/                       # 质量标准（skill-quality-standard.md）
 ├── scripts/                    # 验证器、隔离 smoke 测试与单元测试
 ├── .github/workflows/          # GitHub Actions 质量门禁
-└── skills/software-development/  # 66 个 ada-* 技能
+└── skills/software-development/  # 70 个 ada-* 技能
 ```
 
 ## 质量验证

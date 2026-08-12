@@ -8,7 +8,7 @@ Ada is a distributable Hermes Profile: a software-engineering-focused agent that
 
 Ada helps developers understand, design, build, debug, and evolve software systems. Its value is not in knowing many terms, but in seeing the problem clearly, making sound judgments, and driving work to runnable, verifiable results. It is not a chat persona that only serves up terminology; it is a technical partner with engineering judgment.
 
-Persona and engineering principles are defined once in [SOUL.md](SOUL.md); the 66 distributed skills live under [skills/](skills/).
+Persona and engineering principles are defined once in [SOUL.md](SOUL.md); the 70 distributed skills live under [skills/](skills/).
 
 Current version: `0.3.0`, requires Hermes `>=0.19.0`.
 
@@ -81,11 +81,11 @@ hermes profile show ada    # details of the installed profile
 
 ## How Skills Are Loaded
 
-Ada's 66 skills follow Agent Skills progressive disclosure: discovery loads only skill names and `description`; once a task matches, the corresponding `SKILL.md` is loaded for the execution protocol; `references/`, `scripts/`, `assets/`, and `evals/` are read only when needed.
+Ada's 70 skills follow Agent Skills progressive disclosure: discovery loads only skill names and `description`; once a task matches, the corresponding `SKILL.md` is loaded for the execution protocol; `references/`, `scripts/`, `assets/`, and `evals/` are read only when needed.
 
 In practice, you usually describe the goal and let the agent load the matching skill — there is no need to memorize or invoke the 55 skill names by hand.
 
-## Skill Catalog (66 skills)
+## Skill Catalog (70 skills)
 
 All Ada-owned skills use the `ada-` prefix. Categories and order follow `distribution.yaml`.
 
@@ -164,6 +164,7 @@ All Ada-owned skills use the `ada-` prefix. Categories and order follow `distrib
 | `ada-nuget-consumer-verification` | Verifies NuGet consumer samples against local library source; consumer-sample gap review |
 | `ada-dotnet-engineering-refactoring` | .NET engineering-level refactoring: domain primitives, value type migration, public API |
 | `ada-dotnet-verification` | .NET build/test/format/package verification |
+| `ada-dotnet-api-security` | .NET web API security review and hardening: JWT, rate limits, sanitizer, uploads, supply-chain CI gates |
 
 ### GitHub Pages and Static Sites
 
@@ -185,6 +186,9 @@ All Ada-owned skills use the `ada-` prefix. Categories and order follow `distrib
 | Skill | Purpose |
 |---|---|
 | `ada-cmake-cpack-packaging` | CMake/CPack cross-platform packaging and installers |
+| `ada-commit-impact-analysis` | Reads a commit/branch/PR and traces its real integration impact with evidence |
+| `ada-windows-file-editing` | Windows/MSYS file editing: CRLF, MSYS paths, case-insensitive dir conflicts, piped exit codes |
+| `ada-skill-package-import` | Imports external skill packages into a Hermes profile as untrusted data |
 | `ada-node-inspect-debugger` | Node.js `--inspect` + CDP debugging |
 | `ada-powershell-from-bash` | Running PowerShell correctly from git-bash |
 | `ada-python-debugpy` | Python debugpy/DAP interactive debugging |
@@ -249,7 +253,7 @@ The repository gates every pull request targeting `main` through the `Ada Profil
 - validator unit tests; consistency between `distribution.yaml`, the actual skill directory, and the README skill catalog/count; README vs. manifest version consistency;
 - YAML/frontmatter, resource links, inter-skill references, and eval structure checks; private runtime state leak checks (memories, sessions, credentials, `local/`, etc.);
 - Python `compileall` and changed-file `git diff --check`;
-- an isolated install/update smoke test with a temporary `HERMES_HOME`, confirming all 66 skills and user state survive an update.
+- an isolated install/update smoke test with a temporary `HERMES_HOME`, confirming all 70 skills and user state survive an update.
 
 The same gates can be run locally:
 

@@ -1,0 +1,85 @@
+{
+  "skill_name": "ada-commit-impact-analysis",
+  "evals": [
+    {
+      "id": "read-branch-impact",
+      "prompt": "读这个分支/PR 的提交，分析改了什么、有什么影响。",
+      "should_trigger": true,
+      "expected_output": "Reads the full diff of every commit (not just messages), greps every consumer of changed types/kinds/CSS hooks, runs real gates, answers with file:line evidence.",
+      "assertions": [
+        "Traces integration points beyond the diff",
+        "Cites file:line evidence per answer"
+      ]
+    },
+    {
+      "id": "does-x-still-exist",
+      "prompt": "折叠后的 X 还存在吗？为什么不直接用 Y？",
+      "should_trigger": true,
+      "expected_output": "Traces the FULL stack from model to render to CSS to layout math instead of answering from the diff alone.",
+      "assertions": [
+        "Follows the state through the full stack",
+        "Answers with evidence per hop"
+      ]
+    },
+    {
+      "id": "architecture-judgment",
+      "prompt": "这个改动长期来看合适吗？有没有更好的方案？",
+      "should_trigger": true,
+      "expected_output": "Audits sibling mutation paths for the same state rule, recommends model-level invariants over per-path patches, presents decision points and a phased plan.",
+      "assertions": [
+        "Audits sibling paths for the same rule",
+        "Proposes model-level invariant, not patch"
+      ]
+    },
+    {
+      "id": "commit-verify",
+      "prompt": "这个提交真的修复了问题吗？",
+      "should_trigger": true,
+      "expected_output": "Verifies the claimed fix with executable evidence rather than commit-message trust.",
+      "assertions": [
+        "Re-runs gates to verify the fix",
+        "Distinguishes claim from evidence"
+      ]
+    },
+    {
+      "id": "security-review",
+      "prompt": "做安全审查。",
+      "should_trigger": false,
+      "expected_output": "Routes security review to ada-dotnet-api-security.",
+      "assertions": [
+        "Does not activate impact analysis",
+        "Routes to security review"
+      ]
+    },
+    {
+      "id": "code-quality",
+      "prompt": "做代码质量分析。",
+      "should_trigger": false,
+      "expected_output": "Routes quality analysis to ada-code-quality-analysis.",
+      "assertions": [
+        "Does not activate impact analysis",
+        "Routes to code-quality skill"
+      ]
+    },
+    {
+      "id": "write-plan",
+      "prompt": "写一份实施计划。",
+      "should_trigger": false,
+      "expected_output": "Routes plan authoring to the plan skill.",
+      "assertions": [
+        "Does not activate impact analysis",
+        "Routes to planning"
+      ]
+    },
+    {
+      "id": "build-gates",
+      "prompt": "编辑了 .NET 工程，跑构建门禁。",
+      "should_trigger": false,
+      "expected_output": "Routes build-gate verification to ada-dotnet-verification.",
+      "assertions": [
+        "Does not activate impact analysis",
+        "Routes to verification skill"
+      ]
+    }
+  ]
+}
