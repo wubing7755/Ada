@@ -1,0 +1,95 @@
+{
+  "skill_name": "ada-blazor-wasm-runtime-pitfalls",
+  "evals": [
+    {
+      "id": "first-render-interop-noop",
+      "prompt": "OnAfterRenderAsync 首渲染调 JS 滚动/聚焦没效果，无报错，手动调同函数又正常。",
+      "should_trigger": true,
+      "expected_output": "Diagnoses interop not ready on first render; gates the call on data-loaded, not firstRender.",
+      "assertions": [
+        "Uses data-loaded gate instead of firstRender",
+        "Keeps one-shot flag for fragment handling"
+      ]
+    },
+    {
+      "id": "fragment-direct-load",
+      "prompt": "直接打开 /page#section 不滚动，SPA 导航到同一 URL 却正常。",
+      "should_trigger": true,
+      "expected_output": "Reads the fragment via a JS helper instead of NavigationManager on initial load.",
+      "assertions": [
+        "Uses window.location.hash via JS interop",
+        "Combines with data-ready gate"
+      ]
+    },
+    {
+      "id": "dllnotfound-native",
+      "prompt": "Blazor WASM 浏览器控制台报 DllNotFoundException: libSkiaSharp。",
+      "should_trigger": true,
+      "expected_output": "Runs the native-linking diagnostic ladder: served dotnet.wasm size/symbols, CLI vs VS build, workload SDK imports.",
+      "assertions": [
+        "Checks the served artifact first",
+        "Compares CLI vs VS build behavior"
+      ]
+    },
+    {
+      "id": "query-only-stale",
+      "prompt": "/search?q=first 初始加载正常，但只改查询字符串页面不刷新、结果陈旧。",
+      "should_trigger": true,
+      "expected_output": "Explains component instance reuse and prescribes NavigationManager parsing + LocationChanged subscription.",
+      "assertions": [
+        "Subscribes LocationChanged for query-only nav",
+        "Guards result commits with request version"
+      ]
+    },
+    {
+      "id": "fragment-anchor-root",
+      "prompt": "页脚返回顶部链接在任何非首页点击都跳到首页顶部。",
+      "should_trigger": true,
+      "expected_output": "Explains fragment-only anchors resolve against base href; replaces them with JS scroll via button.",
+      "assertions": [
+        "Avoids fragment-only href anchors",
+        "Uses JS interop scroll with reduced-motion respect"
+      ]
+    },
+    {
+      "id": "deploy-wasm",
+      "prompt": "把 Blazor WASM 站点部署到 GitHub Pages 并做 SPA 兜底。",
+      "should_trigger": false,
+      "expected_output": "Routes deployment mechanics to ada-blazor-wasm-github-pages.",
+      "assertions": [
+        "Does not apply runtime pitfalls",
+        "Routes to deployment skill"
+      ]
+    },
+    {
+      "id": "interop-module-missing",
+      "prompt": "JS 模块函数在真实浏览器里找不到，InvokeVoidAsync 报 undefined。",
+      "should_trigger": false,
+      "expected_output": "Routes module export issues to ada-blazor-interop-pitfalls.",
+      "assertions": [
+        "Does not treat as runtime-state pitfall",
+        "Routes to interop skill"
+      ]
+    },
+    {
+      "id": "write-bunit",
+      "prompt": "给组件写 bUnit 测试。",
+      "should_trigger": false,
+      "expected_output": "Routes test authoring to ada-blazor-bunit-testing.",
+      "assertions": [
+        "Does not activate runtime pitfalls",
+        "Routes to testing skill"
+      ]
+    },
+    {
+      "id": "build-gates",
+      "prompt": "编辑了 .NET 工程，需要跑构建测试格式门禁。",
+      "should_trigger": false,
+      "expected_output": "Routes build-gate verification to ada-dotnet-verification.",
+      "assertions": [
+        "Does not activate runtime pitfalls",
+        "Routes to verification skill"
+      ]
+    }
+  ]
+}

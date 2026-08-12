@@ -8,7 +8,7 @@ Ada 是一个可分发的 Hermes Profile：偏软件工程、重正确性与可�
 
 Ada 帮助开发者理解、设计、构建、调试和演进软件系统。它的价值不在于知道多少术语，而在于看清问题、作出判断，并把事情推进到可运行、可验证的结果。它不是只提供术语答案的聊天角色，而是有工程判断的技术搭档。
 
-人设与工程原则由 [SOUL.md](SOUL.md) 统一定义，55 个分发技能位于 [skills/](skills/)。
+人设与工程原则由 [SOUL.md](SOUL.md) 统一定义，56 个分发技能位于 [skills/](skills/)。
 
 当前版本：`0.3.0`，要求 Hermes `>=0.19.0`。
 
@@ -81,11 +81,11 @@ hermes profile show ada    # 查看已安装 Profile 的详情
 
 ## 技能加载说明
 
-Ada 的 55 个技能遵循 Agent Skills 的 progressive disclosure：discovery 阶段只加载技能名称和 `description`；任务匹配后加载对应 `SKILL.md` 获得执行协议；需要时才读取 `references/`、`scripts/`、`assets/` 和 `evals/`。
+Ada 的 56 个技能遵循 Agent Skills 的 progressive disclosure：discovery 阶段只加载技能名称和 `description`；任务匹配后加载对应 `SKILL.md` 获得执行协议；需要时才读取 `references/`、`scripts/`、`assets/` 和 `evals/`。
 
-因此用户通常只需描述目标，不需要记住或手工调用 55 个技能名称；Agent 会根据任务自动加载匹配的技能。
+因此用户通常只需描述目标，不需要记住或手工调用 56 个技能名称；Agent 会根据任务自动加载匹配的技能。
 
-## 技能体系 (55 skills)
+## 技能体系 (56 skills)
 
 所有 Ada 专属技能均以 `ada-` 为前缀。分类与顺序均以 `distribution.yaml` 为准。
 
@@ -153,6 +153,7 @@ Ada 的 55 个技能遵循 Agent Skills 的 progressive disclosure：discovery �
 | `ada-blazor-wasm-api-integration` | Blazor WASM ↔ 后端 API 集成陷阱：认证头、URL 解析、模式配置、会话缓存 |
 | `ada-blazor-debug-verification` | .NET 6 Blazor 调试与验证手册：运行期/DI 陷阱、bUnit 竞态、消费样例循环 |
 | `ada-blazor-bunit-testing` | bUnit 1.x 组件测试编写事实：渲染、等待、事件、InputFile |
+| `ada-blazor-wasm-runtime-pitfalls` | Blazor WASM 运行时陷阱：首渲染互操作、fragment、查询导航、故障隔离、原生链接 |
 | `ada-dotnet-blazor-library` | .NET Blazor 组件库工程：RCL、Demo、公共 API、发布 |
 | `ada-dotnet-engineering-refactoring` | .NET 工程级重构：领域原语、值类型迁移、公共 API |
 | `ada-dotnet-verification` | .NET 构建/测试/格式化/打包验证 |
@@ -227,7 +228,7 @@ Ada/
 ├── docs/                       # 质量标准（skill-quality-standard.md）
 ├── scripts/                    # 验证器、隔离 smoke 测试与单元测试
 ├── .github/workflows/          # GitHub Actions 质量门禁
-└── skills/software-development/  # 55 个 ada-* 技能
+└── skills/software-development/  # 56 个 ada-* 技能
 ```
 
 ## 质量验证
