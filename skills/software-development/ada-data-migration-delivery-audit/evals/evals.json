@@ -1,0 +1,85 @@
+{
+  "skill_name": "ada-data-migration-delivery-audit",
+  "evals": [
+    {
+      "id": "verify-migration-delivery",
+      "prompt": "验证数据迁移重构的交付：数据真的从旧存储搬到 DB 了吗？",
+      "should_trigger": true,
+      "expected_output": "Applies DB-forensics verification: query the real DB, compare counts and identity, never trust commit messages or plan checkboxes.",
+      "assertions": [
+        "Queries the real database directly",
+        "Compares against source data with evidence"
+      ]
+    },
+    {
+      "id": "db-single-source",
+      "prompt": "宣称 DB 是唯一数据源、迁移后删除旧文件，合入前审查。",
+      "should_trigger": true,
+      "expected_output": "Verifies the migration tool actually populated the target DB and that fallback/degradation semantics survive the migration.",
+      "assertions": [
+        "Checks migration tool actually ran on the real DB",
+        "Verifies recovery paths after deletion"
+      ]
+    },
+    {
+      "id": "timestamp-forensics",
+      "prompt": "Posts 21 条带原始日期，怀疑导入工具从没在正确库跑过。",
+      "should_trigger": true,
+      "expected_output": "Runs timestamp forensics: original dates mean an earlier tool wrote them; checks CWD-relative connection-string trap.",
+      "assertions": [
+        "Uses timestamp forensics as evidence",
+        "Checks the relative connection-string trap"
+      ]
+    },
+    {
+      "id": "empty-tables",
+      "prompt": "4 张新表全空，迁移工具说成功了。",
+      "should_trigger": true,
+      "expected_output": "Counts rows in every target table directly and reports the silent-empty-DB failure mode.",
+      "assertions": [
+        "Runs SELECT COUNT(*) per table",
+        "Distinguishes tool success from real delivery"
+      ]
+    },
+    {
+      "id": "code-quality-audit",
+      "prompt": "做一次常规代码质量审计。",
+      "should_trigger": false,
+      "expected_output": "Routes general code-quality auditing to ada-code-quality-analysis.",
+      "assertions": [
+        "Does not activate migration forensics",
+        "Routes to code-quality skill"
+      ]
+    },
+    {
+      "id": "build-gates",
+      "prompt": "编辑了 .NET 工程，需要跑构建测试格式门禁。",
+      "should_trigger": false,
+      "expected_output": "Routes build-gate verification to ada-dotnet-verification.",
+      "assertions": [
+        "Does not activate migration forensics",
+        "Routes to verification skill"
+      ]
+    },
+    {
+      "id": "stateful-service-audit",
+      "prompt": "审计有状态服务的状态一致性。",
+      "should_trigger": false,
+      "expected_output": "Routes stateful-service auditing to ada-stateful-service-audit.",
+      "assertions": [
+        "Does not activate migration forensics",
+        "Routes to stateful audit"
+      ]
+    },
+    {
+      "id": "project-background",
+      "prompt": "梳理项目背景文档。",
+      "should_trigger": false,
+      "expected_output": "Treats this as document authoring, not migration verification.",
+      "assertions": [
+        "Does not activate migration forensics",
+        "Routes to background authoring"
+      ]
+    }
+  ]
+}
