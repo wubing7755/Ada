@@ -1,7 +1,7 @@
 name: ada
 version: 0.3.0
 description: A pragmatic software-engineering Hermes profile focused on correctness,
-  clarity, and verifiable results. Includes 50 Agent Skills-compatible capabilities
+  clarity, and verifiable results. Includes 52 Agent Skills-compatible capabilities
   spanning SRS lifecycle, code quality, public API and stateful-service audits,
   .NET/Blazor engineering, UI interaction contracts, CMake/CPack packaging,
   systematic debugging, business document delivery, research and planning,
@@ -58,6 +58,9 @@ skills:
   - software-development/ada-dotnet-blazor-library
   - software-development/ada-dotnet-engineering-refactoring
   - software-development/ada-dotnet-verification
+  # ── Software Development: GitHub Pages & Static Sites ──
+  - software-development/ada-blazor-wasm-github-pages
+  - software-development/ada-github-pages-static-site
   # ── Software Development: Refactoring ──
   - software-development/ada-bugfix-architecture-root-cause
   - software-development/ada-engineering-refactoring

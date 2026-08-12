@@ -8,7 +8,7 @@ Ada is a distributable Hermes Profile: a software-engineering-focused agent that
 
 Ada helps developers understand, design, build, debug, and evolve software systems. Its value is not in knowing many terms, but in seeing the problem clearly, making sound judgments, and driving work to runnable, verifiable results. It is not a chat persona that only serves up terminology; it is a technical partner with engineering judgment.
 
-Persona and engineering principles are defined once in [SOUL.md](SOUL.md); the 50 distributed skills live under [skills/](skills/).
+Persona and engineering principles are defined once in [SOUL.md](SOUL.md); the 52 distributed skills live under [skills/](skills/).
 
 Current version: `0.3.0`, requires Hermes `>=0.19.0`.
 
@@ -81,11 +81,11 @@ hermes profile show ada    # details of the installed profile
 
 ## How Skills Are Loaded
 
-Ada's 50 skills follow Agent Skills progressive disclosure: discovery loads only skill names and `description`; once a task matches, the corresponding `SKILL.md` is loaded for the execution protocol; `references/`, `scripts/`, `assets/`, and `evals/` are read only when needed.
+Ada's 52 skills follow Agent Skills progressive disclosure: discovery loads only skill names and `description`; once a task matches, the corresponding `SKILL.md` is loaded for the execution protocol; `references/`, `scripts/`, `assets/`, and `evals/` are read only when needed.
 
-In practice, you usually describe the goal and let the agent load the matching skill — there is no need to memorize or invoke the 50 skill names by hand.
+In practice, you usually describe the goal and let the agent load the matching skill — there is no need to memorize or invoke the 52 skill names by hand.
 
-## Skill Catalog (50 skills)
+## Skill Catalog (52 skills)
 
 All Ada-owned skills use the `ada-` prefix. Categories and order follow `distribution.yaml`.
 
@@ -153,6 +153,13 @@ All Ada-owned skills use the `ada-` prefix. Categories and order follow `distrib
 | `ada-dotnet-blazor-library` | .NET Blazor component library engineering: RCL, demo, public API, publishing |
 | `ada-dotnet-engineering-refactoring` | .NET engineering-level refactoring: domain primitives, value type migration, public API |
 | `ada-dotnet-verification` | .NET build/test/format/package verification |
+
+### GitHub Pages and Static Sites
+
+| Skill | Purpose |
+|---|---|
+| `ada-blazor-wasm-github-pages` | Blazor WASM static-site deployment to GitHub Pages: content pipeline, Actions workflow, SPA fallback, verified pitfalls |
+| `ada-github-pages-static-site` | Static-site architecture constraints on GitHub Pages: no-server limits, content publishing paths, generated-artifact verification |
 
 ### Refactoring
 
@@ -227,7 +234,7 @@ The repository gates every pull request targeting `main` through the `Ada Profil
 - validator unit tests; consistency between `distribution.yaml`, the actual skill directory, and the README skill catalog/count; README vs. manifest version consistency;
 - YAML/frontmatter, resource links, inter-skill references, and eval structure checks; private runtime state leak checks (memories, sessions, credentials, `local/`, etc.);
 - Python `compileall` and changed-file `git diff --check`;
-- an isolated install/update smoke test with a temporary `HERMES_HOME`, confirming all 50 skills and user state survive an update.
+- an isolated install/update smoke test with a temporary `HERMES_HOME`, confirming all 52 skills and user state survive an update.
 
 The same gates can be run locally:
 

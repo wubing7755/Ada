@@ -1,0 +1,95 @@
+{
+  "skill_name": "ada-blazor-wasm-github-pages",
+  "evals": [
+    {
+      "id": "deploy-wasm-pages",
+      "prompt": "把 Blazor WASM 站点部署到 GitHub Pages，需要内容转换管线、SPA 子路由刷新兜底和 Actions 自动构建部署。",
+      "should_trigger": true,
+      "expected_output": "Applies the verified deployment protocol: content source layout, publish nesting, .nojekyll + 404 fallback, and the Actions workflow.",
+      "assertions": [
+        "Checks publish/wwwroot artifact root",
+        "Ensures 404.html and .nojekyll in artifact root"
+      ]
+    },
+    {
+      "id": "local-dev-404",
+      "prompt": "content/*.xml 改成后本地 dotnet run 页面报 404，wwwroot/data 不存在。",
+      "should_trigger": true,
+      "expected_output": "Diagnoses the gitignored build-time data directory: run the converter before local run.",
+      "assertions": [
+        "Identifies missing converter run as root cause",
+        "Gives the exact converter command"
+      ]
+    },
+    {
+      "id": "framework-missing-white-screen",
+      "prompt": "部署到 GitHub Pages 后站点白屏，_framework 目录看起来没发布上去。",
+      "should_trigger": true,
+      "expected_output": "Checks .nojekyll presence and publish/wwwroot artifact root before blaming the build.",
+      "assertions": [
+        "Checks .nojekyll and artifact root",
+        "Distinguishes publish nesting from build failure"
+      ]
+    },
+    {
+      "id": "spa-route-refresh-404",
+      "prompt": "静态站刷新 /blog/xxx 返回 404，要加 SPA 子路由刷新兜底。",
+      "should_trigger": true,
+      "expected_output": "Adds 404.html fallback copying index.html inside the artifact root.",
+      "assertions": [
+        "Uses cp index.html 404.html in artifact root",
+        "Mentions user-level vs project-level base href"
+      ]
+    },
+    {
+      "id": "xml-lang-merge-bug",
+      "prompt": "多语言 XML 字段在转换后变成 '中文English' 拼接，查转换逻辑。",
+      "should_trigger": true,
+      "expected_output": "Identifies nested lang structure concatenation and switches to direct lang-attribute parsing.",
+      "assertions": [
+        "Traces the Value concatenation bug",
+        "Prescribes direct lang attribute structure"
+      ]
+    },
+    {
+      "id": "nuget-publish",
+      "prompt": "把库打包发布到 nuget.org 并写包 README。",
+      "should_trigger": false,
+      "expected_output": "Routes NuGet packaging to ada-dotnet-nuget-packaging, not GitHub Pages deployment.",
+      "assertions": [
+        "Does not apply GitHub Pages workflow",
+        "Routes to packaging skill"
+      ]
+    },
+    {
+      "id": "static-architecture",
+      "prompt": "静态站没有服务端，讨论内容发布三路径和架构约束。",
+      "should_trigger": false,
+      "expected_output": "Routes architecture-constraint discussion to ada-github-pages-static-site.",
+      "assertions": [
+        "Does not narrow to deployment mechanics",
+        "Routes by architecture scope"
+      ]
+    },
+    {
+      "id": "bunit-tests",
+      "prompt": "给 Blazor 组件写 bUnit 测试，覆盖渲染和交互。",
+      "should_trigger": false,
+      "expected_output": "Routes component testing to ada-blazor-bunit-testing.",
+      "assertions": [
+        "Does not activate deployment protocol",
+        "Routes to testing skill"
+      ]
+    },
+    {
+      "id": "build-gates",
+      "prompt": "编辑了 .NET 项目，需要跑构建、测试和格式门禁。",
+      "should_trigger": false,
+      "expected_output": "Routes build-gate verification to ada-dotnet-verification.",
+      "assertions": [
+        "Does not treat as deployment task",
+        "Routes to verification skill"
+      ]
+    }
+  ]
+}
