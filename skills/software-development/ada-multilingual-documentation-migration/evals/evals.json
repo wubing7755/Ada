@@ -1,0 +1,85 @@
+{
+  "skill_name": "ada-multilingual-documentation-migration",
+  "evals": [
+    {
+      "id": "bilingual-migration",
+      "prompt": "把仓库文档做成中英双语，参考项目的多语言约定。",
+      "should_trigger": true,
+      "expected_output": "Applies the migration: core model first (canonical/translated pairs, manifest), phase-gated workflow with one independent commit per phase, translation rules, validation gates.",
+      "assertions": [
+        "Builds the manifest/state model before moving files",
+        "Phases the migration with per-phase gates"
+      ]
+    },
+    {
+      "id": "manifest-states",
+      "prompt": "文档已搬到 docs/en/ 但状态没更新，怎么管理？",
+      "should_trigger": true,
+      "expected_output": "Uses the canonical state machine and blob integrity rules: manifest state is the source of truth, not the directory; drift rolls back to In Review.",
+      "assertions": [
+        "Treats manifest state as source of truth",
+        "Recomputes canonicalBlob after link rewrites"
+      ]
+    },
+    {
+      "id": "translation-rules",
+      "prompt": "翻译成英文时哪些标识符必须保留？",
+      "should_trigger": true,
+      "expected_output": "Applies the translation rules: preserve code identifiers, enums, requirement IDs, must/should strength; only translate prose.",
+      "assertions": [
+        "Preserves identifiers and strength words",
+        "Translates prose only"
+      ]
+    },
+    {
+      "id": "post-migration-merge",
+      "prompt": "迁移 PR 已经 squash 合并了，本地 main 怎么同步？",
+      "should_trigger": true,
+      "expected_output": "Follows the post-migration remote merge procedure: verifies origin's version contains the fix before reset, never merges a stale superseded local commit.",
+      "assertions": [
+        "Verifies origin main is strictly newer",
+        "Uses reset, not merge, for superseded commits"
+      ]
+    },
+    {
+      "id": "bilingual-audit",
+      "prompt": "审计双语对的事实一致性。",
+      "should_trigger": false,
+      "expected_output": "Routes consistency auditing to ada-bilingual-doc-audit.",
+      "assertions": [
+        "Does not activate migration",
+        "Routes to bilingual audit"
+      ]
+    },
+    {
+      "id": "doc-revision",
+      "prompt": "修订文档术语。",
+      "should_trigger": false,
+      "expected_output": "Routes document revision to ada-docs-revision.",
+      "assertions": [
+        "Does not activate migration",
+        "Routes to revision skill"
+      ]
+    },
+    {
+      "id": "git-rename",
+      "prompt": "git mv 保留历史的重命名。",
+      "should_trigger": false,
+      "expected_output": "Routes renames to ada-git-history-preserving-moves.",
+      "assertions": [
+        "Does not activate migration",
+        "Routes to history-preserving moves"
+      ]
+    },
+    {
+      "id": "ui-review",
+      "prompt": "审查网站 UI。",
+      "should_trigger": false,
+      "expected_output": "Routes UI review to ada-web-ui-design-review.",
+      "assertions": [
+        "Does not activate migration",
+        "Routes to UI review"
+      ]
+    }
+  ]
+}

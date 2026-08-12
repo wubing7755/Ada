@@ -1,0 +1,85 @@
+{
+  "skill_name": "ada-web-ui-design-review",
+  "evals": [
+    {
+      "id": "ui-review-request",
+      "prompt": "审查/优化网站的 UI、布局、响应式、交互体验。",
+      "should_trigger": true,
+      "expected_output": "Understands content before design, runs an evidence-based browser audit (viewport matrix, computed styles, overflow, contrast), proposes design direction and gets approval before code.",
+      "assertions": [
+        "Audits with real browser evidence",
+        "Gets approval before editing code"
+      ]
+    },
+    {
+      "id": "visual-consistency",
+      "prompt": "卡片内的编号和别处不一致，请保持一致。",
+      "should_trigger": true,
+      "expected_output": "Checks the whole structural family for SAME STRUCTURAL PATTERN, not just the symptom element; proposes the pattern fix.",
+      "assertions": [
+        "Audits the whole family, not one element",
+        "Fixes structure, not just the visible symptom"
+      ]
+    },
+    {
+      "id": "redesign-plan",
+      "prompt": "在保留品牌的前提下重新设计这个站，先分析再改。",
+      "should_trigger": true,
+      "expected_output": "Produces the four-part review (assessment / direction / structure / plan) with measured evidence, then explicit decision points before implementation.",
+      "assertions": [
+        "Outputs the four-part review shape",
+        "Embeds core principles (content first, no fake precision)"
+      ]
+    },
+    {
+      "id": "responsive-overflow",
+      "prompt": "320 宽度下横向溢出，只在菜单打开时出现。",
+      "should_trigger": true,
+      "expected_output": "Opens every disclosure/dropdown at each collapsed-nav width and measures bounding rectangles; verifies scrollWidth and per-element overflow.",
+      "assertions": [
+        "Checks open-state overflow, not just closed pages",
+        "Measures bounding boxes at narrow viewports"
+      ]
+    },
+    {
+      "id": "bilingual-audit",
+      "prompt": "审计中英文档对的一致性。",
+      "should_trigger": false,
+      "expected_output": "Routes bilingual consistency to ada-bilingual-doc-audit.",
+      "assertions": [
+        "Does not activate UI review",
+        "Routes to bilingual audit"
+      ]
+    },
+    {
+      "id": "doc-migration",
+      "prompt": "把文档做成双语。",
+      "should_trigger": false,
+      "expected_output": "Routes multilingual migration to ada-multilingual-documentation-migration.",
+      "assertions": [
+        "Does not activate UI review",
+        "Routes to migration skill"
+      ]
+    },
+    {
+      "id": "dotnet-gates",
+      "prompt": "编辑了 .NET 工程，跑构建门禁。",
+      "should_trigger": false,
+      "expected_output": "Routes build-gate verification to ada-dotnet-verification.",
+      "assertions": [
+        "Does not activate UI review",
+        "Routes to verification skill"
+      ]
+    },
+    {
+      "id": "interaction-protocol",
+      "prompt": "定义 UI 交互协议契约矩阵。",
+      "should_trigger": false,
+      "expected_output": "Routes protocol contracts to ada-ui-interaction-protocol-contracts.",
+      "assertions": [
+        "Does not activate UI review",
+        "Routes to interaction protocol skill"
+      ]
+    }
+  ]
+}
