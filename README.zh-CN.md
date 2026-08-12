@@ -8,7 +8,7 @@ Ada 是一个可分发的 Hermes Profile：偏软件工程、重正确性与可�
 
 Ada 帮助开发者理解、设计、构建、调试和演进软件系统。它的价值不在于知道多少术语，而在于看清问题、作出判断，并把事情推进到可运行、可验证的结果。它不是只提供术语答案的聊天角色，而是有工程判断的技术搭档。
 
-人设与工程原则由 [SOUL.md](SOUL.md) 统一定义，56 个分发技能位于 [skills/](skills/)。
+人设与工程原则由 [SOUL.md](SOUL.md) 统一定义，59 个分发技能位于 [skills/](skills/)。
 
 当前版本：`0.3.0`，要求 Hermes `>=0.19.0`。
 
@@ -81,11 +81,11 @@ hermes profile show ada    # 查看已安装 Profile 的详情
 
 ## 技能加载说明
 
-Ada 的 56 个技能遵循 Agent Skills 的 progressive disclosure：discovery 阶段只加载技能名称和 `description`；任务匹配后加载对应 `SKILL.md` 获得执行协议；需要时才读取 `references/`、`scripts/`、`assets/` 和 `evals/`。
+Ada 的 59 个技能遵循 Agent Skills 的 progressive disclosure：discovery 阶段只加载技能名称和 `description`；任务匹配后加载对应 `SKILL.md` 获得执行协议；需要时才读取 `references/`、`scripts/`、`assets/` 和 `evals/`。
 
-因此用户通常只需描述目标，不需要记住或手工调用 56 个技能名称；Agent 会根据任务自动加载匹配的技能。
+因此用户通常只需描述目标，不需要记住或手工调用 59 个技能名称；Agent 会根据任务自动加载匹配的技能。
 
-## 技能体系 (56 skills)
+## 技能体系 (59 skills)
 
 所有 Ada 专属技能均以 `ada-` 为前缀。分类与顺序均以 `distribution.yaml` 为准。
 
@@ -114,6 +114,9 @@ Ada 的 56 个技能遵循 Agent Skills 的 progressive disclosure：discovery �
 | `ada-srs-revision` | 大规模修订 SRS：术语替换、重编号、引用修复 |
 | `ada-srs-writing` | SRS 编写：结构模式、质量规则、需求条目格式 |
 | `ada-tp-to-srs-derivation` | 从技术方案（TP）派生 SRS |
+| `ada-srs-to-detailed-design` | 从分层 SRS 生成详细设计条目；仅实现需求派生条目 |
+| `ada-detailed-design-audit` | 审计详细设计质量：可验证性、边界、术语、HOW 深度 |
+| `ada-contract-consistency-review` | 冻结契约一致性审查：SRS/HLD/ADR/计划一致，PASS/FAIL 结论 |
 | `ada-doc-comparison-analysis` | 对比文档版本、合并 SRS 草稿 |
 | `ada-docs-revision` | 大规模修订通用技术文档：术语替换、结构重构 |
 
@@ -228,7 +231,7 @@ Ada/
 ├── docs/                       # 质量标准（skill-quality-standard.md）
 ├── scripts/                    # 验证器、隔离 smoke 测试与单元测试
 ├── .github/workflows/          # GitHub Actions 质量门禁
-└── skills/software-development/  # 56 个 ada-* 技能
+└── skills/software-development/  # 59 个 ada-* 技能
 ```
 
 ## 质量验证

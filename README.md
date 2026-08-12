@@ -8,7 +8,7 @@ Ada is a distributable Hermes Profile: a software-engineering-focused agent that
 
 Ada helps developers understand, design, build, debug, and evolve software systems. Its value is not in knowing many terms, but in seeing the problem clearly, making sound judgments, and driving work to runnable, verifiable results. It is not a chat persona that only serves up terminology; it is a technical partner with engineering judgment.
 
-Persona and engineering principles are defined once in [SOUL.md](SOUL.md); the 56 distributed skills live under [skills/](skills/).
+Persona and engineering principles are defined once in [SOUL.md](SOUL.md); the 59 distributed skills live under [skills/](skills/).
 
 Current version: `0.3.0`, requires Hermes `>=0.19.0`.
 
@@ -81,11 +81,11 @@ hermes profile show ada    # details of the installed profile
 
 ## How Skills Are Loaded
 
-Ada's 56 skills follow Agent Skills progressive disclosure: discovery loads only skill names and `description`; once a task matches, the corresponding `SKILL.md` is loaded for the execution protocol; `references/`, `scripts/`, `assets/`, and `evals/` are read only when needed.
+Ada's 59 skills follow Agent Skills progressive disclosure: discovery loads only skill names and `description`; once a task matches, the corresponding `SKILL.md` is loaded for the execution protocol; `references/`, `scripts/`, `assets/`, and `evals/` are read only when needed.
 
 In practice, you usually describe the goal and let the agent load the matching skill — there is no need to memorize or invoke the 55 skill names by hand.
 
-## Skill Catalog (56 skills)
+## Skill Catalog (59 skills)
 
 All Ada-owned skills use the `ada-` prefix. Categories and order follow `distribution.yaml`.
 
@@ -114,6 +114,9 @@ All Ada-owned skills use the `ada-` prefix. Categories and order follow `distrib
 | `ada-srs-revision` | Large-scale SRS revision: terminology replacement, renumbering, reference repair |
 | `ada-srs-writing` | SRS authoring: structural patterns, quality rules, requirement entry format |
 | `ada-tp-to-srs-derivation` | Derives an SRS from a technical proposal (TP) |
+| `ada-srs-to-detailed-design` | Generates detailed-design entries from layered SRS; only implementation requirements derive entries |
+| `ada-detailed-design-audit` | Audits detailed-design quality: verifiability, boundaries, terminology, HOW depth |
+| `ada-contract-consistency-review` | Frozen-contract consistency review: SRS/HLD/ADR/plan agreement with PASS/FAIL verdict |
 | `ada-doc-comparison-analysis` | Compares document versions and merges SRS drafts |
 | `ada-docs-revision` | Large-scale revision of general technical documents: terminology, structure |
 
@@ -238,7 +241,7 @@ The repository gates every pull request targeting `main` through the `Ada Profil
 - validator unit tests; consistency between `distribution.yaml`, the actual skill directory, and the README skill catalog/count; README vs. manifest version consistency;
 - YAML/frontmatter, resource links, inter-skill references, and eval structure checks; private runtime state leak checks (memories, sessions, credentials, `local/`, etc.);
 - Python `compileall` and changed-file `git diff --check`;
-- an isolated install/update smoke test with a temporary `HERMES_HOME`, confirming all 56 skills and user state survive an update.
+- an isolated install/update smoke test with a temporary `HERMES_HOME`, confirming all 59 skills and user state survive an update.
 
 The same gates can be run locally:
 
