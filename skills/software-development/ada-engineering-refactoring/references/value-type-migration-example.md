@@ -1,6 +1,6 @@
-# Atlas Value-Type Migration: Full Cascade Record (2026-07-22)
+# Lib Value-Type Migration: Full Cascade Record (2026-07-22)
 
-Session: refactor/base-class-optimization branch, Atlas Blazor Dock Layout project (net6.0).
+Session: refactor/base-class-optimization branch, Lib Blazor Dock Layout project (net6.0).
 
 ## New Types Introduced
 
@@ -40,10 +40,10 @@ If you need to validate at an API boundary, check `Ratio.Value` explicitly rathe
 ### Phase 1c — Razor Files
 1. `ToolBar.razor` — `var panelId = panel.Id.Value` (3 locations via `replace_all`), `_entryPanelIds` assignment back to `panelId` (already string), `OnEntryMouseLeave` comparison `_hoveredPanel?.Id.Value != panelId`, `ExpandPanel(_hoveredPanel.Id.Value)`
 2. `DockPanel.razor` — event handler params: `activePanel.Id.Value`
-3. `AtlasLayout.razor` — `TogglePanel(panels[index].Id.Value)`
+3. `LibLayout.razor` — `TogglePanel(panels[index].Id.Value)`
 
 ### Phase 1d — Demo & Tests
-1. `src/Atlas.Demo/Pages/Dock.razor` — 4 `new DockPanelModel(new PanelId(...))` calls
+1. `src/Lib.Demo/Pages/Dock.razor` — 4 `new DockPanelModel(new PanelId(...))` calls
 2. **Bulk test fix** — Python script replaced all `DockPanelModel("id"` → `DockPanelModel(new PanelId("id"` and `SizeRatio = X.0` → `SizeRatio = (Ratio)X.0` across 7 test files
 3. **Post-script cleanup** — `MovePanel` still accepts `string` (not `PanelId`), so `new PanelId(...)` incorrectly inserted by script was reverted manually
 4. **Test assertions** — `Assert.Equal("p1", panel.Id)` → `Assert.Equal(new PanelId("p1"), panel.Id)` (overload resolution failed)
@@ -52,25 +52,25 @@ If you need to validate at an API boundary, check `Ratio.Value` explicitly rathe
 ## Complete File Manifest
 
 ```
-src/Atlas/Domain/Primitives/Ratio.cs              (new)
-src/Atlas/Domain/Primitives/PanelId.cs             (new)
-src/Atlas/Domain/Primitives/TabId.cs               (new)
-src/Atlas/Domain/DockPanelModel.cs                 (modified)
-src/Atlas/Domain/LayoutQuery.cs                    (modified)
-src/Atlas/Domain/LayoutState.cs                    (modified)
-src/Atlas/Services/UndoStack.cs                    (modified — Phase 2)
-src/Atlas/Services/SplitterService.cs              (modified)
-src/Atlas/Services/LayoutDto.cs                    (modified)
-src/Atlas/Services/DragService.cs                  (modified)
-src/Atlas/Services/LayoutContext.cs                (modified — Phase 1 + 2)
-src/Atlas/Services/Commands/CommandBase.cs         (new — Phase 4)
-src/Atlas/Services/Commands/CloseTabCommand.cs     (modified — Phase 4)
-src/Atlas/Services/Commands/MoveTabCommand.cs      (modified — Phase 4)
-src/Atlas/Services/Commands/OpenTabCommand.cs      (modified — Phase 4)
-src/Atlas/Components/ToolBar.razor                 (modified)
-src/Atlas/Components/DockPanel.razor               (modified)
-src/Atlas/Components/AtlasLayout.razor             (modified)
-src/Atlas.Demo/Pages/Dock.razor                    (modified)
+src/Lib/Domain/Primitives/Ratio.cs              (new)
+src/Lib/Domain/Primitives/PanelId.cs             (new)
+src/Lib/Domain/Primitives/TabId.cs               (new)
+src/Lib/Domain/DockPanelModel.cs                 (modified)
+src/Lib/Domain/LayoutQuery.cs                    (modified)
+src/Lib/Domain/LayoutState.cs                    (modified)
+src/Lib/Services/UndoStack.cs                    (modified — Phase 2)
+src/Lib/Services/SplitterService.cs              (modified)
+src/Lib/Services/LayoutDto.cs                    (modified)
+src/Lib/Services/DragService.cs                  (modified)
+src/Lib/Services/LayoutContext.cs                (modified — Phase 1 + 2)
+src/Lib/Services/Commands/CommandBase.cs         (new — Phase 4)
+src/Lib/Services/Commands/CloseTabCommand.cs     (modified — Phase 4)
+src/Lib/Services/Commands/MoveTabCommand.cs      (modified — Phase 4)
+src/Lib/Services/Commands/OpenTabCommand.cs      (modified — Phase 4)
+src/Lib/Components/ToolBar.razor                 (modified)
+src/Lib/Components/DockPanel.razor               (modified)
+src/Lib/Components/LibLayout.razor             (modified)
+src/Lib.Demo/Pages/Dock.razor                    (modified)
 tests/.../Domain/DomainModelTests.cs               (modified)
 tests/.../Domain/LayoutStateTests.cs               (modified)
 tests/.../Services/DragServiceTests.cs             (modified)
@@ -82,7 +82,7 @@ tests/.../Services/SplitterServiceTests.cs         (modified)
 
 ## Error Counts
 - Initial: 108 errors
-- After source fix: 0 errors in `Atlas.csproj`
+- After source fix: 0 errors in `Lib.csproj`
 - After all fixes: 0 errors across all projects
 
 ## Key Error Patterns

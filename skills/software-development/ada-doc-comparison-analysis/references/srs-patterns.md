@@ -1,69 +1,69 @@
 # SRS-Specific Optimization Patterns
 
-Concrete patterns extracted from the PromptEditor ↔ XDocker comparison
+Concrete patterns extracted from the 示例项目 ↔ Lib comparison
 session (2026-07-15). These are the deliverable-level details that sit
 below the general methodology in SKILL.md.
 
-## PromptEditor → XDocker: What Transfered
+## 示例项目 → Lib: What Transfered
 
 ### Structural Elements to Add
 
 1. **Architecture diagram in §1 (Introduction)**
-   - PromptEditor has Mermaid `flowchart LR` showing main→router→commands→storage
-   - XDocker had the detailed ASCII tree + SVG in §3.1 — move a simplified
+   - 示例项目 has Mermaid `flowchart LR` showing main→router→commands→storage
+   - Lib had the detailed ASCII tree + SVG in §3.1 — move a simplified
      high-level Mermaid graph to Introduction, keep detail in §3
    - The intro diagram answers "what are the major pieces?" before diving in
 
 2. **Data model / ER diagram in §1 (Introduction)**
-   - PromptEditor §1.4 has `erDiagram` with entities + cardinality table
-   - XDocker has no entity-relationship view — Panel/Tab/Content relationships
+   - 示例项目 §1.4 has `erDiagram` with entities + cardinality table
+   - Lib has no entity-relationship view — Panel/Tab/Content relationships
      are scattered across prose
    - Add: Layout→Panel→Tab, ContentIdentifier→ContentComponent, with a
      cardinality constraints table
 
 3. **Quick-Finder / decision tree**
-   - PromptEditor §3 opens with a Mermaid flowchart: "What do you want to do?"
+   - 示例项目 §3 opens with a Mermaid flowchart: "What do you want to do?"
      → Object? → Action?
-   - XDocker's 150+ requirements are a flat list — add a decision tree
+   - Lib's 150+ requirements are a flat list — add a decision tree
      branching on role (Developer/End User/System) → feature area → section
    - Also add a simple "I want to... → go to §X.Y" table
 
 4. **Per-section requirement index**
-   - Each PromptEditor sub-command section starts with an Options table
-   - For XDocker: add a "本节需求索引" block at each §3.x heading:
+   - Each 示例项目 sub-command section starts with an Options table
+   - For Lib: add a "本节需求索引" block at each §3.x heading:
      ```
      > **本节需求索引 (N 条):** REQ-F-xxx~yyy — topic summary
      > | 你想... | 看这条 |
      ```
 
 5. **Design Rationale callouts**
-   - PromptEditor uses `> **💡 Design Rationale:** ...` for non-obvious decisions
-   - XDocker has none — add for decisions like "why Bottom Dock is sibling
+   - 示例项目 uses `> **💡 Design Rationale:** ...` for non-obvious decisions
+   - Lib has none — add for decisions like "why Bottom Dock is sibling
      to Main Area, not child of Editor Container"
 
 ### Appendix-Level Elements to Add
 
 6. **Requirement summary by role** (appendix)
-   - PromptEditor §7.2: table of Role → Requirement IDs → Count
-   - XDocker has role definitions (§1.3.2) but no per-role requirement index
+   - 示例项目 §7.2: table of Role → Requirement IDs → Count
+   - Lib has role definitions (§1.3.2) but no per-role requirement index
    - Essential for stakeholder review: "I'm the Application Developer — which
      of the 156 requirements apply to me?"
 
 7. **Planned/Deferred requirements** (appendix)
-   - PromptEditor §7.3: table of deferred REQ IDs with titles
-   - XDocker has P2 priorities scattered but no centralized "these are deferred"
+   - 示例项目 §7.3: table of deferred REQ IDs with titles
+   - Lib has P2 priorities scattered but no centralized "these are deferred"
    - Prevents scope disputes: "it's in the SRS" → "yes, but see Appendix C"
 
 8. **Traceability matrix** (appendix)
-   - PromptEditor §7.4: links requirements → docs/code/tests
-   - XDocker has none — add a table mapping requirement groups → design docs,
+   - 示例项目 §7.4: links requirements → docs/code/tests
+   - Lib has none — add a table mapping requirement groups → design docs,
      implementation modules, and test suites
 
-## What XDocker Already Does Better (Keep)
+## What Lib Already Does Better (Keep)
 
-These are XDocker strengths that should NOT be "fixed":
+These are Lib strengths that should NOT be "fixed":
 
-| XDocker Strength | Why Keep |
+| Lib Strength | Why Keep |
 |-----------------|----------|
 | Chinese main text + English terminology | Team convention; bilingual strategy works |
 | AC1/AC2/AC3 explicit numbering | More testable than bare Given/When/Then |
@@ -78,7 +78,7 @@ These are XDocker strengths that should NOT be "fixed":
 When an SRS defines a hierarchical structure with intermediate containers
 that carry no functional semantics, the hierarchy can (and should) be
 flattened by referencing an established design authority. This was the
-key finding from the VS Code alignment pass on XDocker.
+key finding from the VS Code alignment pass on Lib.
 
 ### Pattern
 

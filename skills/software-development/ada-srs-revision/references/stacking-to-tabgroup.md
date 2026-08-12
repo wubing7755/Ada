@@ -1,4 +1,4 @@
-# Atlas/xdocker SRS: Stacking → Tab Group Revision
+# Lib/lib SRS: Stacking → Tab Group Revision
 
 Worked example of a systematic semantic-concept revision across a 4700-line
 SRS document. This is the session that produced the `srs-revision` skill.

@@ -1,4 +1,4 @@
-# Atlas Audit Session — 2026-07-24
+# Lib Audit Session — 2026-07-24
 
 ## Discovered Discrepancies
 

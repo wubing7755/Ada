@@ -31,7 +31,7 @@ Use this during late-phase .NET library refactoring, especially before NuGet/pac
    - source search under `src` for stale guard/error names
    - added-line secret scan
 
-## Atlas Phase 20 example
+## Lib Phase 20 example
 
 - Deleted `LayoutRepair` historical last-panel-visible guard because current `REQ-F-104` AC3 allows collapsing the last expanded panel and assigning space to Editor Area.
 - Removed stale `DockErrorCode.LastPanelCannotCollapse` so the public API no longer advertises deleted `REQ-F-130`.

@@ -1,12 +1,12 @@
-# XDocker Phase 1 Plan — Reference Template
+# Lib Phase 1 Plan — Reference Template
 
-This reference captures the conventions and task breakdown used in the XDocker Phase 1 implementation. It serves as a template for future Blazor component library phases or similar projects.
+This reference captures the conventions and task breakdown used in the Lib Phase 1 implementation. It serves as a template for future Blazor component library phases or similar projects.
 
 ## Architecture Decision: State-driven Component Architecture (not MVVM)
 
-XDocker rejected traditional MVVM because:
+Lib rejected traditional MVVM because:
 
-| XDocker concern | MVVM suitability |
+| Lib concern | MVVM suitability |
 |---|---|
 | Multi-region dock hierarchy tree | Poor — no natural ViewModel nesting |
 | Editor View / Tab state machine | Poor — ViewModel doesn't own lifecycle |
@@ -15,12 +15,12 @@ XDocker rejected traditional MVVM because:
 | Multi-instance isolation | Better as scoped context |
 | Fast sequential operation serialization | Better as command queue |
 
-Instead, XDocker uses:
+Instead, Lib uses:
 
 ```text
 Razor Components
     ↓ events
-XDockerLayoutContext (per-instance)
+LibLayoutContext (per-instance)
     ↓ commands
 Command/Reducer (pure state transitions)
     ↓
@@ -48,20 +48,20 @@ Each task produces one commit. Order matters — models before services, service
 1. **Scaffolding**: xUnit project + TypeScript build pipeline + `.gitignore`
 2. **Enums & Results**: `DockErrorCode`, `DockResult`, `DockResult<T>`, `LayoutEnums`
 3. **Domain Models**: `LayoutState`, `RegionModel`, `DockPanelModel`, `EditorViewModel`, `TabModel`, `RegionNames`
-4. **Validator**: `XDockerLayoutValidator` — region name checks, fixed-vs-dock, duplicates
-5. **Content Registry**: `XDockerContentRegistry` — register/resolve/is-registered
-6. **Layout Context**: `XDockerLayoutContext` — OpenTab, ActivateTab, GetTab, event dispatch, multi-instance isolation
+4. **Validator**: `LibLayoutValidator` — region name checks, fixed-vs-dock, duplicates
+5. **Content Registry**: `LibContentRegistry` — register/resolve/is-registered
+6. **Layout Context**: `LibLayoutContext` — OpenTab, ActivateTab, GetTab, event dispatch, multi-instance isolation
 7. **Static Components**: All `.razor` files — layout, regions, panels, toolbars, editor area, tabs, splitters
 8. **Styling**: Neutral CSS with `xd-` prefix, JetBrains-like structure, `prefers-reduced-motion`
 9. **DynamicContent**: `DynamicComponent` rendering via ContentRegistry, error isolation per tab
-10. **Demo Page**: Replace prototype `Dock.razor` with formal XDocker components
+10. **Demo Page**: Replace prototype `Dock.razor` with formal Lib components
 11. **Traceability**: Update `docs/requirements-traceability.md`
 
 ## Verification at Each Task
 
 Every task ends with:
 ```bash
-dotnet test XDocker.slnx --no-restore
+dotnet test Lib.slnx --no-restore
 ```
 
 Expected: all tests pass, build succeeds, no new CS errors.
@@ -70,7 +70,7 @@ Only `NETSDK1138` (EOL target framework) warning is acceptable for `net6.0` buil
 
 ## Pitfalls Discovered
 
-1. **Namespace collision** (see SKILL.md main body): `Components/XDocker/` conflicts with root `XDocker` namespace. Fix: rename to `Components/Docking/` or use `global::` prefix.
+1. **Namespace collision** (see SKILL.md main body): `Components/Lib/` conflicts with root `Lib` namespace. Fix: rename to `Components/Docking/` or use `global::` prefix.
 
 2. **Patch tool with Razor files**: Removing `@using` lines via `patch` can consume adjacent markup. Always verify post-patch with `read_file`.
 

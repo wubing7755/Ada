@@ -1,11 +1,11 @@
-# Atlas 项目文档审计案例（2026-07-24）
+# Lib 项目文档审计案例（2026-07-24）
 
-本文件记录了 `ada-doc-implementation-audit` 技能在 Atlas Blazor Dock Layout 项目
+本文件记录了 `ada-doc-implementation-audit` 技能在 Lib Blazor Dock Layout 项目
 上的实际执行结果，作为后续审计的参考模板。
 
 ## 项目背景
 
-- **项目**: Atlas — Blazor WebAssembly Dock Layout 组件库
+- **项目**: Lib — Blazor WebAssembly Dock Layout 组件库
 - **分支**: `refactor/base-class-optimization`
 - **规模**: 50+ 源文件 + 23+ 测试文件 + 14 文档文件
 - **测试**: 199/199 通过

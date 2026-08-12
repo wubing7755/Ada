@@ -91,7 +91,7 @@ Using `js.InvokeVoidAsync("eval", $"...import('...').then(...)")` for ES module 
 private static IJSObjectReference? _module;
 public static async ValueTask InitializeAsync(IJSRuntime js)
 {
-    _module = await js.InvokeAsync<IJSObjectReference>("import", "./xdocker/xdocker.js");
+    _module = await js.InvokeAsync<IJSObjectReference>("import", "./lib/lib.js");
 }
 
 // Then call module methods directly

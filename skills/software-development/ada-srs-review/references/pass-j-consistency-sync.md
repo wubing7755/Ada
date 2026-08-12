@@ -11,7 +11,7 @@ Requirement deletions/additions silently rot the document's self-descriptions. A
 5. **Deferred-requirements appendix**: #1 stale-ID hotspot — entries often cite pre-renumber IDs whose numbers now belong to DIFFERENT requirements (e.g. "REQ-F-138 布局缩放适配" when current F-138 is 右键菜单; real target was F-136). Match by TITLE, then fix ID+title+priority to current body.
 6. **Change-log appendix**: every fix session appends rows (user convention: 编号 | 需求名称 | 变更类型 | 变更说明; use 变更类型=勘误 for editorial fixes).
 7. **Missing chapter numbers** (§3.2 gap): user chose keep-number + one-line note over renumbering — ask, don't assume (see srs-renumbering "When NOT to Renumber").
-8. **Hardcoded ID ranges inside requirement BODIES** (not just indexes/statistics): NFRs love phrasing like "所有功能需求（REQ-F-001 至 REQ-F-139）应正常工作" (browser-compat, performance NFRs). The range rots on ANY add/delete and silently spans gap IDs. Grep `REQ-F-\d{3}\s*(至|~|到)\s*REQ-F-\d{3}` outside index tables; replace with unbound phrasing: "所有功能需求（§3 全部 REQ-F 需求）". Caught in Atlas REQ-NF-002 AC1 only on a SECOND verification pass — the range read plausibly and slipped the first review.
+8. **Hardcoded ID ranges inside requirement BODIES** (not just indexes/statistics): NFRs love phrasing like "所有功能需求（REQ-F-001 至 REQ-F-139）应正常工作" (browser-compat, performance NFRs). The range rots on ANY add/delete and silently spans gap IDs. Grep `REQ-F-\d{3}\s*(至|~|到)\s*REQ-F-\d{3}` outside index tables; replace with unbound phrasing: "所有功能需求（§3 全部 REQ-F 需求）". Caught in Lib REQ-NF-002 AC1 only on a SECOND verification pass — the range read plausibly and slipped the first review.
 9. **New-REQ cascade checklist**: adding a single new requirement touches N locations — every one must be updated:
    - Section index header (`本节需求索引 (N 条)`) — increment count + extend range
    - §5 statistics row — increment section count + adjust P0/P1/P2 split
@@ -20,7 +20,7 @@ Requirement deletions/additions silently rot the document's self-descriptions. A
    - Appendix index table — insert row at correct physical-order position
    - Appendix footer total — increment F count and overall total
    - Appendix C changelog — add row (变更类型=新增)
-   *Proven in Atlas session: adding REQ-F-141 touched all 7. When adding MULTIPLE new REQs (e.g., B3-B11 = 6 REQs + scope/docs fixes), batch the work: insert ALL requirements first, then sync ALL indices/stats/changelog/appendix in ONE pass. This turns N×7 touch-points into 1×7 — critical at scale.*
+   *Proven in Lib session: adding REQ-F-141 touched all 7. When adding MULTIPLE new REQs (e.g., B3-B11 = 6 REQs + scope/docs fixes), batch the work: insert ALL requirements first, then sync ALL indices/stats/changelog/appendix in ONE pass. This turns N×7 touch-points into 1×7 — critical at scale.*
 
 **Re-verification after user self-fix**: when the user fixes reported issues themselves and asks you to re-read, do three things — (a) verify EACH previously-reported item against the new text (report per-item ✅/❌ in a table), (b) independently recompute the statistics table (per-section counts AND P0/P1/P2 split) from genuine requirement headers — never diff against your memory of the old table, (c) run one FRESH residual scan for patterns adjacent to the fixed ones (that's how the hardcoded-range leftover in item 8 was found). Also check the change-log appendix gained rows covering the fixes; when you then make a follow-up edit, append your own change-log row in the same commit.
 

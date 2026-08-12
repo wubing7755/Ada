@@ -1,7 +1,7 @@
-# Example: Atlas Staged Diff Efficiency Review (2026-07-20)
+# Example: Lib Staged Diff Efficiency Review (2026-07-20)
 
 Real output from a `code-efficiency-review` run on a Blazor WASM docking layout
-(`Atlas`) staged diff covering TypeScript drag cleanup, C# auto-hide flyout,
+(`Lib`) staged diff covering TypeScript drag cleanup, C# auto-hide flyout,
 JSON DTO extraction, and async disposal patterns.
 
 ---
@@ -9,7 +9,7 @@ JSON DTO extraction, and async disposal patterns.
 ## Findings (ordered by confidence/severity)
 
 ### 🔴 Finding 1: ToolBar.razor — CTS leak on every hover-leave
-**File**: `src/Atlas/Components/ToolBar.razor:148-149`
+**File**: `src/Lib/Components/ToolBar.razor:148-149`
 **Problem**: `StartFlyoutHideDelay()` calls `_flyoutDelayCts?.Cancel()` then
 immediately `_flyoutDelayCts = new CancellationTokenSource()` — the
 old CTS is orphaned, never disposed. Under rapid mouse movement, many
@@ -23,13 +23,13 @@ _flyoutDelayCts = new CancellationTokenSource();
 ```
 **Confidence**: HIGH | **Risk**: SAFE — one-line add, no behavioral change.
 
-### 🔴 Finding 2: AtlasLayout.razor — Event handler leak pins GC
-**File**: `src/Atlas/Components/AtlasLayout.razor:164-166, 178-185`
+### 🔴 Finding 2: LibLayout.razor — Event handler leak pins GC
+**File**: `src/Lib/Components/LibLayout.razor:164-166, 178-185`
 **Problem**: `OnInitialized` subscribes three lambdas to
 `_layoutContext.Events.*` that capture `this`. `DisposeAsync` never
 unsubscribes them. When an external `Context` is injected (param
 non-null), `DisposeAsync` is a no-op — the EventDispatcher's delegate
-chain keeps AtlasLayout alive after disposal.
+chain keeps LibLayout alive after disposal.
 **Fix**: Lift handlers to named methods, unsubscribe in DisposeAsync:
 ```csharp
 private void OnLayoutChanged(object? _, LayoutChangedEventArgs __) => InvokeAsync(StateHasChanged);
@@ -40,8 +40,8 @@ _layoutContext.Events.TabActivated -= OnTabActivated;
 ```
 **Confidence**: HIGH | **Risk**: SAFE — standard Blazor dispose pattern.
 
-### 🟡 Finding 3: AtlasLayout.razor — 6 × `.ToList()` per render
-**File**: `src/Atlas/Components/AtlasLayout.razor:92-98`
+### 🟡 Finding 3: LibLayout.razor — 6 × `.ToList()` per render
+**File**: `src/Lib/Components/LibLayout.razor:92-98`
 **Problem**: `PanelsIn(string)` is called 6 times from markup, each
 allocating a new `List<>` via `.Where().ToList()`. For N=20 panels,
 that's 6×20=120 iterations + 7 list allocations per render.
@@ -53,7 +53,7 @@ _panelsByRegion = State.DockPanels.ToLookup(p => p.RegionName, StringComparer.Or
 **Confidence**: MEDIUM | **Risk**: SAFE.
 
 ### 🟡 Finding 4: LayoutContext.cs — `_recentTabIds` not cleared on reset
-**File**: `src/Atlas/Services/LayoutContext.cs:455`
+**File**: `src/Lib/Services/LayoutContext.cs:455`
 **Problem**: `ResetLayout()` clears `_history` but not `_recentTabIds`.
 After reset, zombie tab IDs persist in the MRU list. `PickNextTab()`
 passes `_recentTabIds.ToArray()` to the activation strategy, which may
@@ -62,7 +62,7 @@ reference deleted tabs.
 **Confidence**: MEDIUM | **Risk**: SAFE.
 
 ### 🟢 Finding 5: ToolBar.razor — N serial JS interop calls on first render
-**File**: `src/Atlas/Components/ToolBar.razor:178-191`
+**File**: `src/Lib/Components/ToolBar.razor:178-191`
 **Problem**: `OnAfterRenderAsync(firstRender: true)` iterates ALL panels
 and calls `DragInterop.AttachDragHandlers` for each — one JS interop
 call per panel.
@@ -71,7 +71,7 @@ call per panel.
 acceptable for typical panel counts (< 50).
 
 ### 🟢 Finding 6: LayoutDto.cs — `.ToDictionary()` copies on export
-**File**: `src/Atlas/Services/LayoutDto.cs:315`
+**File**: `src/Lib/Services/LayoutDto.cs:315`
 **Problem**: `TabDto.FromModel()` copies the entire `Parameters`
 dictionary with `.ToDictionary()` on every layout serialization (auto-save).
 **Fix**: Shallow copy if immutability not required. Micro-optimization.

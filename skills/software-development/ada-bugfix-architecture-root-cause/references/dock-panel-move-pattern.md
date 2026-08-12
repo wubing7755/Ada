@@ -1,8 +1,8 @@
-# Atlas Dock Panel Move — Architecture Root Cause Example
+# Lib Dock Panel Move — Architecture Root Cause Example
 
 ## Context
 
-Project: Atlas (Blazor WASM dock layout library, .NET 6)
+Project: Lib (Blazor WASM dock layout library, .NET 6)
 Three user-reported symptoms:
 1. Left/Right Bottom Dock can't receive panel drops
 2. Dock Panel shows direction zones (left/right/up/down) on hover — should be full-region highlight
@@ -36,7 +36,7 @@ Region droppability is a Region attribute, not a Panel attribute. Always registe
 |---|---|---|
 | `DockPanel.razor` | Register drop target unconditionally (not gated on `Panels.Count > 0`); re-register when `RegionName` changes (not just `firstRender`) | Empty regions must be valid drop targets (SRS §3.5) |
 | `DockPanel.razor` | Track drag source by string comparison (`_lastHeaderPanelId`) instead of boolean `_headerRegistered` flag | Bool flags persist across Blazor component reuse; string comparison detects identity changes naturally |
-| `AtlasLayout.razor` | Add `@key="@RegionNames.xxx"` to every `DockPanel` in the template | Prevents Blazor from reusing component instances across render cycles with stale instance fields |
+| `LibLayout.razor` | Add `@key="@RegionNames.xxx"` to every `DockPanel` in the template | Prevents Blazor from reusing component instances across render cycles with stale instance fields |
 | `index.ts` | Pass `dragType` to `computeDirection` and `updateIndicator`; for panel drags return `'center'` always, show full-region highlight only | Panel drags need directionless feedback (SRS §3.5); tab drags need 5-zone feedback (SRS §3.4.1) |
 
 ### Deep root cause (reproduced in round 2)

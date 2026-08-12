@@ -1,12 +1,12 @@
-# Atlas Dedup Audit — Real-World Example
+# Lib Dedup Audit — Real-World Example
 
-Context: Atlas is a Blazor WASM docking layout component library (~42 .cs files).
+Context: Lib is a Blazor WASM docking layout component library (~42 .cs files).
 Audit target: uncommitted changes adding auto-hide flyout support to ToolBar and DockPanel.
 
 ## Finding 1: Delay/Debounce Pattern Duplication
 
-**File:** `src/Atlas/Components/ToolBar.razor:145–163` — `StartFlyoutHideDelay()`
-**Existing:** `src/Atlas/Services/PersistenceService.cs:110–136` — `DebouncedSave()`
+**File:** `src/Lib/Components/ToolBar.razor:145–163` — `StartFlyoutHideDelay()`
+**Existing:** `src/Lib/Services/PersistenceService.cs:110–136` — `DebouncedSave()`
 
 Identical CancellationTokenSource + Task.Delay + try/catch OperationCanceledException pattern.
 Only differences: delay duration (300ms vs 500ms) and the action taken after the delay.
@@ -29,12 +29,12 @@ catch (OperationCanceledException) { }
 
 ## Finding 2: Debug Logging Duplication (3rd copy)
 
-**File:** `src/Atlas/Services/LayoutContext.cs:580–583` — `TraceMoveFailure()`
+**File:** `src/Lib/Services/LayoutContext.cs:580–583` — `TraceMoveFailure()`
 **Existing:**
-- `DragService.cs:214` — `NotifyDragFailed` → `Debug.WriteLine($"[Atlas] Drag failed: {reason}")`
-- `PersistenceService.cs:125, 134` — manual `Debug.WriteLine($"[Atlas] Auto-save ...")`
+- `DragService.cs:214` — `NotifyDragFailed` → `Debug.WriteLine($"[Lib] Drag failed: {reason}")`
+- `PersistenceService.cs:125, 134` — manual `Debug.WriteLine($"[Lib] Auto-save ...")`
 
-All four locations hardcode `System.Diagnostics.Debug.WriteLine` with `[Atlas]` prefix.
+All four locations hardcode `System.Diagnostics.Debug.WriteLine` with `[Lib]` prefix.
 The new `TraceMoveFailure` generalises the format but is the third parallel implementation.
 
 **Suggestion:** Create `internal static class Diagnostics { static void TraceFailure(string context, string reason); }`.
@@ -43,7 +43,7 @@ The new `TraceMoveFailure` generalises the format but is the third parallel impl
 
 ## Finding 3: ~~DockPanel.OnAutoHideClick Bypasses LayoutContext~~ ✅ RESOLVED
 
-**File:** `src/Atlas/Components/DockPanel.razor:109–121`
+**File:** `src/Lib/Components/DockPanel.razor:109–121`
 **Status:** Fixed in 2026-07-20 diff. `OnAutoHideClick` now calls `Context.ExpandPanel(panelId)` / `Context.EnableAutoHide(panelId)` instead of model methods directly. Lock + event dispatch now fires correctly.
 
 ---
@@ -95,7 +95,7 @@ Same `string.IsNullOrWhiteSpace(presetName)` guard → same `DockErrorCode.Inval
 **Existing:** `LayoutContext.cs:564`, `DragService.cs:214`
 
 PersistenceService uses inconsistent prefixes (`"Auto-save failed"` / `"Auto-save error"`)
-while the rest of the codebase follows `"{Operation} failed: {reason}"`. All use `[Atlas]` prefix.
+while the rest of the codebase follows `"{Operation} failed: {reason}"`. All use `[Lib]` prefix.
 
 **Suggestion:** Standardize on one format. `TraceMoveFailure` in LayoutContext already provides the template.
 
@@ -103,8 +103,8 @@ while the rest of the codebase follows `"{Operation} failed: {reason}"`. All use
 
 ## Finding 10: FakeJsRuntime Test Double Lives Inline
 
-**File:** `tests/Atlas.Tests/Services/PersistenceServiceTests.cs:292–329`
-**Existing:** `tests/Atlas.Tests/TestFixture.cs` — shared test helpers, but no JS mock
+**File:** `tests/Lib.Tests/Services/PersistenceServiceTests.cs:292–329`
+**Existing:** `tests/Lib.Tests/TestFixture.cs` — shared test helpers, but no JS mock
 
 `FakeJsRuntime` + `FakeJsVoidResult` + `FakeJsResult<T>` are only used in one test file today.
 If future tests need JS mocking (drag interop, layout persistence), this should be promoted to test infrastructure.

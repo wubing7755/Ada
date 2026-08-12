@@ -121,7 +121,7 @@ for im in block.iter('{%s}imagedata' % VML):
 用户有时要求"把文档 A 第 6 章的某张表复制到从模板新建的文档中，格式不变（含页面方向）"。与整章合并不同，只搬一个表格 + 表注，但格式保真要求等同。
 
 1. **定位源工件**：用 lxml body 直接子元素索引定位 `表注段(pStyle=caption styleId) + 紧随的 w:tbl`。表格行数（如 144×6）是可靠指纹。
-2. **表注样式重映射**：源表注 pStyle 是源 caption styleId（如 `affc`），**在模板中该 styleId 可能是完全不同的样式**（实测：260812 的 `affc`=caption，模板的 `affc`=Hyperlink 字符样式，模板 caption 是 `affa`）。必须按样式名"caption"映射到模板的 caption styleId，否则表注渲染成超链接样式。
+2. **表注样式重映射**：源表注 pStyle 是源 caption styleId（如 `affc`），**在模板中该 styleId 可能是完全不同的样式**（实测： 的 `affc`=caption，模板的 `affc`=Hyperlink 字符样式，模板 caption 是 `affa`）。必须按样式名"caption"映射到模板的 caption styleId，否则表注渲染成超链接样式。
 3. **表注含 SEQ 域**：表注文字是"表" + 连字符 + `SEQ 表 \* ARABIC` 域 + 名称。SEQ 域静态缓存值保留（如"表-5"），模板无 `settings.xml`/无 `updateFields` 时 Word 打开**不会**自动重算 → 显示保持"表-5"。
 4. **表格本体深拷贝**：纯直接格式的表格（无 tblStyle、无 pStyle/rStyle 引用、无表格内图片）可直接深拷贝，无 rId/media 依赖。
 5. **目标文档**：复制模板 zip → 产物；删除模板对应章节的空表（表注 + 空 tbl + 尾随空段）；插入源表注 + 源表格。模板的引导句（如"本文档是依据文件《软件需求规格说明》…"）保留还是删除交付时向用户确认。
@@ -129,7 +129,7 @@ for im in block.iter('{%s}imagedata' % VML):
 
 ## 跨文档表格本体替换（改既有文档的某张表）
 
-用户要求\"用文档 B 的表替换文档 A 第 X 章的同名表\"（如用需求设计追踪矩阵.docx 的已清理表替换 260812_替换图.docx 第 6 章表-5）。可靠做法：
+用户要求\"用文档 B 的表替换文档 A 第 X 章的同名表\"（如用需求设计追踪矩阵.docx 的已清理表替换 _替换图.docx 第 6 章表-5）。可靠做法：
 
 1. **定位两表**：行数（144×6）是最可靠指纹；目标文档按\"表注段 + 紧随 w:tbl\"定位，`body.index(el)` 拿到索引。
 2. **兼容性预检**：源表是否纯直接格式（无 tblStyle / 无 pStyle/rStyle 引用 / 无表格内 rId）→ 若纯直接格式则可整体深拷贝替换，无 rels/media 依赖。检查源表引用的样式 ⊆ 目标 styles.xml。
@@ -174,7 +174,7 @@ for im in block.iter('{%s}imagedata' % VML):
 - **分析/修改必须基于脚本刚生成的干净产物**：用户用 Word 打开并保存后 styles.xml 被改写（补齐缺失样式、重命名样式），md5 不再等于模板。任何后续分析读到的都是被污染状态，会得出错误结论（如 pStyle=afffffffff1 显示为"段落"）。要修改就先重新跑合并脚本再立即分析。
 - **python-docx `doc.paragraphs` 含表格内段落**，索引 ≠ lxml body 直接子元素（`[el for el in body if el.tag == wq('p')]`）。跨文档取"前一段/后一段"上下文、定位锚点时，两种视角混用会取错段落（实测：同一图片段的"前一段"在两种视角下分别是引导句和空段落）。上下文/锚点分析统一用 lxml 视角。
 - **lxml `el.find('{ns}tag')` 只找直接子元素**：找嵌套的 `v:imagedata`（在 `w:r/w:pict/v:shape` 内）要用 `el.find('.//{VML}imagedata')` 或 `el.iter('{VML}imagedata')`——直接 find 返回 None 导致"找不到图片段"误判。
-- **单工件提取时源 caption styleId 在模板中可能同名不同义**：260812 的 `affc`=caption，模板的 `affc`=Hyperlink 字符样式（模板 caption 是 `affa`）。表注必须按样式名映射，不能保留源 styleId——否则表注显示为超链接样式（蓝色下划线）。
+- **单工件提取时源 caption styleId 在模板中可能同名不同义**： 的 `affc`=caption，模板的 `affc`=Hyperlink 字符样式（模板 caption 是 `affa`）。表注必须按样式名映射，不能保留源 styleId——否则表注显示为超链接样式（蓝色下划线）。
 - **模板无 settings.xml 时无 updateFields**：Word 打开不自动刷新域 → SEQ 静态缓存值保留（表注显示"表-5"而非重算的"表-1"）。若用户手动更新域（Ctrl+A→F9）编号会变，交付时说明"保持编号则勿更新该域"。
 - **字符串比较 XML 产生假 diff**：lxml 序列化命名空间前缀声明空白不同（`<w:tblPr  ...>` vs `<w:tblPr ...>`），`strip_ns` 正则对比误报"格式不一致"。用忽略元数据属性（rsid/paraId）的递归签名做语义比较。
 - **条目提取别按样式层级**：同文档不同子章节标题层级可能不同（5.2.1 条目 H4 / 5.2.2+ 多一层 H4 子分组），按 style 提取 SD 归属全错（SD-13~17 全挂到"线型"名下）。按 `【设计编号】` 标记段（与 SD-x 在相邻两段）定位条目区域 `[设计编号段, 下一个设计编号段)` 最可靠。

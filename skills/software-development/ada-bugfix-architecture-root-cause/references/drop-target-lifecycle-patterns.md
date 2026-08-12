@@ -101,7 +101,7 @@ For drag sources (panel headers), the active panel may change after moves/collap
 Even with correct per-render comparison logic, Blazor can reuse a component instance across parameter changes while preserving its instance fields (including `_lastHeaderPanelId`). **Always add `@key` to the component in the parent template** to ensure fresh instances when the logical identity changes:
 
 ```razor
-@* Parent AtlasLayout.razor *@
+@* Parent LibLayout.razor *@
 <div class="xd-left-dock">
     <DockPanel @key="@RegionNames.LeftDockUpper"
                RegionName="@RegionNames.LeftDockUpper" ... />

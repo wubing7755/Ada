@@ -4,8 +4,8 @@ Convention for building TypeScript interop code in a Blazor component library.
 
 ## Convention
 
-- **Source**: `ClientScripts/xdocker/index.ts` (TypeScript only)
-- **Output**: `wwwroot/xdocker/xdocker.js` (generated, never committed)
+- **Source**: `ClientScripts/lib/index.ts` (TypeScript only)
+- **Output**: `wwwroot/lib/lib.js` (generated, never committed)
 - **Build tool**: `esbuild` via `npx` or `npm run build:js`
 
 ## package.json
@@ -14,7 +14,7 @@ Convention for building TypeScript interop code in a Blazor component library.
 {
   "private": true,
   "scripts": {
-    "build:js": "npx --yes esbuild@0.24.2 ClientScripts/xdocker/index.ts --bundle --format=esm --target=es2020 --outfile=wwwroot/xdocker/xdocker.js"
+    "build:js": "npx --yes esbuild@0.24.2 ClientScripts/lib/index.ts --bundle --format=esm --target=es2020 --outfile=wwwroot/lib/lib.js"
   },
   "devDependencies": {
     "esbuild": "0.24.2",
@@ -28,8 +28,8 @@ Convention for building TypeScript interop code in a Blazor component library.
 Add to `.csproj`:
 
 ```xml
-<Target Name="BuildXDockerTypeScript" BeforeTargets="BeforeBuild">
-  <Message Importance="high" Text="Building XDocker TypeScript interop..." />
+<Target Name="BuildLibTypeScript" BeforeTargets="BeforeBuild">
+  <Message Importance="high" Text="Building Lib TypeScript interop..." />
   <Exec Command="npm run build:js" WorkingDirectory="$(MSBuildProjectDirectory)" />
 </Target>
 ```
@@ -38,8 +38,8 @@ Add to `.csproj`:
 
 ```gitignore
 node_modules/
-src/wwwroot/xdocker/*.js
-src/wwwroot/xdocker/*.js.map
+src/wwwroot/lib/*.js
+src/wwwroot/lib/*.js.map
 ```
 
 ## Pitfall

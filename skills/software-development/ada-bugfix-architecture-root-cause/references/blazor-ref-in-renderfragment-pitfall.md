@@ -2,9 +2,9 @@
 
 ## Discovery Context
 
-Session: REQ-F-149 ToolBar 空间分区布局实现 (Atlas project, refactor/base-class-optimization)
+Session: REQ-F-149 ToolBar 空间分区布局实现 (Lib project, refactor/base-class-optimization)
 Date: 2026-07-22
-Files: `src/Atlas/Components/ToolBar.razor`
+Files: `src/Lib/Components/ToolBar.razor`
 
 ## The Problem
 
@@ -42,7 +42,7 @@ Called in the template:
 ```
 JSException: Cannot read properties of null (reading 'removeAttribute')
 TypeError: Cannot read properties of null (reading 'removeAttribute')
-    at Module.detachDragHandlers (atlas.js:11:11)
+    at Module.detachDragHandlers (lib.js:11:11)
 ```
 
 - Stack trace points to `DragInterop.DetachDragHandlers` called from

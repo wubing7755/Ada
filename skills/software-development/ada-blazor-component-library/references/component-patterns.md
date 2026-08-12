@@ -6,9 +6,9 @@ Detailed patterns for common Blazor component library challenges: namespace coll
 
 ### Pitfall
 
-When component files live under `Components/XDocker/` and the project root namespace is `XDocker`, Razor's code generation resolves `@using XDocker.Domain` to the **current nested namespace** (`XDocker.Components.XDocker.Domain`) instead of the global one.
+When component files live under `Components/Lib/` and the project root namespace is `Lib`, Razor's code generation resolves `@using Lib.Domain` to the **current nested namespace** (`Lib.Components.Lib.Domain`) instead of the global one.
 
-This produces cascading `CS0234: 命名空间 'XDocker.Components.XDocker' 中不存在类型或命名空间名 'Domain'` errors.
+This produces cascading `CS0234: 命名空间 'Lib.Components.Lib' 中不存在类型或命名空间名 'Domain'` errors.
 
 ### Fix
 
@@ -16,18 +16,18 @@ Three options, in order of preference:
 
 1. **Use `global::` prefix** (best for existing projects):
    ```razor
-   @using global::XDocker.Domain
-   @using global::XDocker.Services
+   @using global::Lib.Domain
+   @using global::Lib.Services
    ```
 
 2. **Rename the component folder** to avoid the collision:
    ```text
-   Components/Docking/  → namespace XDocker.Components.Docking
+   Components/Docking/  → namespace Lib.Components.Docking
    ```
 
 3. **Move domain code to a separate project** (best for NuGet packaging).
 
-In the XDocker project we used option (2): moved namespace to `XDocker.Components.Docking` via `_Imports.razor` with `@namespace XDocker.Components.Docking`, then removed redundant per-file `@using` directives.
+In the Lib project we used option (2): moved namespace to `Lib.Components.Docking` via `_Imports.razor` with `@namespace Lib.Components.Docking`, then removed redundant per-file `@using` directives.
 
 ## Close-Tab Activation: Capture Index Before Removal
 
@@ -93,7 +93,7 @@ Tip: grep for `request\.` in `OpenTab` and ensure every non-null field is assign
 When `CreateStateWithView` (or similar setup) appears in 3+ test files, extract to a shared helper:
 
 ```csharp
-namespace XDocker.Tests;
+namespace Lib.Tests;
 internal static class TestFixture
 {
     public static LayoutState CreateStateWithView(string viewId) { ... }

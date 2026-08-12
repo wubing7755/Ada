@@ -210,7 +210,7 @@ End with a prioritized table:
 
 ## References
 
-- `references/atlas-review-example.md` — Real output from a Blazor WASM review
+- `references/review-example.md` — Real output from a Blazor WASM review
   (2026-07-20). Concrete example of report structure, severity grading, and
   fix recommendations. Includes pitfalls specific to Blazor WASM `await`
   re-entrancy and JS interop listener lifecycle.

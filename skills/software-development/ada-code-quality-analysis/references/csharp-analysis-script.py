@@ -1,6 +1,6 @@
 # C# Code Quality Analysis Script (Reference Implementation)
 #
-# This is the reference script used in the Atlas 2026-07-20 analysis session.
+# This is the reference script used in the Lib 2026-07-20 analysis session.
 # Adapt regex patterns and thresholds for other languages.
 #
 # Usage: Call from execute_code or adapt for terminal use.

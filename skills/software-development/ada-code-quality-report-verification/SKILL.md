@@ -134,7 +134,7 @@ Recommended compact output when requested:
 }
 ```
 
-See `references/phase-pass-fail-review-example.md` for a concise Atlas MovePanel
+See `references/phase-pass-fail-review-example.md` for a concise Lib MovePanel
 review pattern and command set.
 
 ## Verification Methodology
@@ -246,7 +246,7 @@ Full pitfall catalog: `skill_view(name="ada-code-quality-report-verification", f
 ## Reference Files
 
 - `references/session-verification-example.md` — Full worked example from an actual
-  verification session (Atlas code quality report). Contains 5 verified issues with
+  verification session (Lib code quality report). Contains 5 verified issues with
   real file:line evidence, tool output, and deviation classification. Use this as
   a template for the expected level of detail when sampling issues (Mode A).
 - `references/full-statistical-audit-example.md` — Complete 7-point statistical

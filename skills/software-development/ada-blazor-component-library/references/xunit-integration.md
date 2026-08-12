@@ -5,7 +5,7 @@ Convention for xUnit test project setup in a Blazor component library.
 ## Project structure
 
 ```text
-tests/XDocker.Tests/XDocker.Tests.csproj   → net6.0, references src/XDocker.csproj
+tests/Lib.Tests/Lib.Tests.csproj   → net6.0, references src/Lib.csproj
 ```
 
 ## Required packages
@@ -19,13 +19,13 @@ tests/XDocker.Tests/XDocker.Tests.csproj   → net6.0, references src/XDocker.cs
 
 ## Test naming
 
-Match source folder structure: `tests/XDocker.Tests/Services/XDockerLayoutValidatorTests.cs` tests `src/XDocker/Services/XDockerLayoutValidator.cs`.
+Match source folder structure: `tests/Lib.Tests/Services/LibLayoutValidatorTests.cs` tests `src/Lib/Services/LibLayoutValidator.cs`.
 
 ## Verification
 
 Every task ends with:
 ```bash
-dotnet test XDocker.slnx --no-restore
+dotnet test Lib.slnx --no-restore
 ```
 
 Expected: all tests pass, build succeeds, no new CS errors.

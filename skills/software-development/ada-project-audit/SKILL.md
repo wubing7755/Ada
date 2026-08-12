@@ -133,6 +133,6 @@ plan. A plan built on stale data wastes implementation time.
 
 ## Reference
 
-See `references/atlas-audit-example.md` for the concrete audit that
+See `references/audit-example.md` for the concrete audit that
 discovered F-149 and F-023 were already implemented, cutting the planned
 Phase 21 scope by half.

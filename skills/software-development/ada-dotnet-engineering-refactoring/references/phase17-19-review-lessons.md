@@ -1,4 +1,4 @@
-# Atlas Phase 17–19 review lessons (2026-07-23)
+# Lib Phase 17–19 review lessons (2026-07-23)
 
 Use this as a compact checklist when doing engineering-grade Blazor/.NET refactoring with independent review.
 

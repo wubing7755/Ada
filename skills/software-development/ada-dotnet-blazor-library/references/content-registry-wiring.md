@@ -1,13 +1,13 @@
 # Blazor Service Wiring: LayoutContext + ContentRegistry
 
-Pattern from the Atlas project (Phase 1) for resolving content components
+Pattern from the Lib project (Phase 1) for resolving content components
 by key from a Razor Class Library's `ContentRegistry`.
 
 ## Problem
 
 `TabContent.razor` creates `new ContentRegistry()` every render. That registry
-is empty — no content keys are ever registered. `Resolve("atlas-demo")` always
-fails with "Content key 'atlas-demo' is not registered."
+is empty — no content keys are ever registered. `Resolve("lib-demo")` always
+fails with "Content key 'lib-demo' is not registered."
 
 ## Solution
 
@@ -28,9 +28,9 @@ public sealed class LayoutContext
         ContentRegistry = contentRegistry;
 
         // Phase 1: pre-register built-in demo component
-        if (!ContentRegistry.IsRegistered("atlas-demo"))
+        if (!ContentRegistry.IsRegistered("lib-demo"))
         {
-            ContentRegistry.Register<DemoContent>("atlas-demo");
+            ContentRegistry.Register<DemoContent>("lib-demo");
         }
     }
 }

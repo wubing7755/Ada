@@ -159,7 +159,7 @@ Detailed procedures extracted from this skill for maintainability:
 | Reference | Contents |
 |-----------|----------|
 | [references/value-type-migration.md](references/value-type-migration.md) | Full value-type migration cascade: pattern rules, spread order, Razor pitfalls, arithmetic gaps, clamp-vs-throw, error codes, test adjustments, struct implementation, JSON serialization, bulk strategy |
-| [references/value-type-migration-atlas.md](references/value-type-migration-atlas.md) | Atlas project case study (2026-07-22): 108-error cascade record, actual execution order, file manifest, delegate_task lessons learned |
+| [references/value-type-migration-example.md](references/value-type-migration-example.md) | Lib project case study (2026-07-22): 108-error cascade record, actual execution order, file manifest, delegate_task lessons learned |
 | [references/blazor-patterns.md](references/blazor-patterns.md) | Blazor-specific refactoring: template dedup → child components, inline declarations → computed properties, lifecycle methods → named methods, common pitfalls |
 | [references/refactoring-plan-template.md](references/refactoring-plan-template.md) | Plan document template for Phase 0 (Chinese) |
 | [references/quality-checklist.md](references/quality-checklist.md) | Per-phase quality verification checklist (Chinese) |

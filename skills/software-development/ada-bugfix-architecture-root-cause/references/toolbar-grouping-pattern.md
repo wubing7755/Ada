@@ -1,4 +1,4 @@
-# Atlas ToolBar — Region Grouping and Drag Handler Registration
+# Lib ToolBar — Region Grouping and Drag Handler Registration
 
 ## SRS Requirements
 
@@ -17,7 +17,7 @@ LayoutState initializes regions with Side:
 | RightDockLower | Right | RT |
 | BottomRightDock | Right | RT |
 
-AtlasLayout filters: `panels.Where(p => state.FindRegion(p.RegionName)?.Side == RegionSide.Left)` for LT, same for Right/RT.
+LibLayout filters: `panels.Where(p => state.FindRegion(p.RegionName)?.Side == RegionSide.Left)` for LT, same for Right/RT.
 
 ## Correct Grouping Implementation
 
@@ -113,7 +113,7 @@ This matches the spatial Top→Middle→Bottom layout of the actual Dock Regions
 
 ## CSS Pitfall: Invisible Divider
 
-**Problem**: `<hr>` elements have no visible default in most browsers without explicit styling. The `xd-toolbar-divider` CSS class was defined in `ToolBar.razor` markup (`<hr class="xd-toolbar-divider">`) but had zero CSS rules in `atlas.css`. Result: no visible separator between region groups.
+**Problem**: `<hr>` elements have no visible default in most browsers without explicit styling. The `xd-toolbar-divider` CSS class was defined in `ToolBar.razor` markup (`<hr class="xd-toolbar-divider">`) but had zero CSS rules in `lib.css`. Result: no visible separator between region groups.
 
 **Fix**: Add these CSS rules:
 ```css

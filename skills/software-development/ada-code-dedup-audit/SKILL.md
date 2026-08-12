@@ -97,7 +97,7 @@ and compare with the new code. Ask:
 
 1. **Same signature?** — Could new code literally call the existing code?
 2. **Same pattern?** — Same sequence of calls (e.g. CTS cancel → create → delay → check)?
-3. **Same purpose?** — Different signature but same intent (e.g. two Debug.WriteLine methods that both log `[Atlas]` prefix)?
+3. **Same purpose?** — Different signature but same intent (e.g. two Debug.WriteLine methods that both log `[Lib]` prefix)?
 4. **Bypass risk?** — Does new code skip a layer that existing code goes through (lock, event dispatch, validation)?
 
 ### Phase 5 — Report
@@ -124,7 +124,7 @@ When multiple findings exist, prioritise by:
 
 2. **Identical pattern, different context** (MEDIUM risk) — same CancellationTokenSource + Task.Delay + try/catch pattern repeated verbatim. Extract a shared utility.
 
-3. **Identical call, different wrapper** (LOW risk) — two methods that both end up calling `Debug.WriteLine("[Atlas] ...")`. Extract a shared helper.
+3. **Identical call, different wrapper** (LOW risk) — two methods that both end up calling `Debug.WriteLine("[Lib] ...")`. Extract a shared helper.
 
 4. **Component-level LINQ vs existing State queries** (VERY LOW risk) — `Panels.FirstOrDefault(p => p.Id == x)` when `State.FindDockPanel(x)` exists. Same result, minor inconsistency.
 
@@ -193,4 +193,4 @@ return DockResult.Failure(DockErrorCode.InvalidLayoutData, "Preset name is requi
 
 ## Reference
 
-See `references/atlas-dedup-example.md` for a real-world example from the Atlas Blazor docking library audit.
+See `references/dedup-example.md` for a real-world example from the Lib Blazor docking library audit.

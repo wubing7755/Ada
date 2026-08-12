@@ -1,6 +1,6 @@
-# Atlas Audit Example (2026-07-24)
+# Lib Audit Example (2026-07-24)
 
-Concrete audit that discovered traceability drift in the Atlas Blazor
+Concrete audit that discovered traceability drift in the Lib Blazor
 dock layout project.
 
 ## Context

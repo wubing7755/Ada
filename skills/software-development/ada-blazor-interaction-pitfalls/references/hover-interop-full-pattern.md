@@ -131,7 +131,7 @@ protected override async Task OnAfterRenderAsync(bool firstRender)
     }
     catch (JSException)
     {
-        System.Diagnostics.Debug.WriteLine($"[Atlas] hover register failed for '{currentPanelId}' — DOM missing.");
+        System.Diagnostics.Debug.WriteLine($"[Lib] hover register failed for '{currentPanelId}' — DOM missing.");
     }
 }
 

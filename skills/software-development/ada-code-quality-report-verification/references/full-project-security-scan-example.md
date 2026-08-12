@@ -1,4 +1,4 @@
-# Full-Project Security Gap Scan — Atlas 项目示例
+# Full-Project Security Gap Scan — Lib 项目示例
 
 来自 2026-07-22 独立安全复核会话的完整工作记录。作为全量安全扫描的方法论模板。
 
