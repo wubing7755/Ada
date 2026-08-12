@@ -1,0 +1,85 @@
+{
+  "skill_name": "ada-git-history-preserving-moves",
+  "evals": [
+    {
+      "id": "rename-keep-history",
+      "prompt": "把 README.md 重命名为 README.zh-CN.md 并保持 git log --follow 历史。",
+      "should_trigger": true,
+      "expected_output": "Uses git mv, verifies the staged diff shows R### before committing, verifies --follow history after.",
+      "assertions": [
+        "Verifies rename detection before commit",
+        "Verifies --follow history after commit"
+      ]
+    },
+    {
+      "id": "same-path-replacement",
+      "prompt": "同时把 README.md 改名为中文版并新增英文 README.md。",
+      "should_trigger": true,
+      "expected_output": "Splits into two commits: pure git mv rename first, then add the same-path replacement; explains why one commit cannot record the rename.",
+      "assertions": [
+        "Splits rename and replacement into two commits",
+        "Explains the modified-pair rename-source consumption"
+      ]
+    },
+    {
+      "id": "recover-broken-rename",
+      "prompt": "已经 git add 了但暂存状态不对，重命名没被识别。",
+      "should_trigger": true,
+      "expected_output": "Rebuilds the rename: backups, git reset, restore HEAD version, git mv, restore edits, commit in two steps.",
+      "assertions": [
+        "Backs up files before rebuilding the rename",
+        "Uses git mv on a cleaned target path"
+      ]
+    },
+    {
+      "id": "doc-tree-restructure",
+      "prompt": "文档目录重构，移动一批 .md 文件且历史可追踪。",
+      "should_trigger": true,
+      "expected_output": "Moves via git mv per file, checks R### status for each, confirms --follow works on new paths.",
+      "assertions": [
+        "Uses git mv for each file",
+        "Checks rename detection before commit"
+      ]
+    },
+    {
+      "id": "pr-delivery",
+      "prompt": "把未提交工作变成 PR。",
+      "should_trigger": false,
+      "expected_output": "Routes PR delivery to ada-git-pr-delivery.",
+      "assertions": [
+        "Does not activate rename protocol",
+        "Routes to PR delivery"
+      ]
+    },
+    {
+      "id": "destructive",
+      "prompt": "删除本地提交。",
+      "should_trigger": false,
+      "expected_output": "Routes destructive operations to ada-git-destructive-operations.",
+      "assertions": [
+        "Does not activate rename protocol",
+        "Routes to destructive ops"
+      ]
+    },
+    {
+      "id": "docs-revision",
+      "prompt": "大规模修订文档术语。",
+      "should_trigger": false,
+      "expected_output": "Routes document revision to ada-docs-revision.",
+      "assertions": [
+        "Does not activate rename protocol",
+        "Routes to revision skill"
+      ]
+    },
+    {
+      "id": "repo-docs",
+      "prompt": "写仓库文档。",
+      "should_trigger": false,
+      "expected_output": "Treats this as documentation authoring, not rename mechanics.",
+      "assertions": [
+        "Does not activate rename protocol",
+        "Routes to documentation"
+      ]
+    }
+  ]
+}

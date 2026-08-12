@@ -170,6 +170,76 @@ hygiene, baseline-vs-batch regression judgment): see
 - Baseline vs batch: when "data is missing", prove whether the batch caused it
   (`git diff HEAD -- <data-source>` empty = pre-existing → 备注, not FAIL).
 
+## Review-Gated Batch Loop（先审后改的逐批执行）
+
+Execute a numbered-batch plan (`.hermes/plans/...` 批次 N) where the user wants
+a **pre-implementation review + explicit approval** before each batch
+("先输出精确改动清单和影响分析，不要立即改码；等待我批准后再实施"). Each batch is a
+closed loop: **review → approval → implement → verify → independent audit →
+report**. Validated over 11+ consecutive batches; framework-agnostic.
+
+**Pre-implementation review (NO code edits)**:
+- Re-read the plan section; check `git status` (prior batches stay uncommitted
+  until user reviews); verify the previous batch's actual result; state
+  explicitly whether the plan is stale.
+- **Verify the plan's 涉及文件 list by tracing call chains — never trust the
+  list alone.** Real misses: a plan renumbered routes but omitted the page file
+  itself; a plan added model fields but omitted the `Clone()`/mapper on the
+  data path — the clone drops unlisted fields and new data silently vanishes at
+  runtime. Any Clone/mapper/copy method touching the modified type must be
+  updated for new fields. Check workflow/CI steps needing env injection.
+- Output contract (what the user approves): exact change list (per file, the
+  concrete diff description); impact analysis (nav / routes / search / sitemap
+  / resources / publish artifacts); dead-code & resource-key sweep (never
+  delete keys still used by future/hidden-but-routable pages); verification &
+  acceptance commands; open decision points (recommend one option with
+  rationale).
+- **Stop and wait for explicit approval** (「批准」/「确认」). Do not implement
+  during review.
+
+**Implement strictly per the approved list**: no batch-N+1 while doing batch-N;
+no opportunistic refactors. If a fix discovered during verification is inside
+the batch's acceptance scope, fix it and report it as part of the batch.
+
+**Canonical verification chain (main agent runs all of it)**:
+`dotnet build` (0 errors, no new warnings) → `dotnet test <sln> --no-build` →
+`git diff --check` (+ content converter re-run if content sources or generated
+data changed; expect exit 0). A subagent's "tests passed" is a claim, not
+evidence — re-run yourself.
+
+**Publish + real-browser acceptance**: `dotnet publish -c Release -o
+"C:/tmp/ppN"` (quoted Windows-style path), serve publish `wwwroot` with a
+Python SPA-fallback server, drive with puppeteer-core across the viewport
+matrix (320/375/430/768/1024/1440). Assert the batch's behavior in the DOM
+(computed styles, element counts, aria, URL state) plus no horizontal overflow
+and zero console errors (403 from rate-limited third-party APIs is expected —
+confirm as such).
+
+**Independent subagent audit**: `delegate_task` with the exact batch diff
+description, a `file:line` evidence contract per PASS/FAIL item, read-only.
+Then the **main agent re-runs the canonical chain itself** to verify claims.
+
+**Per-batch report (Chinese)**: 实际修改文件（表格）/ 行为变化 / 测试和浏览器
+验证结果 / 独立审查结果 / 遗留问题. Never commit, push, or deploy without
+explicit instruction.
+
+**Batch-loop pitfalls**: XML content-source edits — a bare `&` in an attribute
+makes the whole XML unparsable; escape as `&amp;` and re-run the converter
+first. CRLF files vs patch tools: `mode='patch'` (V4A) injects LF-only lines
+into CRLF files (whole-block diffs); `mode='replace'` preserves CRLF; after
+V4A, normalize back to CRLF. `dotnet publish -o` MSYS path mangling: `/tmp/out`
+→ `C:\tmp\out`; use quoted `"C:/tmp/ppN"` and read the `-> C:\...` line for the
+real location. Terminal cwd persists across calls — `cd` back to the repo root
+in the same call that runs repo commands. Puppeteer language-switch timing:
+wait for `documentElement.lang` to change after clicking the toggle;
+localStorage language preference persists across pages in one browser
+instance. HTML static metadata vs runtime HeadContent conflict: a static
+`<link rel="canonical">` in index.html persists on every SPA page and wins over
+the page's dynamic canonical — remove the static one. WASM startup interop
+timing: `OnAfterRenderAsync` on the first render fires before JS interop is
+reliably ready — gate on data-ready, use a one-shot flag for fragment
+scrolling.
+
 ## Output Contract
 
 Maintain a phase ledger with status, files, verification, commit/PR handle when applicable, and residual risk. Final reporting must distinguish completed execution from planned or blocked work and include the exact artifact and verification results.

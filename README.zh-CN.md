@@ -8,7 +8,7 @@ Ada 是一个可分发的 Hermes Profile：偏软件工程、重正确性与可�
 
 Ada 帮助开发者理解、设计、构建、调试和演进软件系统。它的价值不在于知道多少术语，而在于看清问题、作出判断，并把事情推进到可运行、可验证的结果。它不是只提供术语答案的聊天角色，而是有工程判断的技术搭档。
 
-人设与工程原则由 [SOUL.md](SOUL.md) 统一定义，70 个分发技能位于 [skills/](skills/)。
+人设与工程原则由 [SOUL.md](SOUL.md) 统一定义，74 个分发技能位于 [skills/](skills/)。
 
 当前版本：`0.3.0`，要求 Hermes `>=0.19.0`。
 
@@ -81,11 +81,11 @@ hermes profile show ada    # 查看已安装 Profile 的详情
 
 ## 技能加载说明
 
-Ada 的 70 个技能遵循 Agent Skills 的 progressive disclosure：discovery 阶段只加载技能名称和 `description`；任务匹配后加载对应 `SKILL.md` 获得执行协议；需要时才读取 `references/`、`scripts/`、`assets/` 和 `evals/`。
+Ada 的 74 个技能遵循 Agent Skills 的 progressive disclosure：discovery 阶段只加载技能名称和 `description`；任务匹配后加载对应 `SKILL.md` 获得执行协议；需要时才读取 `references/`、`scripts/`、`assets/` 和 `evals/`。
 
-因此用户通常只需描述目标，不需要记住或手工调用 70 个技能名称；Agent 会根据任务自动加载匹配的技能。
+因此用户通常只需描述目标，不需要记住或手工调用 74 个技能名称；Agent 会根据任务自动加载匹配的技能。
 
-## 技能体系 (70 skills)
+## 技能体系 (74 skills)
 
 所有 Ada 专属技能均以 `ada-` 为前缀。分类与顺序均以 `distribution.yaml` 为准。
 
@@ -103,6 +103,10 @@ Ada 的 70 个技能遵循 Agent Skills 的 progressive disclosure：discovery �
 | `ada-skill-optimization` | 审计与优化 Hermes 生成技能：frontmatter、去重、curator |
 | `ada-systematic-debugging` | 四阶段根因调试：先理解 bug 再修复 |
 | `ada-test-driven-development` | 强制 RED-GREEN-REFACTOR 的测试驱动开发 |
+| `ada-agent-delivery-audit` | 审核长任务/委托 Agent 的多 Phase 交付：取证、不可逆闸门、门禁重跑 |
+| `ada-git-pr-delivery` | 脏工作树 → 干净 PR：指针修复、提交约定、PR 模板 |
+| `ada-git-destructive-operations` | 安全处理重置与删除本地提交：clarify 澄清意图 |
+| `ada-git-history-preserving-moves` | git mv 重命名保留 `git log --follow` 历史（含同路径替换） |
 
 ### SRS 全生命周期
 
@@ -243,7 +247,7 @@ Ada/
 ├── docs/                       # 质量标准（skill-quality-standard.md）
 ├── scripts/                    # 验证器、隔离 smoke 测试与单元测试
 ├── .github/workflows/          # GitHub Actions 质量门禁
-└── skills/software-development/  # 70 个 ada-* 技能
+└── skills/software-development/  # 74 个 ada-* 技能
 ```
 
 ## 质量验证

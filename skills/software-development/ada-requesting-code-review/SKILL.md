@@ -309,6 +309,77 @@ tests exist, tests pass, no regressions.
 
 **plan:** Validates implementation matches the plan requirements.
 
+## Senior Maintainer PR Review Mode（资深 PR Review）
+
+Use when the user gives a "Senior PR Review Agent" framework, or asks for a
+deep review of the current PR / Pull Request. Goal: find issues that affect
+correctness/security/maintainability with actionable fixes — not pad the
+finding count.
+
+**Workflow**:
+1. Understand the PR: `gh pr view N` → `git diff main...HEAD --stat` +
+   `--name-only` → `git log main..HEAD --oneline`. Incomplete PR body → infer
+   from code and label `Inferred from code`.
+2. Read the FULL diff — not just added lines: deletions, behavior changes, API
+   changes, state changes, dependency changes, test changes. Grep leftovers
+   (`TODO|FIXME|HACK|debugger|console.log`) and secrets patterns.
+3. Trace call chains: Caller → Modified → Callee → Data. Confirm input source,
+   validation, error propagation, where state changes, downstream assumptions.
+4. Find existing patterns: search for similar implementations in the repo;
+   judge reuse vs duplicated implementation vs second scheme.
+5. Verify empirically (see discipline below); if unverifiable, say so — never
+   fake a passed test.
+6. Classify and output (see format below).
+
+**Discipline**:
+- **Evidence First**: conclusions from actual code and call chains; insufficient
+  evidence = `Potential Issue` with trigger conditions. Never write guesses as
+  certain findings.
+- **Review the PR, not the repository**: distinguish `Introduced by this PR` /
+  `Pre-existing issue`; historical problems do not block the current PR.
+- **Minimal Necessary Change**: Correctness > Simplicity > Readability >
+  Consistency > Maintainability > Extensibility. No speculative abstraction.
+- **Respect Existing Architecture**: evaluate against the project's existing
+  Service/Repository/Handler conventions, not personal preference.
+- **No Review for Review's Sake**: say plainly "不建议为重构而重构" when code
+  is reasonable; no vague "建议优化" without a concrete plan.
+- Priority: P0 Correctness → P1 Data/Security/Concurrency → P2 API/Compatibility
+  → P3 Architecture → P4 Maintainability → P5 Performance → P6 Tests → P7 Readability.
+- Severity: **BLOCKER** (must fix before merge) / **MAJOR** / **MINOR** /
+  **NIT**; Confidence High/Medium/Low. Bug report format: Trigger / Current
+  Behavior / Expected Behavior / Root Cause / Fix.
+
+**Empirical verification**:
+- Security claims must be exercised: a regex/blacklist sanitizer that "looks
+  safe" is not safe — run the payloads against the real library in a throwaway
+  console project, then delete it.
+- Encoding damage: source Chinese becoming `???` — check disk bytes first
+  (`file x.cs` + `grep -n "???"` + `od -c`); UTF-8 intact = display issue.
+- Test execution: if the dev server locks the exe (Windows MSB3027), confirm
+  the pid is the dev server, then `dotnet test <proj> --no-build` (trust only
+  if source unchanged), or ask the user to stop the server — never kill user
+  processes yourself.
+- Every MAJOR/BLOCKER gets a Fix + verification method (new test name or an
+  executable command).
+
+**Output format**: `# PR Review` → `## 1. Summary` / `## 2. Merge
+Recommendation` (APPROVE | APPROVE WITH MINOR CHANGES | REQUEST CHANGES | DO
+NOT MERGE + 2~5 reasons) / `## 3. Findings` (severity-sorted; Location /
+Confidence / Introduced by / Problem / Why it matters / Trigger / Fix /
+Validation; "No blocking issues found." if none) / `## 4. Design Assessment` /
+`## 5. Better Implementation` (Current/Proposed/Why/Trade-offs) / `## 6.
+Modification Plan` / `## 7. Test Plan` / `## 8. Final Recommendation`.
+
+**PR-specific pitfalls** (session-verified): storage XSS review must find ALL
+`@((MarkupString)...)` render points and check sanitize calls on both
+render/storage sides; frontend `StartsWith("/")` returnUrl validation passes
+protocol-relative `//evil.com` → open redirect (also exclude `//`); JWT in
+localStorage + any stored XSS = account takeover (assess severity together);
+test-only constructor overloads (e.g. a single-arg ctor used only by tests)
+are hidden bypasses of production path-selection logic — flag as removable
+dead code; brand-new backend: check JWT key/admin seed in config repo, CORS
+default policy, startup MigrateAsync, upload extension-only checks.
+
 ## Pitfalls
 
 - **Empty diff** — check `git status`, tell user nothing to verify
