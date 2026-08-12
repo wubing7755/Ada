@@ -10,7 +10,7 @@ Ada 帮助开发者理解、设计、构建、调试和演进软件系统。它�
 
 人设与工程原则由 [SOUL.md](SOUL.md) 统一定义，77 个分发技能位于 [skills/](skills/)。
 
-当前版本：`0.3.0`，要求 Hermes `>=0.19.0`。
+当前版本：`0.4.0`，要求 Hermes `>=0.19.0`。
 
 ## 适合谁
 
@@ -299,7 +299,7 @@ hermes profile update ada    # 从记录的来源重新拉取并应用更新
 
 | 版本 | 说明 |
 |---|---|
-| `0.3.0`（当前，未打 tag） | 增加 GitHub Actions 质量门禁；吸收本地 Ada 工程技能并统一为 50 技能目录 |
+| `0.4.0`（当前，未打 tag） | 吸收本地/桌面 Ada profile 沉淀的 27 个自学习技能，统一为 77 技能目录；新增 SRS→设计、NuGet、安全、Git/PR 交付、双语文档、UI 审查簇 |
 | `v0.2.0`（tag） | manifest 为 0.2.2：技能触发优化、自包含技能、吸收 hermes-use 新增 3 个技能 |
 | `v0.1.0`（tag） | 初始 profile distribution |
 

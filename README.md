@@ -10,7 +10,7 @@ Ada helps developers understand, design, build, debug, and evolve software syste
 
 Persona and engineering principles are defined once in [SOUL.md](SOUL.md); the 77 distributed skills live under [skills/](skills/).
 
-Current version: `0.3.0`, requires Hermes `>=0.19.0`.
+Current version: `0.4.0`, requires Hermes `>=0.19.0`.
 
 ## Who Ada Is For
 
@@ -299,7 +299,7 @@ hermes profile update ada    # re-pull from the recorded source and apply update
 
 | Version | Notes |
 |---|---|
-| `0.3.0` (current, untagged) | Adds GitHub Actions quality gates; consolidates local Ada engineering skills into a unified 50-skill catalog |
+| `0.4.0` (current, untagged) | Absorbs 27 accumulated self-learned skills from local/desktop Ada profiles into a unified 77-skill catalog; adds SRS-to-design, NuGet, security, Git/PR delivery, bilingual docs, UI review clusters |
 | `v0.2.0` (tagged) | Manifest 0.2.2: skill-trigger refinements, self-contained skills, three new skills absorbed from hermes-use |
 | `v0.1.0` (tagged) | Initial profile distribution |
 
