@@ -1,0 +1,85 @@
+{
+  "skill_name": "ada-blazor-wasm-api-integration",
+  "evals": [
+    {
+      "id": "auth-header-not-sent",
+      "prompt": "Blazor WASM 前端调后端 API，登录后 Authorization 头没有带上去，请求 401。",
+      "should_trigger": true,
+      "expected_output": "Checks the auth-header injection path: manual DelegatingHandler chain vs shared HttpClient DefaultRequestHeaders.",
+      "assertions": [
+        "Diagnoses InnerHandler null crash possibility",
+        "Prescribes DefaultRequestHeaders injection on a singleton client"
+      ]
+    },
+    {
+      "id": "relative-path-frontend",
+      "prompt": "评论加载失败，登录总报用户名或密码错误，后端日志里根本没有请求到达。",
+      "should_trigger": true,
+      "expected_output": "Identifies relative api/ paths resolving to the frontend origin and centralizes URL resolution.",
+      "assertions": [
+        "Checks every cross-backend call goes through one resolver",
+        "Adds host-asserting regression test"
+      ]
+    },
+    {
+      "id": "mode-config-cached",
+      "prompt": "改了 wwwroot/config.api.json 切换 API 模式，重启浏览器页面还是旧行为，后端日志沉默。",
+      "should_trigger": true,
+      "expected_output": "Diagnoses dev-server ETag caching and the committed mode-config trap; recommends build-time generated config per form.",
+      "assertions": [
+        "Restarts dev server / verifies served bytes",
+        "Treats mode config as build-time artifact"
+      ]
+    },
+    {
+      "id": "session-cache-stale",
+      "prompt": "后台编辑保存成功，但公开页面还是旧内容，硬刷新才变。",
+      "should_trigger": true,
+      "expected_output": "Distinguishes session-scoped cache staleness from display-precedence shadowing and prescribes the no-session-cache contract.",
+      "assertions": [
+        "Checks AddScoped singleton-like session cache first",
+        "Tests request count increases on re-read"
+      ]
+    },
+    {
+      "id": "write-bunit-tests",
+      "prompt": "给这个 Blazor 组件写 bUnit 测试覆盖渲染和交互。",
+      "should_trigger": false,
+      "expected_output": "Routes component test authoring to ada-blazor-bunit-testing.",
+      "assertions": [
+        "Does not treat as API integration",
+        "Routes to testing skill"
+      ]
+    },
+    {
+      "id": "deploy-wasm",
+      "prompt": "把 Blazor WASM 站点部署到 GitHub Pages 并加 SPA 兜底。",
+      "should_trigger": false,
+      "expected_output": "Routes deployment mechanics to ada-blazor-wasm-github-pages.",
+      "assertions": [
+        "Does not apply API integration pitfalls",
+        "Routes to deployment skill"
+      ]
+    },
+    {
+      "id": "build-gates",
+      "prompt": "编辑了 .NET 工程，需要跑构建测试格式门禁。",
+      "should_trigger": false,
+      "expected_output": "Routes build-gate verification to ada-dotnet-verification.",
+      "assertions": [
+        "Does not activate integration pitfalls",
+        "Routes to verification skill"
+      ]
+    },
+    {
+      "id": "interop-attach",
+      "prompt": "Blazor WASM 的 JS interop attach 只在真实浏览器失败，bUnit 全绿。",
+      "should_trigger": false,
+      "expected_output": "Routes JS interop diagnostics to ada-blazor-interop-pitfalls.",
+      "assertions": [
+        "Does not narrow to API integration",
+        "Routes to interop skill"
+      ]
+    }
+  ]
+}

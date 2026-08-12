@@ -1,0 +1,85 @@
+{
+  "skill_name": "ada-blazor-bunit-testing",
+  "evals": [
+    {
+      "id": "write-bunit",
+      "prompt": "给 Blazor 组件写 bUnit 测试：RenderComponent、WaitForAssertion、事件触发。",
+      "should_trigger": true,
+      "expected_output": "Applies verified bUnit 1.x authoring facts: render, wait, click, re-query patterns.",
+      "assertions": [
+        "Uses WaitForAssertion for async renders",
+        "Re-queries FindAll before clicks"
+      ]
+    },
+    {
+      "id": "count-assertion-trap",
+      "prompt": "bUnit 里 Assert.Single(FindAll(...)) 报 Collection contained 2 items，看代码没错。",
+      "should_trigger": true,
+      "expected_output": "Diagnoses the selector-count trap and prescribes asserting the exact expected count first.",
+      "assertions": [
+        "Asserts exact count instead of Single",
+        "Explains the misleading message"
+      ]
+    },
+    {
+      "id": "click-late-fail",
+      "prompt": "bUnit 的 Click 后下一个 WaitForAssertion 报 UnknownEventHandlerIdException。",
+      "should_trigger": true,
+      "expected_output": "Explains fire-and-forget Click and the pending-render race; prescribes cut.Render() + re-query.",
+      "assertions": [
+        "Explains Click is fire-and-forget",
+        "Flushes render and re-queries before clicking"
+      ]
+    },
+    {
+      "id": "inputfile-upload",
+      "prompt": "测试 InputFile 组件上传文件的重复文件名校验逻辑。",
+      "should_trigger": true,
+      "expected_output": "Applies UploadFiles pattern with re-query of FindComponent and message assertion.",
+      "assertions": [
+        "Re-queries InputFile after first upload",
+        "Asserts visible status message and unchanged store"
+      ]
+    },
+    {
+      "id": "build-gates",
+      "prompt": "编辑了 .NET 工程，需要跑构建测试格式门禁。",
+      "should_trigger": false,
+      "expected_output": "Routes build-gate verification to ada-dotnet-verification.",
+      "assertions": [
+        "Does not activate bUnit authoring",
+        "Routes to verification skill"
+      ]
+    },
+    {
+      "id": "real-browser",
+      "prompt": "用 puppeteer 在真实浏览器里验证 WASM 渲染和交互。",
+      "should_trigger": false,
+      "expected_output": "Routes real-browser verification to the browser verification recipe, not bUnit.",
+      "assertions": [
+        "Does not replace browser checks with bUnit",
+        "Routes to browser verification"
+      ]
+    },
+    {
+      "id": "interop-debug",
+      "prompt": "调试 JS interop 在浏览器里 attach 失败的坑。",
+      "should_trigger": false,
+      "expected_output": "Routes interop debugging to ada-blazor-interop-pitfalls.",
+      "assertions": [
+        "Does not treat as bUnit authoring",
+        "Routes to interop skill"
+      ]
+    },
+    {
+      "id": "test-migration",
+      "prompt": "库的公共 API 被移除，要迁移 40 个测试调用点。",
+      "should_trigger": false,
+      "expected_output": "Routes test migration across removed APIs to the refactoring lifecycle skill.",
+      "assertions": [
+        "Does not apply bUnit authoring facts",
+        "Routes to refactoring workflow"
+      ]
+    }
+  ]
+}
