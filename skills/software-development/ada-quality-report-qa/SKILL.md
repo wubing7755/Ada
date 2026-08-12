@@ -69,7 +69,7 @@ grep -rhoP 'class\s+\w+Tests\b' tests/ --include="*.cs" | sort -u
 报告头部写的「审查范围」与附录 A 的文件数应一致。常见的矛盾：
 - 头部写「48 个源文件」，附录 A 加起来 47 个
 - 忘记计入根目录文件（如 `_Imports.razor`、`_Imports.cs`）
-- 将生成文件（如 `atlas.js`）计入源码文件计数
+- 将生成文件（如 `lib.js`）计入源码文件计数
 
 修复方法：直接用 find 命令列出所有源文件并计数，不要目测：
 

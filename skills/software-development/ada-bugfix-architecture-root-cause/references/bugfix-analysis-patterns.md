@@ -47,4 +47,4 @@ Do NOT fix one symptom at a time. Implement all changes for the shared root caus
 - **`.OrderBy(p => p.Title)` silently violates SRS ordering.** REQ-F-021 AC5 requires group-internal ordering by add order.
 - **CSS hr divider is invisible without explicit style.** Must define border, width, height, background, and flex-shrink. Without flex-shrink: 0 flexbox may collapse the divider.
 - **@ref inside RenderFragment returned from a C# method silently breaks ElementReference capture.** `@ref` ONLY works directly in the component's main .razor template. See `references/blazor-ref-in-renderfragment-pitfall.md`.
-- **Do not couple Dock Region visibility to droppability.** Separate normal space occupancy from drop scaffold rendering. See `references/atlas-dock-visibility-scaffold-pattern.md`.
+- **Do not couple Dock Region visibility to droppability.** Separate normal space occupancy from drop scaffold rendering. See `references/dock-visibility-scaffold-pattern.md`.

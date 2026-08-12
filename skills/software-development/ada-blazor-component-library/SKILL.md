@@ -9,7 +9,7 @@ metadata:
   hermes:
     tags: [blazor, component-library, razor, dotnet, nuget]
     related_skills: [ada-dotnet-blazor-library]
-    trigger_keywords: [Blazor, Razor, XDocker, dock layout, component library, .razor, DynamicComponent, WASM]
+    trigger_keywords: [Blazor, Razor, Lib, dock layout, component library, .razor, DynamicComponent, WASM]
     usage_prompt: "Use when building or refactoring a Blazor component library — especially dock-panel / IDE-layout components, or any library with JS interop, xUnit tests, and eventual NuGet packaging."
 ---
 
@@ -39,7 +39,7 @@ Do **not** use for: simple single-component development, server-side Blazor conf
 ## Core Principles
 
 1. **State-driven, not MVVM**: Use a pure domain model + per-instance state container + command/reducer-style operations. Components only render and forward events. ViewModels are thin adapters for render projection, not business logic owners.
-2. **Future RCL extraction**: Organize code so `src/XDocker/` (models, services, domain) is separate from `src/Components/XDocker/` (Razor components). Pages are demo consumers only.
+2. **Future RCL extraction**: Organize code so `src/Lib/` (models, services, domain) is separate from `src/Components/Lib/` (Razor components). Pages are demo consumers only.
 3. **.NET 6 compatibility**: Keep target framework at `net6.0` for legacy customers unless explicitly upgraded. Avoid `net7.0+` APIs.
 4. **Result types over exceptions**: Return `DockResult` / `DockResult<T>` from all public APIs. Never throw for expected business failures.
 
@@ -48,7 +48,7 @@ Do **not** use for: simple single-component development, server-side Blazor conf
 ```text
 Razor Components         → forward events, no domain logic
   ↓
-XDockerLayoutContext     → per-instance state container + API surface
+LibLayoutContext     → per-instance state container + API surface
   ↓
 Command/Reducer layer    → pure state transitions, testable
   ↓
@@ -69,7 +69,7 @@ Using `js.InvokeVoidAsync("eval", $"...import('...').then(...)")` for ES module 
 private static IJSObjectReference? _module;
 public static async ValueTask InitializeAsync(IJSRuntime js)
 {
-    _module = await js.InvokeAsync<IJSObjectReference>("import", "./xdocker/xdocker.js");
+    _module = await js.InvokeAsync<IJSObjectReference>("import", "./lib/lib.js");
 }
 
 // Then call module methods directly
@@ -269,4 +269,4 @@ Detailed patterns and setup guides are in `references/`:
 | `references/xunit-integration.md` | Test project structure, NuGet packages, naming conventions |
 | `references/batch-refactoring.md` | `execute_code` + regex for 10+ file API migrations |
 | `references/typescript-guards.md` | Window resize and visibility change drag cancellation |
-| `references/xdocker-phase1-plan-template.md` | Phase 1 task sequence and design constraints reference |
+| `references/phase1-plan-template.md` | Phase 1 task sequence and design constraints reference |

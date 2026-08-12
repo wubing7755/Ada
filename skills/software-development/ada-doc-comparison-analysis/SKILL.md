@@ -103,7 +103,7 @@ End by asking: produce the full optimized document, or refine the proposal?
 ## References
 
 - `references/srs-patterns.md` — Concrete SRS optimization patterns from
-  PromptEditor ↔ XDocker: what transferred, what was kept, phase-boundary
+  示例项目 ↔ Lib: what transferred, what was kept, phase-boundary
   checklist.
 
 ## Execution Patterns
@@ -151,7 +151,7 @@ After the user approves the proposal, implement changes in this order:
 ## Common Pitfalls
 
 - **Don't propose changes the target already does well.** Acknowledge existing
-  strengths (e.g. XDocker already had AC numbering and cross-references — keep
+  strengths (e.g. Lib already had AC numbering and cross-references — keep
   those, don't list them as "to add").
 - **Phase creep is real.** Architecture diagrams at requirements phase show
   *what exists and how it relates*; at design phase they show *how it
@@ -170,7 +170,7 @@ After the user approves the proposal, implement changes in this order:
   reference while keeping the target's language convention.
 - **Don't skimp on reading.** Read 100% of both documents before proposing
   anything. Skimming leads to missing patterns buried in later sections (e.g.
-  PromptEditor's strength is its appendices: requirement-summary-by-role,
+  示例项目's strength is its appendices: requirement-summary-by-role,
   planned-requirements, traceability-matrix — all in the last 10%).
 - **patch() unique-match failures on large files.** After many edits, the
   file content shifts and previously unique strings may no longer match.
@@ -184,7 +184,7 @@ After the user approves the proposal, implement changes in this order:
 
 ## Overview
 
-`ada-doc-comparison-analysis` provides a structured methodology for comparing two technical documents (typically SRS documents, but applicable to design docs, API specs, and other structured references), extracting complementary strengths from each, and synthesizing an improved version that respects the target document's phase boundaries. The five-step workflow — read both documents completely, extract strengths into dimensioned tables, build a complementarity map, propose an optimized structure (with strict phase-boundary discipline: no implementation details in requirements-phase documents), and deliver a concrete proposal with before/after comparisons — ensures that improvements are evidence-based, not subjective. Developed on the PromptEditor vs XDocker SRS comparison, the skill's reference patterns catalog what transfers between documents and what stays behind.
+`ada-doc-comparison-analysis` provides a structured methodology for comparing two technical documents (typically SRS documents, but applicable to design docs, API specs, and other structured references), extracting complementary strengths from each, and synthesizing an improved version that respects the target document's phase boundaries. The five-step workflow — read both documents completely, extract strengths into dimensioned tables, build a complementarity map, propose an optimized structure (with strict phase-boundary discipline: no implementation details in requirements-phase documents), and deliver a concrete proposal with before/after comparisons — ensures that improvements are evidence-based, not subjective. Developed on the 示例项目 vs Lib SRS comparison, the skill's reference patterns catalog what transfers between documents and what stays behind.
 
 ## When to Use
 

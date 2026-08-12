@@ -190,7 +190,7 @@ SRS 定义**行为**，不是**数值常量**。以下属于实现细节，不�
 
 ## Overview
 
-`ada-srs-writing` provides a structured, four-phase methodology for writing and iteratively refining Software Requirements Specification documents. Grounded in real-world SRS authoring experience (notably the Atlas/xDocker dock-layout system), it covers document structure templates (§1-§6 canonical layout, requirement format, priority conventions, bilingual rules), core principles (document purity, requirements-vs-implementation boundary, concept separation, stacking semantics), the optimization workflow (Understand → Propose → Execute → Wrap-up), and an extensive pitfall catalog capturing hard-won lessons from multi-thousand-line document revisions. This is the primary writing skill in the SRS lifecycle.
+`ada-srs-writing` provides a structured, four-phase methodology for writing and iteratively refining Software Requirements Specification documents. Grounded in real-world SRS authoring experience (notably the Lib dock-layout system), it covers document structure templates (§1-§6 canonical layout, requirement format, priority conventions, bilingual rules), core principles (document purity, requirements-vs-implementation boundary, concept separation, stacking semantics), the optimization workflow (Understand → Propose → Execute → Wrap-up), and an extensive pitfall catalog capturing hard-won lessons from multi-thousand-line document revisions. This is the primary writing skill in the SRS lifecycle.
 
 ## When to Use
 

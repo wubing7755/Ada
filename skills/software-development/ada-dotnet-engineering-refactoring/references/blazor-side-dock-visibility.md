@@ -11,7 +11,7 @@ Do not let layout tracks be driven only by declared panel collections. For work-
 
 A side can have ToolBar entries but no content-column track.
 
-## Atlas implementation pattern
+## Lib implementation pattern
 
 1. Add a domain-level visibility helper rather than scattering Razor conditions:
 

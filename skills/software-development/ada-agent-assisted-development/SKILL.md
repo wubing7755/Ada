@@ -162,7 +162,7 @@ Agent auto-executes the full pipeline: `git diff` → grep for secrets/injection
 
 ### Fine-grained control
 
-> "审查最近的改动，但只审 src/Atlas/Services/，SAFE 自动修，CAREFUL 和 RISKY 只报告。"
+> "审查最近的改动，但只审 src/Lib/Services/，SAFE 自动修，CAREFUL 和 RISKY 只报告。"
 
 ---
 

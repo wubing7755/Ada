@@ -1,4 +1,4 @@
-# Blazor mouseenter/mouseleave Fix Pattern (Atlas, 2026-07-24)
+# Blazor mouseenter/mouseleave Fix Pattern (Lib, 2026-07-24)
 
 ## Problem
 
@@ -145,7 +145,7 @@ public static async ValueTask UnregisterHoverEvents(
         }
         catch (JSException)
         {
-            Debug.WriteLine($"[Atlas] hover register failed for '{currentId}'");
+            Debug.WriteLine($"[Lib] hover register failed for '{currentId}'");
         }
     }
 

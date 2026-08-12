@@ -2,7 +2,7 @@
 
 A common SRS defect: using the same term for different UI abstractions,
 or different terms for the same abstraction. This reference documents the
-pattern discovered while reviewing the Atlas (XDocker) SRS.
+pattern discovered while reviewing the Lib SRS.
 
 ## The Five-Entity Model
 

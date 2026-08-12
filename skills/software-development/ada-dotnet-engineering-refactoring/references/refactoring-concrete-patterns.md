@@ -1,9 +1,9 @@
-# Concrete C# Patterns with Code (Atlas Session 2026-07-22)
+# Concrete C# Patterns with Code (Lib Session 2026-07-22)
 
 ## Ratio — Domain primitive replacing double
 
 ```csharp
-// src/Atlas/Domain/Primitives/Ratio.cs
+// src/Lib/Domain/Primitives/Ratio.cs
 public readonly struct Ratio : IEquatable<Ratio>
 {
     public double Value { get; }
@@ -36,7 +36,7 @@ internal sealed class RatioJsonConverter : JsonConverter<Ratio>
 ## PanelId — Domain primitive replacing string
 
 ```csharp
-// src/Atlas/Domain/Primitives/PanelId.cs
+// src/Lib/Domain/Primitives/PanelId.cs
 [JsonConverter(typeof(PanelIdJsonConverter))]
 public readonly struct PanelId : IEquatable<PanelId>
 {

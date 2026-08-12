@@ -1,4 +1,4 @@
-# Concrete Techniques from xdocker SRS Revision
+# Concrete Techniques from lib SRS Revision
 
 ## SVG Text Editing with sed
 

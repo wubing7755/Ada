@@ -137,7 +137,7 @@ Full pitfall catalog and root cause template: `skill_view(name="ada-bugfix-archi
 - `systematic-debugging` — For single-bug root cause analysis
 - `deviation-analysis-refactoring` — For refactoring from an existing analysis document
 - `references/drop-target-lifecycle-patterns.md` — Blazor drop target registration lifecycle: the corrected pattern (always register infrastructure, re-register on identity change, visual feedback by drag type)
-- `references/atlas-dock-panel-move-pattern.md` — Atlas-specific root cause example (this session)
-- `references/atlas-toolbar-grouping-pattern.md` — ToolBar region grouping (REQ-F-021 AC5), entry drag handler registration lifecycle, and icon display
-- `references/atlas-dock-visibility-scaffold-pattern.md` — Dock Region visibility vs droppability: hide empty/auto-hidden regions in normal mode, expose hidden logical regions as drop scaffolds during panel drag
+- `references/dock-panel-move-pattern.md` — Lib-specific root cause example (this session)
+- `references/toolbar-grouping-pattern.md` — ToolBar region grouping (REQ-F-021 AC5), entry drag handler registration lifecycle, and icon display
+- `references/dock-visibility-scaffold-pattern.md` — Dock Region visibility vs droppability: hide empty/auto-hidden regions in normal mode, expose hidden logical regions as drop scaffolds during panel drag
 - `references/blazor-ref-in-renderfragment-pitfall.md` — @ref inside RenderFragment silently breaks ElementReference capture; inline-only rule + try-catch defense

@@ -25,7 +25,7 @@ This skill covers the full lifecycle of a .NET Blazor component library: RCL pro
 Use when:
 - Creating a new Blazor component library as a Razor Class Library (RCL)
 - Splitting an existing Blazor app into a library + demo app structure
-- Applying a common type prefix (e.g., "Atlas") to all public types in a Blazor library
+- Applying a common type prefix (e.g., "Lib") to all public types in a Blazor library
 - Setting up TypeScript/JS interop with `IJSObjectReference` in an RCL
 - Preparing a Blazor library for NuGet packaging
 - Debugging 404 errors on RCL static assets (JS, CSS, images)
@@ -37,7 +37,7 @@ Do **not** use for: writing individual Blazor components, general .NET library d
 - "Create a Blazor component library"
 - "Split this Blazor app into a library + demo"
 - "Structure this as a NuGet package"
-- "Add Atlas prefix to all public types"
+- "Add Lib prefix to all public types"
 
 ## Scaffolding Baseline
 
@@ -100,7 +100,7 @@ tests/
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <RootNamespace>Atlas</RootNamespace>
+    <RootNamespace>Lib</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components" Version="6.0.36" />
@@ -117,14 +117,14 @@ tests/
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <RootNamespace>Atlas.Demo</RootNamespace>
+    <RootNamespace>Lib.Demo</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.36" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.36" PrivateAssets="all" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Atlas\Atlas.csproj" />
+    <ProjectReference Include="..\Lib\Lib.csproj" />
   </ItemGroup>
 </Project>
 ```
@@ -136,14 +136,14 @@ as prefix on all types. Distinguish categories by suffix:
 
 | Category | Pattern | Example |
 |----------|---------|---------|
-| Razor components | `<Name><Purpose>` | `AtlasLayout`, `AtlasDockPanel` |
-| Domain models | `<Name><Purpose>Model` | `AtlasLayoutState`, `AtlasDockPanelModel` |
-| Services | `<Name><Purpose>Service` | `AtlasDragService` |
-| Enums | `<Name><Purpose>` | `AtlasRegionKind`, `AtlasDedupMode` |
-| Results | `<Name>Result<T>` | `AtlasResult<string>` |
-| Error codes | `<Name>ErrorCode` | `AtlasErrorCode` |
-| Events | `<Name><Event>EventArgs` | `AtlasLayoutChangedEventArgs` |
-| Interfaces | `I<Name><Purpose>` | `IAtlasActivationStrategy` |
+| Razor components | `<Name><Purpose>` | `LibLayout`, `LibDockPanel` |
+| Domain models | `<Name><Purpose>Model` | `LibLayoutState`, `LibDockPanelModel` |
+| Services | `<Name><Purpose>Service` | `LibDragService` |
+| Enums | `<Name><Purpose>` | `LibRegionKind`, `LibDedupMode` |
+| Results | `<Name>Result<T>` | `LibResult<string>` |
+| Error codes | `<Name>ErrorCode` | `LibErrorCode` |
+| Events | `<Name><Event>EventArgs` | `LibLayoutChangedEventArgs` |
+| Interfaces | `I<Name><Purpose>` | `ILibActivationStrategy` |
 
 **Key rule**: Domain models and Razor components MUST NOT share the same name.
 The `Model` suffix on domain types prevents clash. The component name stays
@@ -157,18 +157,18 @@ When adding a common prefix to all types:
 
 1. Rename all types (both domain models and components get the prefix)
 2. This creates identical names for paired types (e.g., both `DockPanelModel`
-   and `DockPanel` component become `AtlasDockPanel`)
-3. Fix: add `Model` suffix to domain types (`AtlasDockPanel` → `AtlasDockPanelModel`)
+   and `DockPanel` component become `LibDockPanel`)
+3. Fix: add `Model` suffix to domain types (`LibDockPanel` → `LibDockPanelModel`)
 4. In `.razor` `@code` blocks, use the `Model`-suffixed name for domain references
-5. Component tags stay clean (`<AtlasDockPanel>`)
+5. Component tags stay clean (`<LibDockPanel>`)
 
 ### Regex for Fixing Component Tags
 
 When reverting component tag names after a Model-suffix pass, the regex MUST
 distinguish HTML/XML tags from generic type parameters:
 
-- **Correct**: `<AtlasDockPanelModel ...>` (HTML tag) → `<AtlasDockPanel ...>`
-- **Incorrect**: `List<AtlasDockPanelModel>` must NOT be matched
+- **Correct**: `<LibDockPanelModel ...>` (HTML tag) → `<LibDockPanel ...>`
+- **Incorrect**: `List<LibDockPanelModel>` must NOT be matched
 
 The fix: match only when `<TagName` is preceded by whitespace, `=`, `"`, or
 start-of-line:
@@ -266,8 +266,8 @@ it produces 404 at runtime:
 
 | Asset type | Wrong path | Correct path |
 |------------|-----------|--------------|
-| JS module import | `"./atlas/atlas.js"` | `"./_content/Atlas/atlas/atlas.js"` |
-| CSS stylesheet | `"css/atlas.css"` | `"_content/Atlas/atlas.css"` |
+| JS module import | `"./lib/lib.js"` | `"./_content/Lib/lib/lib.js"` |
+| CSS stylesheet | `"css/lib.css"` | `"_content/Lib/lib.css"` |
 
 Check ALL of these when a demo app can't load RCL assets:
 1. `IJSRuntime.InvokeAsync<IJSObjectReference>("import", path)` calls in C#/Razor
@@ -279,8 +279,8 @@ Check ALL of these when a demo app can't load RCL assets:
 Scoped CSS bundles (`{ProjectName}.styles.css`) are generated **per project** from
 `.razor.css` sidecar files. Do NOT reference an RCL's scoped CSS from the demo app:
 
-- `_content/Atlas/Atlas.styles.css` → **404** if Atlas RCL has no `.razor.css` files
-- `Atlas.Demo.styles.css` → **correct** — this is the demo project's own scoped CSS
+- `_content/Lib/Lib.styles.css` → **404** if Lib RCL has no `.razor.css` files
+- `Lib.Demo.styles.css` → **correct** — this is the demo project's own scoped CSS
 
 Only the project that owns the `.razor.css` files produces the corresponding
 `.styles.css` bundle.
@@ -302,7 +302,7 @@ var registry = Context?.ContentRegistry ?? new ContentRegistry();
 Pre-register demo/fallback components in `LayoutContext`'s constructor.
 See `references/content-registry-wiring.md` for the full pattern.
 
-- **Domain model / component name clash after prefix application.** When adding a common prefix (e.g., "Atlas") to all types, both `DockPanelModel` and the `DockPanel` component become `AtlasDockPanel`. Fix: add `Model` suffix to domain types (`AtlasDockPanelModel`) so component tags stay clean (`<AtlasDockPanel>`).
+- **Domain model / component name clash after prefix application.** When adding a common prefix (e.g., "Lib") to all types, both `DockPanelModel` and the `DockPanel` component become `LibDockPanel`. Fix: add `Model` suffix to domain types (`LibDockPanelModel`) so component tags stay clean (`<LibDockPanel>`).
 - **RCL static assets not using `_content/{AssemblyName}/` prefix.** Every reference to RCL `wwwroot/` from outside the RCL must use this prefix — JS imports, CSS links, image paths. Missing it produces silent 404s.
 - **Referencing another project's scoped CSS.** Scoped CSS bundles (`{ProjectName}.styles.css`) are per-project. An RCL's scoped CSS is not available to the demo app unless the RCL owns the `.razor.css` files.
 - **Using the deprecated `dotnet-format` global tool.** It conflicts with the SDK built-in `dotnet format`. CI pipelines using the global tool produce false-positive format failures. Always use `dotnet format style --verify-no-changes`.
@@ -320,8 +320,8 @@ See `references/content-registry-wiring.md` for the full pattern.
 
 ## Reference
 
-- `references/atlas-rename-map.md` — Complete before/after type rename map
-  from XDocker → Atlas, including the Model-suffix disambiguation pass and
+- `references/rename-map.md` — Complete before/after type rename map
+  from 旧项目名 → Lib, including the Model-suffix disambiguation pass and
   the component tag fix regex.
 - `references/content-registry-wiring.md` — LayoutContext + ContentRegistry
   wiring pattern: why `new ContentRegistry()` per-render fails and how to

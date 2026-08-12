@@ -106,7 +106,7 @@ that do exist, test method counts that don't match.
 
 **Appendix B (source files):**
 ```bash
-find src/Atlas -type f \( -name "*.cs" -o -name "*.razor" -o -name "*.ts" \) \
+find src/Lib -type f \( -name "*.cs" -o -name "*.razor" -o -name "*.ts" \) \
   ! -path "*/obj/*" ! -path "*/bin/*" ! -path "*/node_modules/*" | sort
 ```
 Flag: files with "—" in the line count column, new files not listed, line counts

@@ -10,7 +10,7 @@ is false. JS-side operations that iterate registered drop targets
 (`findDropTarget`, indicator rendering) have zero elements to hit-test,
 even though the logical region should still be a valid drop zone.
 
-### Real-machine failure symptoms (Atlas PanelDrag, 2026-07-24)
+### Real-machine failure symptoms (Lib PanelDrag, 2026-07-24)
 
 | Symptom | Root cause |
 |---------|-----------|
@@ -22,7 +22,7 @@ even though the logical region should still be a valid drop zone.
 ### Why C#-rendered divs fail
 
 ```razor
-<!-- AtlasLayout.razor: the drop target container is inside @if -->
+<!-- LibLayout.razor: the drop target container is inside @if -->
 @if (_visibility.ShowLeftColumn)      // ← FALSE when no expanded left panels
 {
     <div class="xd-left-dock">        // ← NOT RENDERED → drop targets don't exist

@@ -1,6 +1,6 @@
 # Doc Cleanup Pattern — Concrete Decision Examples
 
-From the 2026-07-24 Atlas cleanup pass. Use these as a calibration reference.
+From the 2026-07-24 Lib cleanup pass. Use these as a calibration reference.
 
 ## Deleted (3 files)
 

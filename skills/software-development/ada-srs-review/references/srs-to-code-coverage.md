@@ -192,7 +192,7 @@ scanning only `.cs` files systematically miss implementations in:
   auto-restore layout, initialization hooks, event wiring
 - **CSS**: visual feedback, animations, responsive behavior
 
-In Blazor WASM projects, expect 10-20% of "Not Implemented" entries to\nbe false negatives from missed TS/razor layers. Always grep the full\nrepo, not just `src/Atlas/**/*.cs`.\n\n**Specific patterns that evade C#-only scans:**\n- `HandleKeyDown` / `@onkeydown` in `.razor` files → keyboard shortcut REQs (F-116–118)\n- `OnAfterRenderAsync` with `firstRender` guard → auto-restore REQs (F-092)\n- `onWindowResize` / `onVisibilityChange` in `.ts` → edge-case REQs (F-129, F-137)\n- `@onkeydown` without `Ctrl` modifier → may indicate Esc handling too
+In Blazor WASM projects, expect 10-20% of "Not Implemented" entries to\nbe false negatives from missed TS/razor layers. Always grep the full\nrepo, not just `src/Lib/**/*.cs`.\n\n**Specific patterns that evade C#-only scans:**\n- `HandleKeyDown` / `@onkeydown` in `.razor` files → keyboard shortcut REQs (F-116–118)\n- `OnAfterRenderAsync` with `firstRender` guard → auto-restore REQs (F-092)\n- `onWindowResize` / `onVisibilityChange` in `.ts` → edge-case REQs (F-129, F-137)\n- `@onkeydown` without `Ctrl` modifier → may indicate Esc handling too
 
 ### 3. Verify "Partial" Gap Descriptions
 
@@ -227,7 +227,7 @@ Produce an audit report with:
   from scratch. If the old matrix exists, compare to produce a diff section at
   the end of the new report — but never use it as a starting assumption.
 
-- **Extract REQs programmatically first.** For a 150+ REQ spec like Atlas SRS,
+- **Extract REQs programmatically first.** For a 150+ REQ spec like Lib SRS,
   use `execute_code` with a regex to extract all `REQ-F-XXX | 🔴🟡🟢 | Title`
   tuples BEFORE reading any source code. This gives you a numbered checklist.
   Then batch-read all source files (Domain/, Services/, Commands/,

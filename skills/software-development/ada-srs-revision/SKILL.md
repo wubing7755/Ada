@@ -35,7 +35,7 @@ Before touching the document, clarify exactly what changes:
 - **What is the new concept?** Define the replacement and whether it changes behavior (acceptance criteria) in addition to naming.
 - **What are the behavioral implications?** If the concept changes behavior (e.g., "stacking collapses to toolbar entries" → "tab group shows a tab bar"), identify every requirement whose AC must be rewritten, not just search-replaced.
 
-Example from the Atlas/xdocker revision:
+Example from the Lib/lib revision:
 
 | Old | New | Behavioral? |
 |-----|-----|:-----------:|
@@ -205,7 +205,7 @@ Don't use for:
 
 ## References
 
-- `references/atlas-stacking-to-tabgroup.md` — Full before/after diff of the xdocker SRS stacking→Tab Group revision
-- `references/atlas-terminology.md` — Atlas (xDocker) project terminology decisions: old→new term mapping, VS Code/Rider reference terminology, Tab group model decisions
+- `references/stacking-to-tabgroup.md` — Full before/after diff of the lib SRS stacking→Tab Group revision
+- `references/terminology.md` — Lib project terminology decisions: old→new term mapping, VS Code/Rider reference terminology, Tab group model decisions
 - `references/survey-commands.md` — Pre-edit survey commands (grep patterns for terminology audit)
 - `scripts/verify-terminology.py` — Script to validate term counts after refactoring

@@ -76,7 +76,7 @@ Do **not** use for: running the full CI pipeline, performance benchmarking, or s
 
 3. **Project gate**
    - Prefer the repository's documented commands.
-   - Typical Atlas-style gate:
+   - Typical Lib-style gate:
      ```sh
      dotnet build -v q && dotnet test --no-build -v q
      dotnet format --verify-no-changes

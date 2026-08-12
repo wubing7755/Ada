@@ -1,7 +1,7 @@
 # Invisible Drop Targets: JS Dynamic Creation (v3 Final)
 
 Pattern for providing drag-and-drop targets for hidden regions in Blazor
-without affecting CSS Grid / Flex layout. Used in Atlas for REQ-F-150 AC4
+without affecting CSS Grid / Flex layout. Used in Lib for REQ-F-150 AC4
 ("隐藏的 Dock Region 不因悬浮层而展开") and REQ-F-069 AC6.
 
 **Evolution:**

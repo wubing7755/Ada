@@ -100,7 +100,7 @@ See **[references/dotnet-refactoring-workflow.md](references/dotnet-refactoring-
 - **Value-type migration mechanical edits with `sed`:** For bulk renames across 5+ files, use targeted `sed -i` per property rename — faster and safer than `patch`. After sed, `dotnet build` to catch missed edges.
 - **delegate_task for parallel test repair:** Fan out to 2 sub-agents (tests + demo app) for the same mechanical fix pattern across multiple files. Saves ~5 rounds of manual tool calls.
 - **InternalsVisibleTo for testing internal classes:** Add `<InternalsVisibleTo Include="TestProjectName" />` to the source `.csproj`. Prefer this over making implementation classes `public` prematurely.
-- **Independent-review hardening checklist:** See [references/atlas-phase17-19-review-lessons.md](references/atlas-phase17-19-review-lessons.md) for reviewer-discovered pitfalls around client-visible `ErrorBoundary` details, behavioral lifecycle tests, render-identity hashes, DI boundaries, and Windows ad-hoc verification evidence.
+- **Independent-review hardening checklist:** See [references/phase17-19-review-lessons.md](references/phase17-19-review-lessons.md) for reviewer-discovered pitfalls around client-visible `ErrorBoundary` details, behavioral lifecycle tests, render-identity hashes, DI boundaries, and Windows ad-hoc verification evidence.
 
 ## God-Class Partial File Splitting
 

@@ -2,7 +2,7 @@
 
 A real-world investigation into why `CPACK_CREATE_DESKTOP_LINKS` and `CPACK_NSIS_CREATE_ICONS_EXTRA` both fail to produce a working desktop shortcut on Windows, and the exact configuration that finally works. Recorded so the next agent who hits this doesn't redo the 20-PR cycle.
 
-**Environment:** CMake 4.3.3, NSIS 3.10, GCC 15.2 (MSYS2 ucrt64), Windows 10, project `wubing7755/c-project-standard` (C11+CMake+Ninja+CPack NSIS).
+**Environment:** CMake 4.3.3, NSIS 3.10, GCC 15.2 (MSYS2 ucrt64), Windows 10, project `示例项目` (C11+CMake+Ninja+CPack NSIS).
 
 ## Symptom
 
@@ -156,4 +156,4 @@ ls "C:\Users\Public\Desktop\MyApp.lnk"
 
 ## PR history that this resolves
 
-This investigation closes the loop on PRs #23–#44 of `wubing7755/c-project-standard`, which repeatedly tried and failed to fix the desktop shortcut. Each PR picked a different wrong assumption; the right answer turned out to be the most boring one (`CPACK_NSIS_CREATE_ICONS_EXTRA` with `\\` escaping and **no quotes at all**).
+This investigation closes the loop on PRs #23–#44 of `示例项目`, which repeatedly tried and failed to fix the desktop shortcut. Each PR picked a different wrong assumption; the right answer turned out to be the most boring one (`CPACK_NSIS_CREATE_ICONS_EXTRA` with `\\` escaping and **no quotes at all**).

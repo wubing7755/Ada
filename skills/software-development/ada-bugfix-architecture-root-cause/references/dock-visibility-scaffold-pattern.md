@@ -1,4 +1,4 @@
-# Atlas Dock visibility + drop-scaffold pattern
+# Lib Dock visibility + drop-scaffold pattern
 
 Use this when a Dock layout bug involves empty/hidden Dock regions, Bottom Dock collapse, or dragging a panel back into a region that is normally hidden.
 

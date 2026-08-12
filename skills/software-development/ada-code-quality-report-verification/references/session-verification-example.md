@@ -1,4 +1,4 @@
-# Session Verification Example — Atlas Code Quality Report (2026-07-22)
+# Session Verification Example — Lib Code Quality Report (2026-07-22)
 
 This is a worked example from an actual verification session. Use it as reference
 for the level of detail expected in each verdict.
@@ -62,7 +62,7 @@ for the level of detail expected in each verdict.
 
 **✅ 确认存在**
 
-- **证据**: `src/Atlas/Domain/LayoutStyleAdapter.cs`（42 行）有构造函数验证、
+- **证据**: `src/Lib/Domain/LayoutStyleAdapter.cs`（42 行）有构造函数验证、
   `PxToRatio` 计算属性和 5 个 CSS grid 样式属性。`tests/` 下所有文件
   无任何对 `LayoutStyleAdapter` 的引用。
 - **结论**: 零测试完全属实。

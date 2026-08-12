@@ -1,4 +1,4 @@
-# Atlas (xDocker) Terminology Decisions
+# Lib Terminology Decisions
 
 Session: 2026-07-16 — SRS terminology refactoring
 Reference implementations: VS Code User Interface docs, JetBrains Rider
@@ -45,7 +45,7 @@ Tab is now a general concept with two sub-types:
 
 ## VS Code Reference Terminology
 
-| VS Code Term | XDocker Equivalent |
+| VS Code Term | Lib Equivalent |
 |---|---|
 | Workbench | Dock 布局 |
 | Activity Bar | ToolBar (LT/RT) |
@@ -58,7 +58,7 @@ Tab is now a general concept with two sub-types:
 
 ## Rider Reference Terminology
 
-| Rider Term | XDocker Equivalent |
+| Rider Term | Lib Equivalent |
 |---|---|
 | Tool Window | 面板 / Panel |
 | Tool Window Bar / Stripe | ToolBar (LT/RT) |

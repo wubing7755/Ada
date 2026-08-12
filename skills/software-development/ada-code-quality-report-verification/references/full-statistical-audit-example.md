@@ -7,8 +7,8 @@ audit of every quantitative claim in the report.
 
 ## Report Under Audit
 
-- **Report**: `docs/reports/code-quality-2026-07-22-full.md` (Atlas project)
-- **Scope claim**: "src/Atlas/（47 个文件，5,510 行）+ tests/（12 个文件，1,907 行）"
+- **Report**: `docs/reports/code-quality-2026-07-22-full.md` (Lib project)
+- **Scope claim**: "src/Lib/（47 个文件，5,510 行）+ tests/（12 个文件，1,907 行）"
 - **Coverage claim**: "8/30 源类有直接测试覆盖（27%）"
 - **Test claim**: "130 个测试（123 [Fact]/[Theory] + 7 个结构验证）"
 - **Previous report citation**: "前次报告覆盖 3 个文件，908 行"
@@ -25,7 +25,7 @@ audit of every quantitative claim in the report.
 | src/ line count | 5,510 | 5,519 | +9 |
 | Header claim | "48 个源文件" | 50 | — |
 
-Root cause: Report excluded `src/Atlas/_Imports.razor` (4 lines), and its
+Root cause: Report excluded `src/Lib/_Imports.razor` (4 lines), and its
 subdirectory breakdowns are systematically off (see item 4).
 
 ### 2️⃣ Test file count & lines (12 files, 1,907 lines)
@@ -94,14 +94,14 @@ only subdirectory totals. Spot-checked against subdirectory totals:
 |------|-------------------|-------------------|---------|
 | LayoutState.cs (Domain/) | 806 (domain total) | 158 | N/A — only subdir total available |
 | DragService.cs (Services/) | 1,755 (services total) | 225 | N/A — same |
-| atlas.css (wwwroot/) | 470 | 470 | ✅ matches |
+| lib.css (wwwroot/) | 470 | 470 | ✅ matches |
 
 ### 7️⃣ Cross-report consistency (prior report = 908 lines)
 
 **✅ 一致**
 
-- Prior report (`code-quality-2026-07-22.md`): ToolBar.razor 395 + LayoutStyleAdapter.cs 42 + atlas.css 471 = 908 ✅
-- Current working tree has modified ToolBar.razor (+20 lines) and atlas.css (-1 line) making them 415 and 470 respectively, but the cited 908 refers to the prior report's own totals at its generation time, not the current file state.
+- Prior report (`code-quality-2026-07-22.md`): ToolBar.razor 395 + LayoutStyleAdapter.cs 42 + lib.css 471 = 908 ✅
+- Current working tree has modified ToolBar.razor (+20 lines) and lib.css (-1 line) making them 415 and 470 respectively, but the cited 908 refers to the prior report's own totals at its generation time, not the current file state.
 
 ## Summary
 

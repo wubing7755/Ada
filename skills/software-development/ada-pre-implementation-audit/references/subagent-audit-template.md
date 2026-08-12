@@ -77,7 +77,7 @@ For each file, report:
 ])
 ```
 
-## Concrete example: Atlas audit (2026-07-24)
+## Concrete example: Lib audit (2026-07-24)
 
 Used 30 files per agent. Aggregate findings in ~3 minutes. Key discoveries:
 - `REQ-F-149` (ToolBar spatial sections): **Already implemented** in `ToolBar.razor:11-100`, traceability wrong
