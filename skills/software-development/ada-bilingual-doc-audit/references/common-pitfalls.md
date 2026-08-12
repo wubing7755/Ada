@@ -235,4 +235,3 @@
   unrelated hunk can silently rewrite the `来源：` DES footer to the EN
   `Source:` label — check the zh footer label after every multi-hunk zh
   patch and revert if swapped.
-
