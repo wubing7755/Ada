@@ -1,0 +1,85 @@
+{
+  "skill_name": "ada-adr-authoring",
+  "evals": [
+    {
+      "id": "write-adr",
+      "prompt": "为这个架构决策写一份 ADR，包含 Context/Decision/Alternatives/Consequences/Verification/Supersession。",
+      "should_trigger": true,
+      "expected_output": "Applies the mandatory ADR structure with frontmatter Status=Proposed and explicit supersession statements.",
+      "assertions": [
+        "Uses the mandatory six-section structure",
+        "Sets Status Proposed until maintainer approval"
+      ]
+    },
+    {
+      "id": "api-change-adr",
+      "prompt": "公共 API 变更需要 ADR，先核实真实源码里的接口签名再写候选 API。",
+      "should_trigger": true,
+      "expected_output": "Verifies framework API shapes against actual source before writing candidate signatures; flags maintainer decision points.",
+      "assertions": [
+        "Reads real contracts before writing signatures",
+        "Lists rejected alternatives with rationale"
+      ]
+    },
+    {
+      "id": "bilingual-adr",
+      "prompt": "ADR 写英文权威版加中文翻译，并更新两个 README 索引。",
+      "should_trigger": true,
+      "expected_output": "Writes en canonical + zh translation preserving identifiers and strength words; updates both README index tables; runs identifier-consistency diff.",
+      "assertions": [
+        "Preserves identifiers and must/should/may strength",
+        "Updates both README indexes and checks identifier parity"
+      ]
+    },
+    {
+      "id": "maintainer-decision",
+      "prompt": "维护者需要决策清单：每个决策点给影响分析和推荐默认值。",
+      "should_trigger": true,
+      "expected_output": "Produces an impact-analysis table per decision point with recommended defaults and a numbered decision list; bakes decisions into the ADR on acceptance.",
+      "assertions": [
+        "Gives recommendation per decision point",
+        "Records accepted decisions and adoption order"
+      ]
+    },
+    {
+      "id": "write-srs",
+      "prompt": "编写 SRS 需求条目。",
+      "should_trigger": false,
+      "expected_output": "Routes SRS authoring to ada-srs-writing.",
+      "assertions": [
+        "Does not activate ADR authoring",
+        "Routes to SRS authoring"
+      ]
+    },
+    {
+      "id": "traceability-audit",
+      "prompt": "审计需求到设计的可追踪性矩阵。",
+      "should_trigger": false,
+      "expected_output": "Routes traceability auditing to ada-traceability-audit.",
+      "assertions": [
+        "Does not activate ADR authoring",
+        "Routes to traceability audit"
+      ]
+    },
+    {
+      "id": "large-doc-revision",
+      "prompt": "大规模修订通用技术文档的术语与结构。",
+      "should_trigger": false,
+      "expected_output": "Routes large document revision to ada-docs-revision.",
+      "assertions": [
+        "Does not activate ADR authoring",
+        "Routes to revision skill"
+      ]
+    },
+    {
+      "id": "project-background",
+      "prompt": "梳理项目背景文档作为 SRS 前置输入。",
+      "should_trigger": false,
+      "expected_output": "Routes pre-SRS background authoring to ada-project-background-authoring.",
+      "assertions": [
+        "Does not activate ADR authoring",
+        "Routes to background authoring"
+      ]
+    }
+  ]
+}

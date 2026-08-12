@@ -111,6 +111,65 @@ Stop and report immediately when:
 - release/merge authority is missing;
 - a required environment or dependency cannot be obtained safely.
 
+## Batch Audit Gate（批次独立审查）
+
+Independent, read-only audit of a batch of changes ("批次 N 改动") against a
+user-supplied numbered checklist. Every item gets a PASS/FAIL verdict backed by
+file:line evidence. This is the "independent review" gate of phased delivery.
+
+**Activation**: 独立审查 / 独立复核 / 审查批次 N 改动 with a numbered checklist;
+a batch needs a gate review before merge or before the next batch.
+**Do NOT use for**: verifying claims in an existing report
+(ada-code-quality-report-verification), impact analysis of a commit/branch,
+generating a quality report
+(ada-code-quality-analysis), or auditing docs against the diff
+(ada-doc-implementation-audit).
+
+**Core principles**:
+1. **Read-only discipline.** Never modify worktree files. Re-running
+   generators/builds is allowed; if a regenerated artifact differs from the
+   committed one, report it — do not "fix" it. State 未修改任何文件 in the report.
+2. **Evidence = file:line + re-run tool output.** Tool claims (test runs,
+   converter output, JSON contents) are re-run, never assumed.
+3. **Absence checks are evidence too.** `grep -n '<pattern>'` returning exit 1
+   (no match) proves "no stale logic". Document the exit code.
+4. **Never fabricate.** If the source data contains no status/tags elements,
+   the generated output must show empty values — that empty serialization IS
+   the correct evidence that nothing was invented, not a defect.
+5. **Prefer programmatic verification:** python one-liners for JSON counts and
+   key-set parity, `grep -c` for counts, tests for gate status.
+
+**Workflow**:
+1. Scope the batch: `git diff --stat` — know every touched file.
+2. Map checklist items to files; read each file fully.
+3. Per item, gather evidence in order: source-level lines → gate-level re-runs
+   → absence greps (exit 1 = evidence) → parity diffs (zh/en key sets, CSS
+   class definitions vs usage).
+4. Classify PASS or FAIL per item (nuances go in the item's evidence as 备注).
+5. Write the report: `## 审查结论（N/N PASS, M FAIL）` summary up front →
+   `## 逐项清单`（verdict first, then bullet evidence with file:line）→
+   `## 发现的任何问题或遗漏`（only real observations; non-blocking notes as 备注,
+   do not inflate into FAILs).
+
+**Layer-by-layer evidence techniques** (content pipeline, CSS, tests,
+bilingual resources, SEO metadata, doc-sync sweeps, cross-SDK CI, git
+hygiene, baseline-vs-batch regression judgment): see
+`references/batch-audit-evidence-techniques.md`.
+
+**Key pitfalls**:
+- Generated data files are often gitignored — absence from `git status` is NOT
+  evidence of a stale build; use `git check-ignore` + re-run the generator.
+- `grep -c` returns exit 1 on zero matches — a "no match" absence check inside
+  an `&&` chain kills the remaining evidence commands silently; run as
+  standalone commands and document exit 1 as the intended evidence.
+- `grep -rn "Symbol" src/` also matches compiled DLLs in bin/ and obj/ —
+  scope source greps with `--include=*.razor --include=*.cs --include=*.js` or
+  `--exclude-dir=bin --exclude-dir=obj`.
+- A newer host SDK can hide a real compiler mismatch in the workflow's
+  declared SDK — re-run the gate in a scratch copy pinned to that exact SDK.
+- Baseline vs batch: when "data is missing", prove whether the batch caused it
+  (`git diff HEAD -- <data-source>` empty = pre-existing → 备注, not FAIL).
+
 ## Output Contract
 
 Maintain a phase ledger with status, files, verification, commit/PR handle when applicable, and residual risk. Final reporting must distinguish completed execution from planned or blocked work and include the exact artifact and verification results.
