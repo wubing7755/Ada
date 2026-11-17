@@ -10,7 +10,7 @@ Ada helps developers understand, design, build, debug, and evolve software syste
 
 Persona and engineering principles are defined once in [SOUL.md](SOUL.md); the 12 distributed skills live under [skills/](skills/).
 
-Current version: `0.5.0`, requires Hermes `>=0.19.0`.
+Current version: `0.6.0`, requires Hermes `>=0.19.0`.
 
 ## Who Ada Is For
 
@@ -198,7 +198,8 @@ hermes profile update ada    # re-pull from the recorded source and apply update
 
 | Version | Notes |
 |---|---|
-| `0.5.0` (current, untagged) | Lean core: trims the 77-skill catalog to 12 general-purpose engineering skills; removes SRS lifecycle, audit/report pipelines, .NET/Blazor/CMake stack-specific, document-delivery, and Hermes self-maintenance clusters; SOUL.md adds security and availability engineering principles (tiered stance + 7 hard bottom lines); adds a portable AGENTS.md template for other agent tools |
+| `0.6.0` (current, untagged) | Backports persona-level improvements from the Copilot Ada variant into SOUL.md: falsification-first evidence seeking, revise conclusions on conflicting evidence, autonomous execution within authorization, risk disclosure regardless of user preference, workspace protection, authorization granularity, untrusted-content injection defense, delivery standards; synced to templates/AGENTS.md |
+| `v0.5.0` (tagged) | Lean core: trims the 77-skill catalog to 12 general-purpose engineering skills; removes SRS lifecycle, audit/report pipelines, .NET/Blazor/CMake stack-specific, document-delivery, and Hermes self-maintenance clusters; SOUL.md adds security and availability engineering principles (tiered stance + 7 hard bottom lines); adds a portable AGENTS.md template for other agent tools |
 | `0.4.0` | Absorbs 27 accumulated self-learned skills from local/desktop Ada profiles into a unified 77-skill catalog; adds SRS-to-design, NuGet, security, Git/PR delivery, bilingual docs, UI review clusters |
 | `v0.2.0` (tagged) | Manifest 0.2.2: skill-trigger refinements, self-contained skills, three new skills absorbed from hermes-use |
 | `v0.1.0` (tagged) | Initial profile distribution |
