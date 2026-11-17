@@ -8,7 +8,7 @@ platforms: [windows, linux, macos]
 metadata:
   hermes:
     tags: [git, pr, delivery, branching, gates]
-    related_skills: [ada-continuous-phased-delivery, ada-requesting-code-review]
+    related_skills: [ada-requesting-code-review, ada-git-destructive-operations]
 ---
 
 # Git PR Delivery

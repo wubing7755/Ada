@@ -1,14 +1,14 @@
 ---
 name: ada-engineering-refactoring
-description: 'Use when an agent is doing architecture-level refactoring outside .NET-specific workflows: type-system constraints, interface protocols, orchestration/implementation separation, and whole-project consistency. For C#/.NET/Blazor refactors, route through ada-refactoring-lifecycle to ada-dotnet-engineering-refactoring.'
+description: 'Use when an agent is doing architecture-level refactoring: type-system constraints, interface protocols, orchestration/implementation separation, and whole-project consistency.'
 version: 1.0.0
 author: Hermes Agent
 license: MIT
 platforms: [linux, macos, windows]
 metadata:
   hermes:
-    tags: [refactoring, architecture, engineering-quality, dotnet, blazor]
-    related_skills: [ada-refactoring-lifecycle]
+    tags: [refactoring, architecture, engineering-quality]
+    related_skills: [ada-code-quality-analysis, ada-requesting-code-review]
 ---
 
 # Engineering-Grade Refactoring

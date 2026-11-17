@@ -55,10 +55,10 @@
       "id": "history-moves",
       "prompt": "git mv 保留历史。",
       "should_trigger": false,
-      "expected_output": "Routes renames to ada-git-history-preserving-moves.",
+      "expected_output": "History-preserving renames are out of scope for destructive operations.",
       "assertions": [
         "Does not activate destructive ops",
-        "Routes to history-preserving moves"
+        "Declares renames out of scope"
       ]
     },
     {
@@ -75,10 +75,10 @@
       "id": "hermes-ops",
       "prompt": "查看 Hermes 配置。",
       "should_trigger": false,
-      "expected_output": "Routes operations to ada-hermes-operations.",
+      "expected_output": "Hermes configuration is out of scope for destructive operations.",
       "assertions": [
         "Does not activate destructive ops",
-        "Routes to operations"
+        "Declares configuration out of scope"
       ]
     }
   ]

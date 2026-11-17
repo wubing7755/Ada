@@ -104,11 +104,7 @@ def main() -> int:
             encoding="utf-8",
         )
         owned_marker = (
-            source
-            / "skills"
-            / "software-development"
-            / "ada-business-document-authoring"
-            / "SMOKE_UPDATE.txt"
+            source / "skills" / source_manifest["skills"][0] / "SMOKE_UPDATE.txt"
         )
         owned_marker.write_text("updated", encoding="utf-8")
 

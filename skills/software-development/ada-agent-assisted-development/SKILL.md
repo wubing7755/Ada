@@ -68,12 +68,12 @@ Context management rules baked into every step:
 | User says | Workflow | Key skills loaded |
 |-----------|----------|-------------------|
 | "修复这个 bug" | Bug Fix (1) | ada-systematic-debugging, ada-test-driven-development, ada-requesting-code-review |
-| "实现 REQ-XXX" | Feature (2) | ada-srs-lifecycle, plan, ada-srs-writing |
-| "审查代码" | Code Review (3) | ada-requesting-code-review, ada-code-efficiency-review |
-| "优化/简化代码" | Quality (4) | ada-simplify-code, ada-code-dedup-audit |
-| "升级/重构架构" | Architecture (5) | ada-refactoring-lifecycle, plan, spike |
-| "SRS 覆盖率" | SRS Coverage (6) | ada-srs-review |
-| "代码质量报告" | Quality Report (7) | codebase-inspection, ada-code-efficiency-review |
+| "实现新功能" | Feature (2) | plan, ada-test-driven-development |
+| "审查代码" | Code Review (3) | ada-requesting-code-review |
+| "优化/简化代码" | Quality (4) | ada-simplify-code, ada-code-quality-analysis |
+| "升级/重构架构" | Architecture (5) | ada-engineering-refactoring, plan, spike |
+| "SRS 覆盖率" | SRS Coverage (6) | codebase-inspection, plan |
+| "代码质量报告" | Quality Report (7) | codebase-inspection, ada-code-quality-analysis |
 
 ## §1 — Bug Fix Workflow
 

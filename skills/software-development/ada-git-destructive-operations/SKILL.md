@@ -8,7 +8,7 @@ platforms: [linux, macos, windows]
 metadata:
   hermes:
     tags: [git, reset, branch, destructive, safety, recovery]
-    related_skills: [ada-git-history-preserving-moves, ada-hermes-operations, github-pr-workflow]
+    related_skills: [ada-git-pr-delivery, github-pr-workflow]
 ---
 
 # Git Destructive Operations
