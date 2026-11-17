@@ -8,7 +8,7 @@ platforms: [windows]
 metadata:
   hermes:
     tags: [windows, msys, git-bash, crlf, patch, verification, hermes]
-    related_skills: [ada-powershell-from-bash, ada-hermes-operations, ada-blazor-wasm-github-pages]
+    related_skills: [ada-powershell-from-bash]
 ---
 
 # Windows 文件编辑与验证（git-bash/MSYS）
@@ -155,4 +155,4 @@ test_ok = t.returncode == 0 and "失败:     0" in t.stdout and "通过:" in t.s
 
 ## Reference Files
 
-本技能无独立 references：Blazor 交互/表单绑定陷阱已由 `ada-blazor-interaction-pitfalls` 与 `ada-blazor-interop-pitfalls` 覆盖（如 `[SupplyParameterFromQuery]` 变化需在 `OnParametersSetAsync` 重载、`@bind`+`@onchange` 同元素 RZ10008、引用组件前先读 `[Parameter]` 签名）。
+本技能无独立 references；Windows/MSYS 文件编辑陷阱均已在正文覆盖。

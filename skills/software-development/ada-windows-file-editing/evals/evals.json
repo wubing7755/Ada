@@ -45,10 +45,10 @@
       "id": "build-gates",
       "prompt": "编辑了 .NET 工程，跑构建门禁。",
       "should_trigger": false,
-      "expected_output": "Routes build-gate verification to ada-dotnet-verification.",
+      "expected_output": ".NET build-gate verification is out of scope for Windows file-editing pitfalls.",
       "assertions": [
         "Does not activate Windows editing pitfalls",
-        "Routes to verification skill"
+        "Declares build gates out of scope"
       ]
     },
     {
@@ -65,20 +65,20 @@
       "id": "browser-verify",
       "prompt": "用浏览器验证 WASM 站点部署。",
       "should_trigger": false,
-      "expected_output": "Routes browser verification to ada-blazor-wasm-github-pages.",
+      "expected_output": "Browser deployment verification is out of scope for Windows file-editing pitfalls.",
       "assertions": [
         "Does not activate file-editing pitfalls",
-        "Routes to browser verification"
+        "Declares browser verification out of scope"
       ]
     },
     {
       "id": "hermes-ops",
       "prompt": "查看 Hermes 配置。",
       "should_trigger": false,
-      "expected_output": "Routes operations to ada-hermes-operations.",
+      "expected_output": "Hermes configuration is out of scope for Windows file-editing pitfalls.",
       "assertions": [
         "Does not activate file-editing pitfalls",
-        "Routes to operations skill"
+        "Declares configuration out of scope"
       ]
     }
   ]

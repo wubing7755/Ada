@@ -8,7 +8,7 @@ license: MIT
 metadata:
   hermes:
     tags: [research, planning, grilling, domain-modeling, specs, tickets, self-evolution]
-    related_skills: [ada-project-audit, ada-pre-implementation-audit]
+    related_skills: [ada-agent-assisted-development]
 ---
 
 # 研究、规划与自进化

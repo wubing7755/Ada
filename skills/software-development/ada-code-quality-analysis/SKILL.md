@@ -1,6 +1,6 @@
 ---
 name: ada-code-quality-analysis
-description: 'Use when an agent must produce a code quality audit of source code: complexity, duplication, dead code, security risks, dependency health, test gaps, or standards compliance. Use ada-code-quality-pipeline for end-to-end verified reports; use SRS/document skills for document quality.'
+description: 'Use when an agent must produce a code quality audit of source code: complexity, duplication, dead code, security risks, dependency health, test gaps, or standards compliance. Independently verify report claims against source before delivery.'
 version: 1.0.0
 author: Hermes Agent
 license: MIT
@@ -8,7 +8,7 @@ platforms: [linux, macos, windows]
 metadata:
   hermes:
     tags: [code-quality, static-analysis, audit, metrics, report]
-    related_skills: [ada-code-efficiency-review, ada-requesting-code-review, codebase-inspection, ada-code-quality-pipeline]
+    related_skills: [ada-requesting-code-review, ada-simplify-code, codebase-inspection]
 ---
 
 # Code Quality Analysis
@@ -32,7 +32,7 @@ Default workflow:
 2. Run lightweight automated counts/scans before manual conclusions.
 3. Read the highest-risk hot spots directly.
 4. Attach concrete file/line evidence to every finding.
-5. If the report will drive decisions, route through `ada-code-quality-pipeline` for verification and QA.
+5. If the report will drive decisions, independently re-verify each claim against source before delivery.
 
 Stop conditions:
 - The target scope is unclear or mixes unrelated repositories.

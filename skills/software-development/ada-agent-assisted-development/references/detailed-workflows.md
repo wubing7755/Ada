@@ -68,7 +68,7 @@ Merge subagent findings into structured report:
 - Severity classification: Critical / Major / Minor / Info
 
 ### Step 4: Verification
-Run `ada-code-quality-report-verification` to independently confirm each claim before delivery.
+Independently re-verify each claim against source (a fresh subagent re-reads every cited file:line) before delivery.
 
 ### Key efficiency rules
 - **Parallel subagents for independent audits** — complexity, duplication, null-safety run simultaneously

@@ -55,10 +55,10 @@
       "id": "history-preserving-move",
       "prompt": "git mv 重命名并保留历史。",
       "should_trigger": false,
-      "expected_output": "Routes renames to ada-git-history-preserving-moves.",
+      "expected_output": "History-preserving renames are out of scope for PR delivery.",
       "assertions": [
         "Does not activate PR delivery",
-        "Routes to history-preserving moves"
+        "Declares renames out of scope"
       ]
     },
     {
@@ -75,10 +75,10 @@
       "id": "phased-delivery",
       "prompt": "按批次执行计划并逐批审阅。",
       "should_trigger": false,
-      "expected_output": "Routes batch execution to ada-continuous-phased-delivery.",
+      "expected_output": "Batch plan execution is out of scope for PR delivery.",
       "assertions": [
         "Does not activate PR delivery",
-        "Routes to phased delivery"
+        "Declares batch execution out of scope"
       ]
     }
   ]
